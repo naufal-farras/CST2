@@ -1,0 +1,977 @@
+﻿@model CST.ViewModels.Rumusan.RumusVM;
+
+@{
+    ViewData["Title"] = "Tambah Template Rumusan";
+}  
+<style>
+    .nav.nav-tabs li a {
+        pointer-events: none;
+    }
+</style>
+
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                           @* @if (Model.Edit)
+                                                {
+                                                    <b>Edit Rumus Timeline</b>
+                                                }
+                                                else
+                                                {
+                                                    <b>Input Rumus Timeline</b>
+                                                }*@
+                                        <h5>Tambah Template Rumusan</h5>
+                                        @*<button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>*@
+                                    </div>
+
+                                    <div class="card-block">  
+ 
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="nav-tabs-custom">
+                                                        <ul class="nav nav-tabs">
+                                                            <li class="active"><a href="#" id="tab-main" onclick="ToTab('main')">Aktifitas</a></li>
+                                                            <li class=""><a href="#" id="tab-sub" onclick="ToTab('sub')">Sub Aktifitas</a></li>
+                                                        </ul>
+                                                      @*  @if (Model.Edit == false)
+                                                        {*@
+                                                            <div class="tab-content">
+                                                                <div class="active tab-pane" id="content-main">
+                                                                    <div class="form-horizontal">
+                                                                        <div class="form-group" hidden>
+                                                                            <label class="col-sm-2 control-label">Id</label>
+                                                                            <div class="col-sm-4">
+                                                                                <input type="text" class="form-control" id="RumusId" value="0" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-2 control-label">Area Proyek</label>
+                                                                            <div class="col-sm-4">
+                                                                                <select required="required" class="form-control" style="width: 100%;" id="AreaProyek">
+                                                                                    @foreach (var item in Model.M_Nasabah)
+                                                                                    {
+                                                                                        <option value="@item.Id">@item.Nama</option>
+                                                                                    }
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-2 control-label">Nama Template</label>
+                                                                            <div class="col-sm-4">
+                                                                                <input type="text" class="form-control" value="" id="Template" placeholder="Masukkan nama template" />
+                                                                            </div>
+                                                                        </div>
+
+				                                                       
+				 
+                                                                        <div class="form-group main-aktifitas" id="main">
+                                                                        
+                                                                            <label class="col-sm-2 control-label">Bab</label>
+                                                                            <div class="col-sm-4"> 
+
+                                                                                <select required="required" class="form-control select-aktifitas" style="width:100%"></select> 
+                                                                                <button class="btn btn-default add" @*id="add"*@><i class="fa fa-plus-circle"></i></button> 
+
+                                                                               
+                                                                            </div>  
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-horizontal">
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-12 text-right">
+                                                                                @*<a href="@Url.Action("Index","Rumusan")" class="btn btn-default"><i class="fa fa-close"></i> Cancel</a>*@
+                                                                                <button class="btn btn-primary" onclick="ToTab('sub')"><i class="fa fa-chevron-right"></i> Next</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane" id="content-sub">
+                                                                    <div class="form-horizontal">
+                                                                        <div class="sub-wrapper">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-12 text-right">
+                                                                                <button class="btn btn-primary" onclick="ToTab('main')"><i class="fa fa-chevron-left"></i> Back &amp; Reset</button>
+                                                                                <button class="btn btn-primary" onclick="ToTab('subsub')"><i class="fa fa-chevron-right"></i> Next</button>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                  <div class="tab-pane" id="content-subsub">
+                                                                    <div class="form-horizontal">
+                                                                        <div class="subsub-wrapper">
+                                                                             <div class="subsub-wrapper">
+
+                                                                             </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-12 text-right">
+                                                                                <button class="btn btn-primary" onclick="ToTab('sub')"><i class="fa fa-chevron-left"></i> Back</button>
+
+                                                                                <button class="btn btn-success" id="Save"><i class="fa fa-save"></i> Save</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        @*}*@
+                                                       @* else
+                                                        {
+                                                            <div class="tab-content">
+                                                                <div class="active tab-pane" id="content-main">
+                                                                    <div class="form-horizontal">
+                                                                        <div class="form-group" hidden>
+                                                                            <label class="col-sm-2 control-label">Id</label>
+                                                                            <div class="col-sm-4">
+                                                                                <input type="text" class="form-control" id="RumusId" value="@Model.IdRumusan" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-2 control-label">Area Proyek</label>
+                                                                            <div class="col-sm-4">
+                                                                                <select required="required" class="form-control" style="width: 100%;" id="AreaProyek" disabled>
+                                                                                    @foreach (var item in Model.ProjectArea)
+                                                                                    {
+                                                                                        if (item.Id == Model.PASelected)
+                                                                                        {
+                                                                                            <option value="@item.Id" selected>@item.Nama</option>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option value="@item.Id">@item.Nama</option>
+                                                                                        }
+                                                                                    }
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-2 control-label">Nama Template</label>
+                                                                            <div class="col-sm-4">
+                                                                                <input type="text" class="form-control" id="Template" placeholder="Masukkan nama template" value="@Model.Template" />
+                                                                            </div>
+                                                                        </div>
+                                                                        @{ var index = 0; }
+                                                                        @foreach (var item in Model.AktivitasRumusan)
+                                                                        {
+                                                                            <div class="form-group main-aktifitas" id="main">
+                                                                                @if (index == 0)
+                                                                                {
+                                                                                    <label class="col-sm-2 control-label">Aktifitas</label>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <label class="col-sm-2 control-label"></label>
+                                                                                }
+                                                                                <div class="col-sm-4">
+                                                                                    <select required="required" class="form-control select-aktifitas" style="width: 100%;">
+                                                                                        <option value="">-- Pilih Aktifitas --</option>
+                                                                                        @foreach (var akt in Model.Aktivitas)
+                                                                                        {
+                                                                                            if (akt.Id == item.AktivitasId)
+                                                                                            {
+                                                                                                <option value="@akt.Id" selected>@akt.Nama</option>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <option value="@akt.Id">@akt.Nama</option>
+                                                                                            }
+                                                                                        }
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="col-sm-1" style="width:150px;">
+                                                                                    <div class="input-group col-sm-12">
+                                                                                        <input type="number" min="1" max="100" class="form-control persentase" value="@item.Presentase">
+                                                                                        <span class="input-group-addon">%</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-1">
+                                                                                    @if (index == 0)
+                                                                                    {
+                                                                                        <button class="btn btn-default" id="add"><i class="fa fa-plus-circle"></i></button>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <button class="btn btn-danger" id="removeRow"><i class="fa fa-close"></i></button>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+
+                                                                            { index++; }
+                                                                        }
+                                                                    </div>
+                                                                    <div class="form-horizontal">
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-12 text-right">
+                                                                                <a href="@Url.Action("Index","RumusTimeline")" class="btn btn-default"><i class="fa fa-close"></i> Cancel</a>
+                                                                                <button class="btn btn-primary" onclick="ToTab('sub')"><i class="fa fa-chevron-right"></i> Next</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane" id="content-sub">
+                                                                    <div class="form-horizontal">
+                                                                        <div class="sub-wrapper">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-sm-12 text-right">
+                                                                                <button class="btn btn-primary" onclick="ToTab('main')"><i class="fa fa-chevron-left"></i> Back</button>
+                                                                                <button class="btn btn-success" id="Save"><i class="fa fa-save"></i> Save</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                                            }*@
+                                                    </div>
+                                                </div>
+                                            </div>
+ 
+
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+    .nav.nav-tabs li a {
+        pointer-events: none;
+    }
+</style>
+
+
+
+
+@section Scripts{
+    <script>
+        //$('#add').click(function () {
+        $(document).on('click', '.add', function () {
+            var $newRow = $('#main').first().clone();
+
+            $newRow.find('.control-label').text(''); //Remove label text
+            //$newRow.find('.persentase').val('0'); //Reset persentase
+
+            //Replace add button with remove button
+            $('.add', $newRow).removeClass('add').attr('id', 'removeRow').removeClass('btn-default').addClass('btn-danger').find('i').removeClass('fa-plus-circle').addClass('fa-close');
+
+            $('.main-aktifitas').last().after($newRow);
+        });
+
+        $(document).on('click', '#removeRow', function () {
+            $(this).closest('#main').remove();
+        });
+
+        $(document).on('click', '.add-sub', function () {
+            var $newRow = $('.sub-aktifitas').first().clone();
+
+            //$newRow.find('.control-label').text(''); //Remove label text
+            //$newRow.find('.persentase').val('0'); //Reset persentase
+
+            //Replace add button with remove button
+            $('.add-sub', $newRow).removeClass('add-sub').attr('id', 'removeRowsub').removeClass('btn-default').addClass('btn-danger').find('i').removeClass('fa-plus-circle').addClass('fa-close');
+
+            $(this).closest('.sub-aktifitas').after($newRow);
+        });
+
+        $(document).on('click', '#removeRowsub', function () {
+            $(this).closest('#sub').remove();
+        });
+
+           $(document).on('click', '.add-subsub', function () {
+            var $newRow = $('.subsub-aktifitas').first().clone();
+
+            //$newRow.find('.control-label').text(''); //Remove label text
+            //$newRow.find('.persentase').val('0'); //Reset persentase
+
+            //Replace add button with remove button
+            $('.add-subsub', $newRow).removeClass('add-subsub').attr('id', 'removeRowsubsub').removeClass('btn-default').addClass('btn-danger').find('i').removeClass('fa-plus-circle').addClass('fa-close');
+
+            $(this).closest('.subsub-aktifitas').after($newRow);
+        });
+
+        $(document).on('click', '#removeRowsubsub', function () {
+            $(this).closest('#subsub').remove();
+        });
+
+        function ToTab(page) {
+            clear();
+
+            if (page == 'sub') {
+                var isValid = true;
+                $('#content-main select').each(function () {
+                    if ($(this).val() == '') {
+                        isValid = false;
+                        $(this).parent().addClass('has-error');
+                        return false;
+                    }
+                    return isValid;
+                })
+
+                //$('#content-main .persentase').each(function () {
+                //    if ($(this).val() == '' || $(this).val() <= 0 || $(this).val() > 100) {
+                //        isValid = false;
+                //        $(this).parent().addClass('has-error');
+                //        return false;
+                //    }
+                //    return isValid;
+                //})
+
+                if($.trim($('#Template').val()) == ""){
+                    isValid = false;
+                    $('#Template').parent().addClass('has-error');
+                }
+
+                if (!isValid) {
+                    swal('Form belum valid.');
+                    return;
+                } else {
+                    ToSubTab();
+                }
+            }
+            else if (page == 'subsub')
+            {
+
+                 var isValid = true;
+                $('#content-main select').each(function () {
+                    if ($(this).val() == '') {
+                        isValid = false;
+                        $(this).parent().addClass('has-error');
+                        return false;
+                    }
+                    return isValid;
+                })
+                 
+                if($.trim($('#Template').val()) == ""){
+                    isValid = false;
+                    $('#Template').parent().addClass('has-error');
+                }
+
+                if (!isValid) {
+                    swal('Form belum valid.');
+                    return;
+                } else {
+                    ToSubSubTab();
+                }
+            }
+             var $curr = $('#tab-' + page).parent();
+
+            $('.nav-tabs li').removeClass();
+
+            $curr.addClass("active");
+            $curr.prevAll().addClass("visited");
+
+            $('.tab-pane').removeClass("active");
+            $("#content-" + page).addClass("active");
+
+           
+        }
+
+      function ToSubSubTab() {
+         
+           var isValid = true;
+            $('#content-sub select').each(function () {
+                if ($(this).val() == '') {
+                    isValid = false;
+                    $(this).parent().addClass('has-error');
+                    return false;
+                }
+                return isValid;
+            }) 
+
+            if (!isValid) {
+                swal('Form belum valid.');
+                return;
+            } 
+            else {
+                SaveRumusan();
+            debugger;
+
+                GetSubBefore(); 
+            }
+
+           
+
+        }
+
+        function ToSubTab() {
+            var arr = [];
+
+            $('#content-main .main-aktifitas select').each(function () {
+                var value = $(this).val();
+                var text = $(this).find('option').filter(':selected').text();
+                //var persen = $(this).parent().next().find('.persentase').val();
+
+                arr.push([value, text]);
+            })
+
+            //if(!Edit){
+                var html = '';
+                $('#content-sub .sub-wrapper').html(html);
+            debugger;
+
+                for (let i = 0; i < arr.length; ++i) {
+
+                    html += '<div class="form-group main-aktifitas">';
+                    html += '<label class="col-sm-2 control-label">Bab</label>';
+                    html += '<div class="col-sm-4">';
+                    html += '<select required="required" class="form-control" style="width: 100%;" disabled>';
+                    html += '<option value="' + arr[i][0] + '" selected>' + arr[i][1] + '</option>';
+                    html += '</select>';
+                    html += '</div>';
+
+                    html += '<div class="col-sm-1" style="width:150px;">';
+                    html += '<div class="input-group col-sm-12">'; 
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div class="form-group sub-aktifitas" id="sub" style="margin-left:10px;">';
+
+                    html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub Bab</label>';
+                    html += '<div class="col-sm-4">';
+                    html += '<div class="input-group">';
+                    html += '<div class="input-group-addon">';
+                    html += '<i class="fa fa-minus"></i>';
+                    html += '</div>';
+                    html += '<select required="required" class="form-control select-subaktifitas" style="width: 100%;"></select>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div class="col-sm-1">';
+                    html += '<button class="btn btn-default add-sub"><i class="fa fa-plus-circle"></i></button>';
+                    html += '</div>';
+
+                    html += '<div class="form-group subsub-aktifitas" id="subsub" style="margin-left:10px;">'; 
+                    html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub Sub Bab</label>';
+                    html += '<div class="col-sm-4">';
+                    html += '<div class="input-group">';
+                    html += '<div class="input-group-addon">';
+                    html += '<i class="fa fa-minus"></i>';
+                    html += '</div>';
+                    html += '<select required="required" class="form-control select-subsubaktifitas" style="width: 100%;"></select>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-sm-1">';
+                    html += '<button class="btn btn-default add-subsub"><i class="fa fa-plus-circle"></i></button>';
+                    html += '</div>';
+                    html += '</div>'; 
+
+                    html += '</div>';
+
+                    //html += '<div class="form-group subsub-aktifitas" id="subsub" style="margin-left:10px;">';
+                    //html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub Sub Bab</label>';
+                    //html += '<div class="col-sm-4">';
+                    //html += '<div class="input-group">';
+                    //html += '<div class="input-group-addon">';
+                    //html += '<i class="fa fa-minus"></i>';
+                    //html += '</div>';
+                    //html += '<select required="required" class="form-control select-subsubaktifitas" style="width: 100%;"></select>';
+                    //html += '</div>';
+                    //html += '</div>';
+                    //html += '<div class="col-sm-1">';
+                    //html += '<button class="btn btn-default add-subsub"><i class="fa fa-plus-circle"></i></button>';
+                    //html += '</div>';
+                    //html += '</div>'; 
+
+                  
+                }
+
+                $('#content-sub .sub-wrapper').html(html);
+
+                GetSub();
+                GetSubSub(); 
+
+            //}
+            //else{
+            //    var RumusId =$('#RumusId').val();
+
+            //    var html = '';
+            //    $('#content-sub .sub-wrapper').html(html);
+
+            //    for (let i = 0; i < arr.length; ++i) {
+
+            //        var AktifitasId = arr[i][0];
+
+            //        $.ajax({
+            //            url: "@Url.Action("GetSubEdit", "RumusTimeline")",
+            //            type: 'POST',
+            //            async: false,
+            //            data: { AktifitasId: AktifitasId, RumusanId: RumusId },
+            //            success: function (result) {
+            //                if(result.length == 0){
+            //                    html += '<div class="form-group main-aktifitas">';
+            //                    html += '<label class="col-sm-2 control-label">Aktifitas</label>';
+            //                    html += '<div class="col-sm-4">';
+            //                    html += '<select required="required" class="form-control" style="width: 100%;" disabled>';
+            //                    html += '<option value="' + arr[i][0] + '" selected>' + arr[i][1] + '</option>';
+            //                    html += '</select>';
+            //                    html += '</div>';
+
+            //                    html += '<div class="col-sm-1" style="width:150px;">';
+            //                    html += '<div class="input-group col-sm-12">';
+            //                    //html += '<input type="number" min="1" max="100" class="form-control persentase" value="' + arr[i][2] + '" readonly>';
+            //                    html += '<span class="input-group-addon">%</span>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+
+            //                    html += '<div class="form-group sub-aktifitas" id="sub" style="margin-left:10px;">';
+            //                    html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub</label>';
+            //                    html += '<div class="col-sm-4">';
+            //                    html += '<div class="input-group">';
+            //                    html += '<div class="input-group-addon">';
+            //                    html += '<i class="fa fa-minus"></i>';
+            //                    html += '</div>';
+            //                    html += '<select required="required" class="form-control select-subaktifitas" style="width: 100%;">';
+            //                    $.ajax({
+            //                        url: "@Url.Action("GetSubAktifitas", "RumusTimeline")",
+            //                        type: 'GET',
+            //                        dataType: 'json',
+            //                        async: false,
+            //                        success: function (subresult) {
+            //                            html += '<option value="">-- Pilih Sub Aktifitas --</option>';
+            //                            $.each(subresult, function (i, value) {
+            //                                html += '<option value="' + value.Id + '">' + value.Nama + '</option>';
+            //                            });
+            //                        }
+            //                    })
+            //                    html += '</select>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+
+
+            //                    html += '<div class="col-sm-1" style="width:150px;">';
+            //                    html += '<div class="input-group col-sm-12">';
+            //                    //html += '<input type="number" min="1" max="100" class="form-control persentase" value="0">';
+            //                    html += '<span class="input-group-addon">%</span>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+
+            //                    html += '<div class="col-sm-1">';
+            //                    html += '<button class="btn btn-default add-sub"><i class="fa fa-plus-circle"></i></button>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+            //                }else{
+            //                    html += '<div class="form-group main-aktifitas">';
+            //                    html += '<label class="col-sm-2 control-label">Aktifitas</label>';
+            //                    html += '<div class="col-sm-4">';
+            //                    html += '<select required="required" class="form-control" style="width: 100%;" disabled>';
+            //                    html += '<option value="' + arr[i][0] + '" selected>' + arr[i][1] + '</option>';
+            //                    html += '</select>';
+            //                    html += '</div>';
+
+            //                    html += '<div class="col-sm-1" style="width:150px;">';
+            //                    html += '<div class="input-group col-sm-12">';
+            //                    //html += '<input type="number" min="1" max="100" class="form-control persentase" value="' + arr[i][2] + '" readonly>';
+            //                    html += '<span class="input-group-addon">%</span>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+            //                    html += '</div>';
+
+            //                    var index = 0;
+
+            //                    for (var j = 0; j < result.length; j++) {
+            //                        html += '<div class="form-group sub-aktifitas" id="sub" style="margin-left:10px;">';
+            //                        html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub</label>';
+            //                        html += '<div class="col-sm-4">';
+            //                        html += '<div class="input-group">';
+            //                        html += '<div class="input-group-addon">';
+            //                        html += '<i class="fa fa-minus"></i>';
+            //                        html += '</div>';
+            //                        html += '<select required="required" class="form-control select-subaktifitas" style="width: 100%;">';
+            //                        $.ajax({
+            //                            url: "@Url.Action("GetSubAktifitas", "RumusTimeline")",
+            //                            type: 'GET',
+            //                            dataType: 'json',
+            //                            async: false,
+            //                            success: function (subresult) {
+            //                                html += '<option value="">-- Pilih Sub Aktifitas --</option>';
+            //                                $.each(subresult, function (i, value) {
+            //                                    if(value.Id === result[j].SubAktivitasId){
+            //                                        html += '<option value="' + value.Id + '" selected>' + value.Nama + '</option>';
+            //                                    }else{
+            //                                        html += '<option value="' + value.Id + '">' + value.Nama + '</option>';
+            //                                    }
+            //                                });
+            //                            }
+            //                        })
+            //                        html += '</select>';
+            //                        html += '</div>';
+            //                        html += '</div>';
+
+
+            //                        html += '<div class="col-sm-1" style="width:150px;">';
+            //                        html += '<div class="input-group col-sm-12">';
+            //                        //html += '<input type="number" min="1" max="100" class="form-control persentase" value="'+ result[j].Presentase +'">';
+            //                        html += '<span class="input-group-addon">%</span>';
+            //                        html += '</div>';
+            //                        html += '</div>';
+
+            //                        html += '<div class="col-sm-1">';
+            //                        if(index == 0){
+            //                            html += '<button class="btn btn-default add-sub"><i class="fa fa-plus-circle"></i></button>';
+            //                        }else{
+            //                            html += '<button class="btn btn-danger" id="removeRowsub"><i class="fa fa-close"></i></button>';
+            //                        }
+            //                        html += '</div>';
+            //                        html += '</div>';
+
+            //                        index++;
+            //                    }
+
+            //                }
+            //            },
+            //            complete: function (data) {
+            //                $('#content-sub .sub-wrapper').html(html);
+            //            }
+            //        })
+            //    }
+
+            //} 
+
+        }
+         
+        $(function () {
+
+            //if(!Edit){
+                $.ajax({
+                     url: "@Url.Action("GetAllData", "Rumusan")",  
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (result) {
+                        var $main = $(".select-aktifitas");
+                        $main.append($("<option />").val("").text("-- Pilih Bab --"));
+                        $.each(result, function (i, value) {   
+                             $.each(value.m_Bab, function (ix, value2) { 
+                             $main.append($("<option />").val(this.id).text(this.nama));
+                             });
+                        });
+                    }
+                  })
+          });
+     
+
+        
+        
+
+        function GetSub() {
+            $.ajax({
+                url: "@Url.Action("GetAllData", "Rumusan")",
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    var $sub = $(".select-subaktifitas");
+                    $sub.append($("<option />").val("").text("-- Pilih Sub Bab --"));
+                    $.each(result, function (i, value) {
+                        
+                        $.each(value.m_SubBab, function (ix, value2) {
+                        $sub.append($("<option />").val(this.id).text(this.nama));
+                        });
+                    });
+                }
+            })
+        };
+      
+            
+        function GetSubBefore() {
+            var AreaProyekId = $('#AreaProyek option:selected').val();
+
+            //$.ajax({
+            //    url: "@Url.Action("GetSubBabBefore", "Rumusan")",
+            //    type: 'GET',
+            //    dataType: 'json',
+            //     data: { id: AreaProyekId, babId:1 },
+            //    success: function (result) {
+
+            var arr = [];
+
+               $('#content-main .main-aktifitas select').each(function () {
+                var value = $(this).val();
+                var text = $(this).find('option').filter(':selected').text();
+
+                arr.push([value, text]);
+                })
+                    
+                 //var arr2 = []; 
+          
+             //for (let i = 0; i < result.data.value.length; i++) {
+             //     let data = result.data.value[i].rumusanBab.bab; 
+             //      arr.push([data.id, data.nama]);
+
+             //   }
+             //      console.log(arr);
+
+                //let resultBab = arr.groupBy( ({ nama }) => nama);
+             
+
+             //for (let i = 0; i < result.data.value.length; i++) {
+             //     let data = result.data.value[i].subBab;
+             //      arr2.push([data.id, data.nama]);
+             //      console.log(arr2);
+
+             //   }
+
+                 //$(result.value).each(function () {
+                 
+                 // })
+
+
+            debugger;
+
+              //$(result.subBab).each(function () {
+              //      var value = $(this.id) 
+              //      var text = $(this.nama); 
+              //      arr2.push([value, text]);
+              //      console.log(arr2); 
+              //  })
+
+            //if(!Edit){
+                var html = '';
+                $('#content-subsub .subsub-wrapper').html(html);
+                debugger;
+             
+                for (let i = 0; i < arr.length; ++i) {
+                    html += '<div class="form-group main-aktifitas">';
+                    html += '<label class="col-sm-2 control-label">Bab</label>';
+                    html += '<div class="col-sm-4">';
+                    html += '<select required="required" class="form-control" style="width: 100%;" disabled>';
+                    html += '<option value="' + arr[i][0] + '" selected>' + arr[i][1] + '</option>';
+                    html += '</select>';
+                    html += '</div>';
+
+                    html += '<div class="col-sm-1" style="width:150px;">';
+                    html += '<div class="input-group col-sm-12">'; 
+                    html += '</div>';
+                    html += '</div>';   
+                    html += '</div>'; 
+
+                    var babid = arr[i][0]
+
+                     $.ajax({
+                        url: "@Url.Action("GetSubBabBefore", "Rumusan")",
+                        type: 'GET',
+                        data: { id: AreaProyekId, babId: babid },
+                        success: function (result) {
+                        //debugger;
+                        //console.log(result);
+
+                        //for (let j = i; j < result.value.length; ++j) {
+                        //html += '<div class="form-group sub-aktifitas" id="sub" style="margin-left:10px;">';
+                        //html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub Bab</label>';
+                        //html += '<div class="col-sm-4">';
+                        //html += '<div class="input-group">';
+                        //html += '<div class="input-group-addon">';
+                        //html += '<i class="fa fa-minus"></i>';
+                        //html += '</div>';
+                        //html += '<select required="required" class="form-control" style="width: 100%;" disabled>';
+                          
+                        //html += '<option value="' + result.value[j].subBab.id + '" selected>' + result.value[j].subBab.nama + '</option>';
+                        //html += '</select>';
+                        //html += '</div>';
+                        //html += '</div>';
+
+
+                        //html += '<div class="col-sm-1" style="width:150px;">';
+                        //html += '<div class="input-group col-sm-10">'; 
+                        //html += '</div>';
+                        //html += '</div>';
+
+                        //html += '<div class="form-group subsub-aktifitas" id="subsub" style="margin-left:10px;">';
+                        //html += '<label class="col-sm-2 control-label" style="font-size:12px;">Sub Sub Bab</label>';
+                        //html += '<div class="col-sm-4">';
+                        //html += '<div class="input-group">';
+                        //html += '<div class="input-group-addon">';
+                        //html += '<i class="fa fa-minus"></i>';
+                        //html += '</div>';
+                        //html += '<select required="required" class="form-control select-subsubaktifitas" style="width: 100%;"></select>';
+                        //html += '</div>';
+                        //html += '</div>';
+
+                        //html += '<div class="col-sm-1">';
+                        //html += '<button class="btn btn-default add-subsub"><i class="fa fa-plus-circle"></i></button>';
+                        //html += '</div>';
+                        //html += '</div>'; 
+                        //} 
+                    },
+                     complete: function (data) {
+                     $('#content-subsub .subsub-wrapper').html(html);
+                     }
+                });
+
+              } 
+            //$('#content-subsub .subsub-wrapper').html(html);
+            GetSubSub(); 
+        };
+
+   
+
+         function GetSubSub() {
+            $.ajax({
+                url: "@Url.Action("GetAllData", "Rumusan")",
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    var $subsub = $(".select-subsubaktifitas");
+                    $subsub.append($("<option />").val("").text("-- Pilih Sub Sub Bab --"));
+                    $.each(result, function (i, value) {
+                       
+                        $.each(value.m_SubSubBab, function (ixx, value3) {
+                        $subsub.append($("<option />").val(this.id).text(this.nama));
+                        });
+                    });
+                }
+            })
+        };
+
+        //$('#SaveSubbab').on('click', function () {
+        //    clear();
+
+        //    var isValid = true;
+        //    $('#content-sub select').each(function () {
+        //        if ($(this).val() == '') {
+        //            isValid = false;
+        //            $(this).parent().addClass('has-error');
+        //            return false;
+        //        }
+        //        return isValid;
+        //    })
+
+        //    //$('#content-sub .persentase').each(function () {
+        //    //    if ($(this).val() == '' || $(this).val() <= 0 || $(this).val() > 100) {
+        //    //        isValid = false;
+        //    //        $(this).parent().addClass('has-error');
+        //    //        return false;
+        //    //    }
+        //    //    return isValid;
+        //    //})
+
+        //    if (!isValid) {
+        //        swal('Form belum valid.');
+        //        return;
+        //    } else {
+        //        SaveRumusan();
+        //    }
+        //})
+
+        function SaveRumusan() {
+             debugger;
+            var data = new Array();
+
+            $('#content-sub .main-aktifitas select').each(function () {
+                var value = $(this).val();
+
+                var arr = new Object();
+                arr.AktifitasId = value;
+
+                var array2 = new Array();
+                var array3 = new Array();
+
+                $(this).closest('.main-aktifitas').nextUntil('.main-aktifitas').each(function () {
+                    var arrsub = new Object();
+
+                    var subvalue = $(this).find('option').filter(':selected').val();
+
+                    arrsub.SubId = subvalue; 
+                    array2.push(arrsub); 
+
+                    debugger;
+                    $(this).closest('#sub').nextUntil('.sub-aktifitas').each(function () {
+                    var arrsubsub = new Object();
+
+                    var subsubvalue = $(this).find('option').filter(':selected').val();
+
+                    arrsubsub.SubSubId = subsubvalue; 
+                    array3.push(arrsubsub);
+                   console.log(array3);
+
+
+                     })
+                        arr.SubSubAktifitas = array3; 
+                        data.push(arr);
+                })
+
+
+
+                arr.SubAktifitas = array2; 
+                data.push(arr);
+
+            })
+
+            var RumusId =$('#RumusId').val();
+            var AreaProyekId = $('#AreaProyek option:selected').val();
+            var Template = $('#Template').val();
+
+            $.ajax({
+                url: "@Url.Action("SaveRumusan", "Rumusan")",
+                type: 'POST',
+                data: { data: JSON.stringify(data), nasabahId: AreaProyekId, Template: Template, rumusanNasabahId: RumusId },
+                contenttype: "application/json; charset=utf-8",
+                datatype: 'json',
+                success: function (result) {
+                    if(result){
+                        swal({
+                            title: "Success!",
+                            text: "The data has been saved!",
+                            type: "success",
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 1000,
+                        },
+                        function () {
+                            window.location.href = '@Url.Action("Index", "Rumusan")';
+                        });
+                    }else{
+                        swal({
+                            title: "Error!",
+                            text: "The data has not been saved!",
+                            type: "error",
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 1000,
+                        })
+                    }
+                }
+            })
+        }
+
+        function clear() {
+            $('.has-error').removeClass('has-error')
+        }
+    </script>
+}
+
+
+
+<div class="md-overlay"></div>
+
+@section Styles{
+    @*<link href="~/vendor/bootstrap.min.css" rel="stylesheet">*@
+    
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+		

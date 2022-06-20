@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CST.Models.Master;
+@inject SignInManager<M_User> SignInManager
+@inject UserManager<M_User> UserManager
+
+@{
+    var user = UserManager.FindByNameAsync(User.Identity.Name);
+    var namaUser = "-";
+    var npp = "-";
+    if (user.Result != null)
+    {
+        namaUser = user.Result.Nama;
+        npp = user.Result.NPP;
+    }
+
+}
+
+<div class="m-header">
+    <a class="mobile-menu" id="mobile-collapse1" href="#!"><span></span></a>
+    <a href="/Home/Index" class="b-brand">
+        <div class="b-bg">
+            <i class="feather icon-trending-up"></i>
+        </div>
+        <span class="b-title">APD</span>
+    </a>
+</div>
+<a class="mobile-menu" id="mobile-header" href="#!">
+    <i class="feather icon-more-horizontal"></i>
+</a>
+<div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+        <li><a href="#!" class="full-screen" onclick="javascript:toggleFullScreen()"><i class="feather icon-maximize"></i></a></li>
+    </ul>
+    <ul class="navbar-nav ml-auto">        
+        <li><p>@namaUser</p></li>        
+        <li>
+            <div class="dropdown drp-user">                
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    My Account <i class="far fa-user-circle"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right profile-notification">
+                    <div class="pro-head">                        
+                        <span>Welcome, @namaUser / @npp</span>
+                    </div>
+                    <ul class="pro-body">                        
+                        <li><a href="@Url.Action("ChangePassword","Account")" class="dropdown-item"><i class="fas fa-key"></i> Change Password</a></li>                        
+                        <li><a href="javascript:void(0)" class="dropdown-item" onclick="Logout()"><i class="feather icon-log-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

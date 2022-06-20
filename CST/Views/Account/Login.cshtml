@@ -1,0 +1,144 @@
+﻿
+@model CST.ViewModels.LoginVM;
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;    
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+   
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="CodedThemes" />
+
+    <!-- Favicon icon -->
+    <link rel="icon" href="~/vendor/jazztemplate/images/faviconSAFE.png" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/css/style.css">
+    <link rel="stylesheet" href="~/vendor/jazztemplate/css/layouts/dark.css">
+
+</head>
+
+<body>
+    <div class="auth-wrapper aut-bg-img" style="background-image: url('../images/bgCST.jpg'); ">
+        <div class="auth-content">
+            <div class="text-white">
+                <div class="card-body text-center">
+                    <form method="post">
+                        <div class="mb-4">
+                            <i class="feather icon-unlock auth-icon"></i>
+                        </div>
+                        <h3 class="mb-4 text-dark">Login</h3>
+                        <div class="input-group mb-3">
+                            @*<input type="text" asp-for="NPP" id="boxNPP" class="form-control text-dark" placeholder="NPP">*@
+                            <input type="text" id="boxNPP" class="form-control text-dark" placeholder="NPP">
+                        </div>
+                        <div class="input-group mb-4">
+                            @*<input type="password" asp-for="Password" id="boxPassword" class="form-control text-dark" placeholder="password">*@
+                            <input type="password" id="boxPassword" class="form-control text-dark" placeholder="Password"/> 
+                            <span class="input-group-append">
+                                <button type="button" class="btn-btn-primary">
+                                    <i id="password-eye" class="fas fa-eye"></i>
+                                </button>
+                            </span>
+                        </div>
+                        @*<button class="btn btn-primary shadow-2 mb-4">Login</button>*@
+                        <button class="btn btn-primary shadow-2 mb-4" onclick="Login()"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Required Js -->
+    <script src="~/vendor/jazztemplate/plugins/sweetalert/js/sweetalert.min.js"></script>
+    <script src="~/vendor/jazztemplate/js/vendor-all.min.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.spinnerButtonProccess').hide();
+        });
+
+        function Login() {            
+            var data = new Object();
+            data.NPP = $("#boxNPP").val();
+            data.Password = $("#boxPassword").val();
+
+            $.ajax({
+                "url": "@Url.Action("Login","Account")",
+                "type": "POST",
+                "datatype": "json",
+                "beforeSend": function () {
+                    ProcessingRequest();
+                },
+                "data": data,
+            }).then(
+                (result) => {                    
+                    if (result.statusCategory == 2) {
+                        swal({
+                            text: result.message,
+                            icon: "success",
+                            buttons: false,
+                            timer: 1500
+                        }).then(()=> {                            
+                            $(location).attr('href', "@Url.Action("Index","Home")");
+                        });                  
+                    }
+                    else {
+                        swal({
+                            text: result.message,
+                            icon: "error",
+                        });
+                    }
+                    RequestDone();
+                },
+                (XMLHttpRequest, textStatus, errorThrown) => {
+                    alert("Error : " + textStatus);
+                    RequestDone();
+                }
+            );
+        }
+
+        function ProcessingRequest() {
+            $('.spinnerButtonProccess').show();
+            $(':input').prop('disabled', true);
+        }
+        function RequestDone() {
+            $('.spinnerButtonProccess').hide();
+            $(':input').prop('disabled', false);
+        }
+
+        window.onload = function(){
+            const input = document.querySelector('#boxPassword')
+            const eye = document.querySelector('#password-eye');
+
+            const eyeBtn = eye.closest('button');
+
+            eyeBtn.onclick = function(){
+                if(input.type === 'password'){
+                    input.type = 'text';
+                    eye.classList.remove('fa-eye');
+                    eye.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    eye.classList.add('fa-eye');
+                    eye.classList.remove('fa-eye-slash');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+

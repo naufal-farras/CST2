@@ -1,0 +1,161 @@
+﻿@{
+    ViewData["Title"] = "Rumusan Template";
+}
+
+<div class="modal fade" id="ebookModal" tabindex="-1" role="dialog" aria-labelledby="ebookModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<h4 class="modal-title" id="ebookModalLabel">Upload Data</h4>*@
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="boxIdLaporan">
+                    @*<div class="form-row">
+                        <div class="col-md-8 mb-3">
+                           <label for="boxNamaNasabah">Nama Nasabah</label>
+                           <input type="text" class="form-control" id="boxNamaNasabah" placeholder="Nama Nasabah ..." required>
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <label for="boxNamaNasabah">Nama Nasabah</label>
+                        <select class="form-control" id="boxNamaNasabah">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-5 mb-3">
+                           <label for="boxNamaSubMenu">Nama Sub-Menu</label>
+                            <select class="form-control" id="boxNamaSubMenu">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            </select>
+                            <label for="boxFileSO">Upload File</label>
+                            <input type="file" accept="application/pdf" class="form-control mb-3" id="boxFile" placeholder="Choose File ....">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-5 mb-3">
+                           <label for="boxNamaCST">Nama Inputer</label>
+                           <input type="text" class="form-control" id="boxNamaCST" readonly placeholder="Nama Inputer ...">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="boxNPPCST">NPP Inputer</label>
+                            <input type="text" class="form-control" id="boxNPPCST" readonly placeholder="NPP Inputer....">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                           <label for="boxTanggal">Tanggal Upload</label>
+                        <input type="text" class="form-control" id="boxTanggal" readonly placeholder="Tanggal Upload....">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnAddData" onclick="AddData();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Simpan</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnUpdateData" onclick="UpdateData();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Perbarui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Rumusan Template</h5>
+                                        @*<button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>*@
+                                       
+                                        <button class="btn btn-sm btn-success fa-pull-right" onclick="location.href='@Url.Action("Tambah", "Rumusan")'" title="Tambah Template"> Tambah Template</button>   
+                                  
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table id="ebookTable" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Nama Nasabah</th>
+                                                        <th>Inputer</th>
+                                                        <th>Tanggal Upload</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="row mt-5">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>EBook / History</h5>
+                                        <button class="btn btn-sm btn-light fa-pull-right" data-toggle="modal" data-target="#ebookModal" onclick="ClearScreen()" data-backdrop="static" data-keyboard="false" title="Add Data">Add Data</button>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table id="historyTable" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Nama Nasabah</th>
+                                                        <th>Inputer</th>
+                                                        <th>Tanggal Upload</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="md-overlay"></div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
+
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script>
+        
+    </script>
+}

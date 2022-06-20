@@ -1,0 +1,402 @@
+﻿@model CST.ViewModels.Rumusan.RumusVM;
+@{
+    ViewData["Title"] = "Data Sub-Bab";
+}
+
+<div class="modal fade" id="subMenuModal" tabindex="-1" role="dialog" aria-labelledby="subMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="subMenuModalLabel">Tambah Sub-Bab</h4>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off">
+                    <div class="form-row">
+                        <input type="hidden" id="boxSubMenuId" />
+                        <div class="col-md-8 mb-3">
+                            <label for="boxNama">Nama Sub-Bab</label>
+                            <input type="text" class="form-control" id="boxNama" placeholder="Nama Sub-Bab" required>
+                        </div>
+                        <div class="form-group col-md-8 mb-3">  
+                            <label>Pilih Nasabah</label>
+                                <select required="required" class="form-control" style="width: 100%;" id="nasabahId">
+
+                                  @foreach (var item in Model.M_Nasabah)
+                                   {
+                                        <option value="@item.Id">@item.Nama</option>
+                                   }
+                             </select>                  
+                       </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnAddSubMenu" onclick="AddSubMenu();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Simpan</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnUpdateSubMenu" onclick="UpdateSubMenu();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Perbarui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="detailModalLabel">Detail Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <table>
+                            <tr>
+                                <td>Nama Sub-Bab</td>
+                                <td> : </td>
+                                <td id="tdSubMenuNama"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>                               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Master / Sub-Bab</h5>
+                                        <button class="btn btn-sm btn-light fa-pull-right" data-toggle="modal" data-target="#subMenuModal" onclick="ClearScreen()" data-backdrop="static" data-keyboard="false" title="Add Data">Add Sub-Bab</button>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table id="subMenuTable" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Nama Sub-Bab</th>
+                                                        <th>Nasabah</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+    <link href="~/vendor/jazztemplate/plugins/select2/css/select2.min.css" rel="stylesheet" />
+
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">  
+}
+
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>    
+
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.spinnerButtonProccess').hide();
+            LoadTable();
+            //LoadTableHistory();
+        })
+
+        function LoadTable() {
+            var t = $("#subMenuTable").DataTable({                
+                "ajax": function (data, callback, settings) {
+                    $.ajax({
+                        "url": "@Url.Action("Data","SubMenu")/Input",
+                        "type": "GET",
+                        "datatype": "json",
+                        "data" : data,
+                        "beforeSend": function () {
+                            materialLoading(true);
+                        }
+                    }).then(
+                        (data) => {
+                            callback(data);
+                            materialLoading(false);                            
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            materialLoading(false);
+                        });
+                },
+                "columns": [
+                    { "data": null },
+                    { "data": "nama" },
+                    { "data": "nasabah.nama"},
+                    {
+                        "render": function (data, type, row) {
+                            let buttonEdit = '<button type="button" class="btn btn-sm btn-light" onclick="ShowData('+row.id+')"><span><i class="fas fa-edit"></i> Edit</span></button>';
+                            let buttonDetail = '<button type="button" class="btn btn-sm btn-light" onclick="DetailData('+row.id+')"><span><i class="fas fa-info-circle"></i> Detail</span></button>';
+                            let buttonDelete = '<button type="button" class="btn btn-sm btn-light" onclick="DeleteData('+row.id+')"><span><i class="fas fa-trash-alt""></i> Delete</span></button>';
+
+                            return buttonDetail + buttonEdit + buttonDelete; 
+                        }
+                    }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": [0,2],
+                        "className": "text-center",
+                    }
+                ]
+            })
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+
+        function ShowData(id) {
+            let subBab = $('#subMenuTable').DataTable().data();
+            $.each(subBab, function (index, value) {
+                if (value.id == parseInt(id)) {
+                    debugger;
+                    $("#boxSubMenuId").val(value.id);
+                    $("#boxNama").val(value.nama);
+                    $('#btnAddSubMenu').hide();
+                    $('#btnUpdateSubMenu').show();
+                    $('#subMenuModal').modal('show');
+                    return false;
+                }
+            })
+        }        
+
+        function DetailData(id)
+        {
+            let subBab = $('#subMenuTable').DataTable().data();
+            $.each(subBab, function (index, value) {
+                if (value.id == parseInt(id)) {
+                    $("#tdSubMenuNama").html(value.nama);
+                    $('#detailModal').modal('show');
+                    return false;
+                }
+            })
+        }
+
+        function AddSubMenu() {
+            if($('#boxNama').val()==''){
+                swal({
+                    text: "Nama sub-bab harus diisi!",
+                    icon: "warning"                    
+                });
+            }
+            else
+            {
+                var fileData = new FormData();
+                fileData.append('Nama',$("#boxNama").val());
+                fileData.append('NasabahId',$("#nasabahId").val());
+
+                $.ajax({
+                    "url": "@Url.Action("Input","SubMenu")",
+                    "type": "POST",
+                    "datatype": "json",
+                    "processData": false,
+                    "contentType": false,
+                    "beforeSend": function () {
+                        ProcessingRequest();
+                    },
+                    "data": fileData, 
+                    "enctype": 'multipart/form-data',
+                }).then(
+                    (result) => {
+                    
+                        if (result.statusCategory == 2) {
+                            swal({
+                                text: result.message,
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500
+                            }).then(() => {
+                                $("#subMenuModal").modal('hide');
+                                ClearScreen();
+                                $('#subMenuTable').DataTable().ajax.reload();
+                            })
+                        }
+                        else {
+                            swal({
+                                text: result.message,
+                                icon: "error",                            
+                            }).then(() => {
+                                $("#subMenuModal").modal('hide');
+                                ClearScreen();
+                                $('#subMenuTable').DataTable().ajax.reload();
+                            })
+                        }
+                        RequestDone();
+                    },
+                    (XMLHttpRequest, textStatus, errorThrown) => {
+                        alert("Error : " + textStatus);
+                        RequestDone();
+                    }
+                );
+            }
+        }
+
+        function UpdateSubMenu() {
+            
+            let isPassedCheck = false;
+            if($('#boxNama').val()==''){
+                swal({
+                    text: "Nama sub-bab harus diisi!",
+                    icon: "warning"                    
+                });
+                isPassedCheck = false;
+            }     
+            else
+            {
+                isPassedCheck = true;                
+            }
+            
+
+            if(isPassedCheck==true)
+            {
+                debugger;
+                console.log($("#boxSubMenuId").val());
+                console.log($("#boxNama").val());
+
+                var fileData = new FormData();                
+                fileData.append('Id',$("#boxSubMenuId").val());
+                fileData.append('Nama',$("#boxNama").val());
+                fileData.append('NasabahId',$("#nasabahId").val());
+
+                $.ajax({
+                    "url": "@Url.Action("Update","SubMenu")",
+                    "type": "PUT",
+                    "datatype": "json",
+                    "processData": false,
+                    "contentType": false,
+                    "beforeSend": function () {
+                        ProcessingRequest();
+                    },
+                    "data": fileData, 
+                    "enctype": 'multipart/form-data',                
+                }).then(
+                    (result) => {
+                        if (result.statusCategory == 2) {
+                            swal({
+                                text: result.message,
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500
+                            }).then(() => {
+                                $("#subMenuModal").modal('hide');
+                                ClearScreen();
+                                $('#subMenuTable').DataTable().ajax.reload();
+                            })
+                        }
+                        else {
+                            swal({
+                                text: result.message,
+                                icon: "error",                            
+                            }).then(() => {
+                                $("#subMenuModal").modal('hide');
+                                ClearScreen();
+                                $('#subMenuTable').DataTable().ajax.reload();
+                            })
+                        }
+                        RequestDone();
+                    },
+                    (XMLHttpRequest, textStatus, errorThrown) => {
+                        alert("Error : " + textStatus);
+                        RequestDone();
+                    });
+            }
+        }
+
+        function DeleteData(Id) {
+            swal({
+                title: "Hapus Data",
+                text: "Apakah anda yakin akan menghapus data ini?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        "url": "@Url.Action("Delete","SubMenu")",
+                        "type": "DELETE",
+                        "datatype": "json",
+                        "beforeSend": function () {
+                            ProcessingRequest();
+                        },
+                        "data": { dataId: Id }
+                    }).then(
+                        (result) => {
+                            //console.log(result);
+                            if (result.statusCategory == 2) {
+                                swal({
+                                    text: result.message,
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    $('#subMenuTable').DataTable().ajax.reload();
+                                })
+                            }
+                            else {
+                                swal({
+                                    text: result.message,
+                                    icon: "error",
+                                    buttons: true
+                                }).then(() => {
+                                    $('#subMenuTable').DataTable().ajax.reload();
+                                })
+                            }
+                            RequestDone();
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            alert("Error : " + textStatus);
+                            RequestDone();
+                        }
+                    )
+                }
+            })
+        }
+
+        function ProcessingRequest() {
+            $('.spinnerButtonProccess').show();
+            $(':input').prop('disabled', true);
+        }
+        function RequestDone() {
+            $('.spinnerButtonProccess').hide();
+            $(':input').prop('disabled', false);
+        }
+
+        function ClearScreen() {
+            $("#boxNama").val("");
+            $('#btnAddSubMenu').show();
+            $('#btnUpdateSubMenu').hide();
+        }
+    </script>
+}

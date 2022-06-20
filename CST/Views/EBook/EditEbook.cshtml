@@ -1,0 +1,253 @@
+﻿@model CST.ViewModels.EBook.InputDataVM;
+ 
+@{
+    ViewData["Title"] = "Edit E-Book";
+} 
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <form autocomplete="off" method="post" enctype="multipart/form-data">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Edit Data E-Book</h5>
+                                        <button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>
+                                    </div>
+                                    
+                                      
+                                    <div class="card-block">
+
+                                      <div class="form-row">
+                                      
+                                          <div class="col">
+                                          <input type="text" class="form-control" id="namaBab" placeholder="@Model.Kelompok" value="@Model.Kelompok" required>
+                                        </div>
+                                       
+                                        <div class="col">
+                                          <input type="text" class="form-control" id="kelompok" placeholder="@Model.NamaEbook" value="@Model.NamaEbook"  required>
+                                        </div>
+                                         <div class="float-right"> 
+                                             
+                                            <a  onclick="UpdateJudul()" class="btn btn-sm btn-primary">Update Judul/Kelompok</a>
+
+                                         </div>
+                                      </div>
+                                      
+                                      <br>
+
+                                         @*batas atas accordion*@
+                                       <div class="accordion" id="accordionPanelsStayOpenExample">
+                                            @{
+                                                var nobab = 1;
+                                                
+                                             }
+                                          @{var noIndex =0 ; }
+                                           
+                                          @foreach (var item in Model.Babs)
+                                          {
+                                              <div class="accordion-item">
+                                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@nobab"  aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                                      
+                                                      Bab @nobab @item.namaBab
+
+                                                  </button>
+                                                  <input id="babId-@nobab" name="babId"  value="@item.BabId" hidden>
+                                                </h2>
+                                                 
+                                                    <div id="panelsStayOpen-collapseOne-@nobab" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                                      <div class="accordion-body">
+                                                  @{var nosub = 1;}
+                                                    @foreach (var item2 in item.SubBabs)
+                                                     { 
+                                                        <input id="subBabId-@nobab-@nosub" name="subbabId"  value="@item2.SubBabId " hidden>
+
+                                                         <h4> @nosub.@item2.namaSubBab </h4>
+                                                         <div class="col-5 mb-3">
+                                                          @{var nosubsub = 1; }
+                                                           @foreach (var item3 in item2.SubSubBabs)
+                                                           {  
+                                                                <div class="form-group row">
+                                                                  <div class="col-xs-2">
+                                                                    <span><strong>  @nosubsub.@item3.namaSubSubBab </strong></span>
+                                                                           
+                                                                       <input class="form-control" type="file" style="width:250px" accept="application/pdf" name="subsubbabId" id="subSubBabId-@nobab-@nosub-@nosubsub"> 
+                                                             
+                                                                       <a onclick="EditData(@noIndex,@nobab,@nosub,@nosubsub)" class="btn btn-primary">Ubah File</a>
+                                                                        @foreach (var item5 in Model.T_TransDetail)
+                                                                       {
+                                                                          if(noIndex == item5.Index)
+                                                                          {
+                                                                                             
+                                                                                            <a class="btn btn-warning" href="@Url.Action("Preview", "EBook")/@item5.Id" target="_blank">Lihat File</a>
+                                                                          }
+                                                                                        continue;
+
+                                                                      }
+                                                                      
+                                                                       <br />
+                                                                  </div>
+                                                                 
+                                                                </div>
+                                                         
+                                                               noIndex++;
+                                                               nosubsub++;
+                                                           } 
+                                                           </div>
+                                                       nosub++;
+                                                     }
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                                {
+                                                    nobab++;
+
+                                                }
+
+                                            }
+                                           
+                                        </div>
+                                          @*batas bawah accordion*@
+                                         @*<a class="btn btn-primary" onclick="AddData()">Save</a>*@
+                                         <div class="float-left"> 
+                                             <br />
+                                            <a  href="@Url.Action("Index", "EBook")" class="btn btn-sm btn-warning">Kembali</a>
+
+                                         </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- [ Main Content ] end -->
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="md-overlay"></div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+    <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
+    <script src="~/vendor/bootstrap.bundle.min.js"></script>
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script> 
+       
+
+           function EditData(id,nobab,nosub,nosubsub) 
+           { 
+             debugger;
+             var IdFile= "#subSubBabId-"+nobab+"-"+nosub+"-"+nosubsub;
+            
+               if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
+               {
+                swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok!");
+               }
+               else
+               {   
+                   var indx = id;
+                   var url = window.location.href;
+                   var parts = url.split("/");
+                   var beforeLast = parts[parts.length - 1]; //keep in mind that since array starts with 0, last part is [length - 1]
+                   var rumusanId=beforeLast;
+
+                   var fileData = new FormData();   
+                   fileData.append('selectedUpload',$(IdFile)[0].files[0]);  
+                   fileData.append('Index', indx); 
+                   fileData.append('RumusanId', rumusanId); 
+
+
+                                 $.ajax({ 
+                                       url: "@Url.Action("UpdateFileEbook", "Ebook")", 
+                                       type: 'POST', 
+                                        data:fileData, 
+                                        cache: false,
+                                        processData: false,
+                                        contentType: false,
+                                    success: function (result) {
+                                        swal({
+                                            html: true,
+                                            title: 'Sukses',
+                                            text: 'Data Anda Berhasil Disimpan',
+                                            type: "success",
+                                            showCancelButton: false,
+                                            showConfirmButton: true,
+                                        }).then(() => {
+                                         window.location.reload();
+                                        }) 
+                                    },
+                                    error: function (response) {
+                                        swal("Oops", "We couldn't connect to the server!", "error");
+                                    }
+                                });
+               } 
+
+
+           }
+           function UpdateJudul()
+           {
+               debugger;
+               var namaEbook = $('#namaBab').val();
+               var kelompok = $('#kelompok').val();
+
+            debugger;
+               if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
+               {
+                swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok!");
+               }
+               else
+               {   
+                   var url = window.location.href;
+                   var parts = url.split("/");
+                   var beforeLast = parts[parts.length - 1]; //keep in mind that since array starts with 0, last part is [length - 1]
+                   var rumusanId=beforeLast; 
+
+                                 $.ajax({ 
+                                       url: "@Url.Action("UpdateJudul", "Ebook")", 
+                                       type: 'POST', 
+                                        data:{Id:rumusanId,NamaEbook: namaEbook,Kelompok:kelompok}, 
+                                        cache: false, 
+                                         dataType: 'json',
+                                    success: function (result) {
+                                        swal({
+                                            html: true,
+                                            title: 'Sukses',
+                                            text: 'Data Anda Berhasil Di Update',
+                                            type: "success",
+                                            showCancelButton: false,
+                                            showConfirmButton: true,
+                                        }).then(() => {
+                                         window.location.reload();
+                                        }) 
+                                    },
+                                    error: function (response) {
+                                        swal("Oops", "We couldn't connect to the server!", "error");
+                                    }
+                                });
+               }                 
+           }
+     
+           
+    </script>
+}

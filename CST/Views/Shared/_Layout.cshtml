@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" href="~/images/faviconSAFE.png" type="image/x-icon">
+    <!-- font awesome css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/css/style.css">   
+
+    <!-- Material Loading -->
+    <link rel="stylesheet" href="~/vendor/material-loading-master/material/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="~/vendor/material-loading-master/material-loading.css" />
+
+    @RenderSection("Styles", false)
+</head>
+<body>    
+    <!-- [ navigation menu ] start -->
+    <nav class="pcoded-navbar">
+        <partial name="_Navigation" />
+    </nav>
+    <!-- [ navigation menu ] end -->
+
+    <!-- [ Header ] start -->
+    <header class="navbar pcoded-header navbar-expand-lg navbar-light">
+        <partial name="_Header" />
+    </header>
+    <!-- [ Header ] end -->
+
+    <!-- [ Main Content ] start -->
+    @RenderBody()
+    <!-- [ Main Content ] end -->
+
+    <!-- Required Js -->
+
+    <script src="~/vendor/jazztemplate/js/vendor-all.min.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/vendor/jazztemplate/js/pcoded.min.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/sweetalert/js/sweetalert.min.js"></script>
+
+    <!-- Material Loading -->
+    <script defer src="~/vendor/material-loading-master/material/material.min.js"></script>
+    <script src="~/vendor/material-loading-master/material-loading.js"></script>
+
+    <!-- Account Script -->
+    <script>
+        function Logout() {
+            swal({
+                title: "Logout",
+                text: "Apakah anda yakin akan logout?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    window.location.href = "@Url.Action("Logout","Account")";
+                }
+            })
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

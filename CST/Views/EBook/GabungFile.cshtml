@@ -1,0 +1,130 @@
+﻿@model CST.ViewModels.EBook.InputDataVM;
+ 
+@{
+    ViewData["Title"] = "Gabung File Pdf";
+} 
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <form autocomplete="off" method="post" enctype="multipart/form-data">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Gabung File Pdf</h5>
+                                    </div>
+                                    
+                                      
+                                    <div class="card-block">
+
+                                        <table class="table" style="width: 100%;" id="table-form">
+                                            <tr>
+                                                <td style="display:none;"></td>
+                                                @*<td>Pengirim</td>*@
+                                                <td>File</td>
+                                                <td>&nbsp</td>
+                                            </tr>
+                                            <tr class="mycontainer" id="mainrow">
+                                                
+                                                <td>
+                                                    <input type="file" id="subsubbabId" accept="application/pdf" name="subsubbabId" class="form-control" />
+                                                </td>
+                                                <td>
+
+                                                    <a class='btn btn-success btn-sm' id="add" title='Tambah Detail'><i class='fa fa-plus'></i></a>
+                                                </td>
+                                            </tr>
+                                        </table>  
+
+                                       
+                                         @*<a class="btn btn-primary" onclick="AddData()">Save</a>*@
+                                          <div class="float-left"> 
+                                             <br />
+                                            <a  href="@Url.Action("TambahEbook", "EBook")" class="text-white btn btn-sm btn-warning">Kembali</a>
+
+                                         </div>
+                                         <div class="float-right"> 
+                                             <br />
+                                         <a class="btn btn-sm btn-primary text-white"  onclick="AddData();">Gabung</a>
+
+                                         </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- [ Main Content ] end -->
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="md-overlay"></div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+    <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
+    <script src="~/vendor/bootstrap.bundle.min.js"></script>
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script> 
+      
+ $("#add").on("click",function(){
+        let newRow = $("#mainrow").clone().removeAttr("id");
+        $('#add', newRow).addClass('remove').val('remove').removeClass('btn-success').addClass('btn-danger').find('i').removeClass('fa-plus').addClass('fa-minus');
+        $("#table-form").append(newRow)
+    })
+    $('#table-form').on('click', '.remove', function () {
+                $(this).parents('tr').remove();
+    });
+
+       function AddData() 
+       {  
+                       var fileData = new FormData();   
+                           console.log( $('input[name^="subsubbabId"]'));
+
+                        $('input[name^="subsubbabId"]').each(function(){
+                        
+                           fileData.append('selectedUpload',$(this)[0].files[0]);  
+                         
+                         })    
+                            $.ajax({ 
+                                       url: "@Url.Action("GabungFilePDF", "Ebook")", 
+                                       type: 'POST', 
+                                        data:fileData, 
+                                        cache: false,
+                                        processData: false,
+                                        contentType: false,
+                                    success: function (result) {
+                                         window.location.href ='@Url.Action("GenerateFilePDF", "EBook")';
+                                         
+                                    },
+                                    error: function (response) {
+                                        swal("Oops", "We couldn't connect to the server!", "error");
+                                    }
+                                });
+                       } 
+                   
+
+        
+           
+    </script>
+}

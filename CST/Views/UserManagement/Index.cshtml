@@ -1,0 +1,474 @@
+﻿
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="userModalLabel">Tambah User</h4>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off">
+                    <div class="form-row">
+                        <input type="hidden" id="boxUserId" />
+                        <div class="col-md-8 mb-3">
+                            <label for="boxNama">Nama</label>
+                            <input type="text" class="form-control" id="boxNama" placeholder="Nama" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="boxNPP">NPP</label>
+                            <input type="text" class="form-control" id="boxNPP" placeholder="NPP" required>
+                        </div>                        
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="boxJabatan">Jabatan</label>
+                            <select id="boxJabatan" data-placement="choose" class="form-control">
+                                <option value="" selected>Choose</option>
+                                @foreach (var item in ViewBag.Jabatan)
+                                {
+                                    <option value="@item.Id">@item.Nama</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                                <label for="boxUnit">Unit</label>
+                                <select id="boxUnit" data-placement="choose" class="form-control">
+                                    <option value="" selected>-</option>
+                                    @foreach (var item in ViewBag.Unit)
+                                    {
+                                        <option value="@item.Id">@item.Nama</option>
+                                    }
+                                </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                                <label for="boxStatusPegawai">Status Pegawai</label>
+                                <select id="boxStatusPegawai" data-placement="choose" class="form-control">
+                                    <option value="0" selected>PGS</option>                                    
+                                    <option value="1">Definitif</option>                                    
+                                </select>
+                        </div>
+                    </div>                   
+                    <div class="form-group">
+                        <label>Role</label>
+                        <div class="d-flex flex-row">
+                            <div class="form-group mr-5">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="boxRole" type="checkbox" value="Admin" id="boxRoleAdmin">
+                                    <label class="form-check-label" for="boxRoleAdmin">
+                                        Admin
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="boxRole" type="checkbox" value="Inputer" id="boxRoleInputer">
+                                    <label class="form-check-label" for="boxRoleInputer">
+                                        Inputer
+                                    </label>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnAddUser" onclick="AddUser();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Simpan</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnUpdateUser" onclick="UpdateUser();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Perbarui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Master / User Management</h5>
+                                        <button class="btn btn-sm btn-light fa-pull-right" data-toggle="modal" data-target="#userModal" onclick="ClearScreen()" data-backdrop="static" data-keyboard="false" title="Add Data">Add User</button>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table id="userTable" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Nama Pegawai</th>
+                                                        <th>NPP</th>
+                                                        <th>Jabatan</th>
+                                                        <th>Last Login</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+    <link href="~/vendor/jazztemplate/plugins/select2/css/select2.min.css" rel="stylesheet" />   
+} 
+
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>    
+
+    <script>
+        $(document).ready(function () {                      
+            $('.spinnerButtonProccess').hide();
+            LoadTable();
+        })
+
+        function ShowModalEdit(Id) {
+            let userData = $('#userTable').DataTable().data();
+            $.each(userData, function (index, value) {
+                if (value.id == Id) {
+                    $("#boxUserId").val(value.id);                    
+                    $("#boxNama").val(value.nama);
+                    $("#boxNPP").val(value.npp);
+                    $("#boxJabatan").val(value.jabatanId).change();
+                    $("#boxUnit").val(value.unitId).change();
+                    $("#boxStatusPegawai").val(value.statusPegawai).change();
+
+                    $.each(value.role, function (index, value) {
+                        $('input[name = "boxRole"][value="'+value+'"]').prop('checked', true);
+                    });
+
+                    $("#userModalLabel").html('Edit User');
+                    $("#userModal").modal('show');
+                    $("#btnAddUser").hide();
+                    $("#btnUpdateUser").show();
+                    return false;
+                }
+            })
+        }
+
+        function LoadTable() {
+            var t = $("#userTable").DataTable({
+                "ajax": function (data, callback, settings) {
+                    $.ajax({
+                        "url": "@Url.Action("User", "Master")/Data",
+                        "type": "GET",
+                        "datatype": "json",
+                        "data" : data,
+                        "beforeSend": function () {
+                            materialLoading(true);
+                        }
+                    }).then(
+                        (data) => {
+                            callback(data);                            
+                            materialLoading(false);
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            materialLoading(false);
+                        });
+                },
+                "columns": [
+                    { "data": null },
+                    { "data": "nama" },
+                    { "data": "npp" },
+                    { "data": "jabatan.nama" },                    
+                    {
+                        "render": function (data, type, row) {
+                            if (row.lastLogin != null) {
+                                let val = row.lastLogin.replace("T", " ");
+                                return moment(val, 'YYYY-MM-DD hh:mm:ss').locale("id").format('DD MMMM YYYY hh:mm A');
+                            }
+                            else
+                            {
+                                return "-";
+                            }
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModalEdit('" + row.id + "');><span><i class='fas fa-user-edit'></i></span></button> " +
+                                "<button class='btn btn-light btn-sm text-dark text-center' onclick = DeleteUser('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" +
+                                "<button class='btn btn-light btn-sm text-dark text-center' onclick = ResetPassword('" + row.npp + "');><span>Reset Password <i class='fas fa-sync-alt'></i></span></button>";
+                        },
+
+                    },
+                ]
+            })
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+
+        function AddUser() {
+            var data = new Object();
+            let userRole = [];
+            data.nama = $("#boxNama").val();            
+            data.npp = $("#boxNPP").val();
+            data.jabatanId = $("#boxJabatan").val();
+            data.unitId = $("#boxUnit").val();
+            data.statusPegawai = $("#boxStatusPegawai").val();
+            data.userRole = userRole;
+            $('input[name="boxRole"]:checked').each(function () {
+                userRole.push(this.value);
+            });
+
+            $.ajax({
+                "url": "@Url.Action("User","Master")",
+                "type": "POST",
+                "datatype": "json",
+                "beforeSend": function () {
+                    ProcessingRequest();
+                },
+                "data": data,
+            }).then(
+                (result) => {                    
+                    if (result.statusCategory == 0) {
+                        swal({
+                            text: result.message,
+                            icon: "warning",
+                            buttons: false,
+                            timer: 1500
+                        }).then(() => {
+                            $("#userModal").modal('hide');
+                            ClearScreen();
+                            $('#userTable').DataTable().ajax.reload();
+                        })
+                    }
+                    else if (result.statusCategory ==2) {
+                        swal({
+                            text: result.message,
+                            icon: "success",
+                            buttons: false,
+                            timer:1500
+                        }).then(() => {
+                            $("#userModal").modal('hide');
+                            ClearScreen();
+                            $('#userTable').DataTable().ajax.reload();
+                        })
+                    }
+                    else {
+                        swal({
+                            text: result.message,
+                            icon: "error",
+                        }).then(() => {
+                            $("#userModal").modal('hide');
+                            ClearScreen();
+                            $('#userTable').DataTable().ajax.reload();
+                        })
+                    }
+                    RequestDone();
+                },
+                (XMLHttpRequest, textStatus, errorThrown) => {
+                    alert("Error : " + textStatus);                    
+                    RequestDone();
+                }
+            );
+        }
+
+        function UpdateUser() {
+            var data = new Object();
+            let userRole = [];
+            data.nama = $("#boxNama").val();
+            data.id_user = $("#boxUserId").val();            
+            data.npp = $("#boxNPP").val();
+            data.jabatanId = $("#boxJabatan").val();
+            data.unitId = $("#boxUnit").val();
+            data.statusPegawai = $("#boxStatusPegawai").val();
+            data.userRole = userRole;
+            $('input[name="boxRole"]:checked').each(function () {
+                userRole.push(this.value);
+            });
+
+            $.ajax({
+                "url": "@Url.Action("User","Master")",
+                "async": false,
+                "type": "PUT",
+                "datatype": "json",
+                "beforeSend": function () {
+                    ProcessingRequest();
+                },
+                "data": data,
+            }).then(
+                (result) => {                    
+                    if (result.statusCategory == 2) {
+                        swal({
+                            text: result.message,
+                            icon: "success",
+                            buttons: false,
+                            timer: 1500
+                        }).then(() => {
+                            $("#userModal").modal('hide');
+                            ClearScreen();
+                            $('#userTable').DataTable().ajax.reload();
+                        })
+                    }
+                    else {
+                        swal({
+                            text: result.message,
+                            icon: "error",
+                            buttons: false,
+                            timer: 1500
+                        }).then(() => {
+                            $("#userModal").modal('hide');
+                            ClearScreen();
+                            $('#userTable').DataTable().ajax.reload();
+                        })
+                    }
+                    RequestDone();
+                },
+                (XMLHttpRequest, textStatus, errorThrown) => {
+                    alert("Error : " + textStatus);
+                    RequestDone();
+                });
+        } 
+
+        function DeleteUser(Id) {
+            swal({
+                title: "Hapus User",
+                text: "Apakah anda yakin akan menghapus data user ini?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        "url": "@Url.Action("User","Master")",
+                        "type": "DELETE",
+                        "beforeSend": function () {
+                            ProcessingRequest();
+                        },
+                        "datatype": "json",
+                        "data": { Id: Id }
+                    }).then(
+                        (result) =>{
+                            //console.log(result);
+                            if (result.statusCategory == 2) {
+                                swal({
+                                    text: result.message,
+                                    icon: "success",
+                                    buttons: false,
+                                    timer:1500
+                                }).then(() => {
+                                    $('#userTable').DataTable().ajax.reload();
+                                })
+                            }
+                            else
+                            {
+                                swal({
+                                    text: result.message,
+                                    icon: "error",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    $('#userTable').DataTable().ajax.reload();
+                                })
+                            }
+                            RequestDone();
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            alert("Error : " + textStatus);
+                            RequestDone();
+                        }
+                    )
+                }
+            })
+        }
+
+        function ResetPassword(npp) {
+            swal({
+                title: "Reset Password",
+                text: "Apakah anda yakin akan mereset password user ini?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        "url": "@Url.Action("User","Master")/ResetPassword",
+                        "type": "POST",
+                        "beforeSend": function () {
+                            ProcessingRequest();
+                        },
+                        "datatype": "json",
+                        "data": { NPP: npp }
+                    }).then(
+                        (result) => {
+                            //console.log(result);
+                            if (result.statusCategory == 2) {
+                                swal({
+                                    text: result.message,
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    $('#userTable').DataTable().ajax.reload();
+                                })
+                            }
+                            else {
+                                swal({
+                                    text: result.message,
+                                    icon: "error",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    $('#userTable').DataTable().ajax.reload();
+                                })
+                            }
+                            RequestDone();
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            alert("Error : " + textStatus);
+                            RequestDone();
+                        }
+                    )
+                }
+            })
+        }
+
+        function ProcessingRequest()
+        {
+            $('.spinnerButtonProccess').show();
+            $(':input').prop('disabled', true);
+        }
+        function RequestDone()
+        {
+            $('.spinnerButtonProccess').hide();
+            $(':input').prop('disabled', false);
+        }
+
+        function ClearScreen() {
+            $("#boxNama").val('');
+            $("#boxUserId").val('');
+            $("#boxNPP").val('');            
+            $("#boxUnit").val('').change;
+            $("#boxJabatan").val('').change;
+            $("#boxStatusPegawai").val(0).change;
+            $("input[name = 'boxRole']").prop('checked', false);
+            $("#userModalLabel").html('Tambah User');
+            $("#btnUpdateUser").hide();
+            $("#btnAddUser").show();
+        }
+    </script>
+}
+

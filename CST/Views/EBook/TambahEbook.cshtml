@@ -1,0 +1,87 @@
+﻿@model CST.ViewModels.EBook.EbookVM;
+
+@{
+    ViewData["Title"] = "Buat  Data";
+}
+
+ 
+
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start --> 
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Tambah Data E-Book</h5>
+                                        @*<button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>*@
+                                    </div>
+                                    <div class="card-block">
+
+                                     <div class="row" >
+                                            <div class="col-sm-3">
+                                                 <div class="form-group"> 
+                                                     <select required="required" class="form-select" style="width: 100%;" name="rumusanId" onchange="selectRumusan()"  id="rumusanId">  
+                                                        <option>--Pilih Template--</option>
+                                                        
+                                                         @foreach (var item in Model.rumusanNasabah)
+                                                           {
+                                                                <option   value="@item.Id">@item.Nama</option>
+                                                           }
+                                                     </select>  
+                                                 </div>
+                                            </div>
+                                             <div class="col-sm-3" id="ButtonAdd">
+                                                 <a class="btn btn-sm btn-success"  id="buttonId" title="Tambah Ebook"> Tambah Ebook</a> 
+                                             </div>     
+                                        </div>  
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<div class="md-overlay"></div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+    <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
+    <script src="~/vendor/bootstrap.bundle.min.js"></script>
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script>
+          $(document).ready(function () {                      
+          
+             
+        })
+       
+            function selectRumusan() {
+             var rumusId = document.getElementById("rumusanId").value; 
+                $('#buttonId').attr('href','@Url.Action("DetailTambah", "EBook")/'+rumusId);
+            }
+          
+          
+    </script>
+}

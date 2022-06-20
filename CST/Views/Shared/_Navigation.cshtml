@@ -1,0 +1,60 @@
+﻿@using CST.Models.Master
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<M_User> SignInManager
+@inject UserManager<M_User> UserManager
+    
+
+<div class="navbar-wrapper">
+    <div class="navbar-brand header-logo">
+        <a href="/Home/Index" class="b-brand">
+            <div class="b-bg">
+                <i class="fas fa-code"></i>
+            </div>
+            <span class="b-title">CST</span>
+        </a>
+        <a class="mobile-menu" id="mobile-collapse" href="#"><span></span></a>
+    </div>
+    <div class="navbar-content scroll-div">
+        <ul class="nav pcoded-inner-navbar">
+            <li class="nav-item pcoded-menu-caption text-white">
+                <label>MENU</label>
+            </li>
+            
+            @if (User.IsInRole("Admin"))
+            {                
+                <li class="nav-item">
+                    <a href="@Url.Action("User","Master")" class="text-white"><span class="pcoded-micon"><i class="fas fa-users-cog"></i></span><span class="pcoded-mtext">User Management</span></a>
+                </li>            
+            } 
+            @if (User.IsInRole("Inputer"))
+            {
+               <li class=""><a href="@Url.Action("Index","EBook")" class="text-white"><span class="pcoded-micon"><i class="fas fa-book"></i></span><span class="pcoded-mtext">E-Book</span></a></li>
+
+                <li class="nav-item pcoded-hasmenu">
+                    <a href="javascript:void(0)" class="nav-link text-white"><span class="pcoded-micon"><i class="far fa-check-circle"></i></span><span class="pcoded-mtext">Management Data</span></a>
+                    <ul class="pcoded-submenu">
+                       @*<li class=""><a href="@Url.Action("Index","Rumusan")" class="text-white"><span class="pcoded-micon"><i class="fas fa-book"></i></span><span class="pcoded-mtext">Rumusan Template</span></a></li>*@
+                        <li class="nav-item pcoded-hasmenu">
+                            <a href="javascript:void(0)" class="nav-link text-white"><span class="pcoded-micon"><i class="fas fa-users-cog"></i></span><span class="pcoded-mtext">Rumusan Template</span></a>
+                             <ul class="pcoded-submenu">
+                                @*<li class=""><a href="@Url.Action("AddNasabah","Rumusan")" class="text-white">Nasabah</a></li>*@
+                                <li class=""><a href="@Url.Action("AddBab","Rumusan")" class="text-white">Bab</a></li>
+                                <li class=""><a href="@Url.Action("AddSub","Rumusan")" class="text-white">Sub-Bab</a></li>
+                                <li class=""><a href="@Url.Action("AddSubSub","Rumusan")" class="text-white">SubSub-Bab</a></li>
+                            </ul>
+                        </li> 
+                        <li class="nav-item pcoded-hasmenu">
+                            <a href="javascript:void(0)" class="nav-link text-white"><span class="pcoded-micon"><i class="fas fa-users-cog"></i></span><span class="pcoded-mtext">Data Master</span></a>
+                            <ul class="pcoded-submenu">
+                                <li class=""><a href="@Url.Action("Input","Nasabah")" class="text-white">Nasabah</a></li>
+                                <li class=""><a href="@Url.Action("Input","Bab")" class="text-white">Data Bab</a></li>
+                                <li class=""><a href="@Url.Action("Input","SubMenu")" class="text-white">Data Sub-Bab</a></li>
+                                <li class=""><a href="@Url.Action("Tambah","SubSubMenu")" class="text-white">Data SubSub-Bab</a></li>
+                            </ul>
+                        </li> 
+                    </ul>
+                </li>
+            }             
+        </ul>
+    </div>
+</div>

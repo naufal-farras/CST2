@@ -1,0 +1,940 @@
+﻿@model CST.ViewModels.Rumusan.RumusVM;
+
+@{
+    ViewData["Title"] = "Add Sub Bab";
+}
+
+<div class="modal fade" id="Addbab" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="LabelModal">Tambah Data</h4>
+                <div class="input-group-btn">
+                            <button class="btn btn-secondary" type="button"  onclick="tambahbab();" id="btntambahsubbab"> <span class="glyphicon glyphicon-plus" aria-hidden="true">Tambah Sub Bab</span>  </button>
+                         </div>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" method="post" enctype="multipart/form-data"> 
+
+                      <div class="form-group col-md-6">  
+                            <label>Nama Template</label>
+                            <input type="text" class="form-control" id="template" disabled placeholder="Nama Template"/>             
+                            <input type="text" class="form-control" id="rumusanId" hidden  />             
+                       </div>  
+                      
+                         
+                                  <div class="form-group">
+                                    <label class="col-sm-2 control-label">Pilih Bab</label>
+                                    <div class="col-sm-6" >
+                                        <select required="required" class="form-control" id="selectbab" style="width: 100%;" onchange="CheckSubBabAdd(0)" >
+                                            
+                                         </select>
+                                    </div>
+                                 </div>
+                          
+                            
+                           <div id="SubBabdiv"></div> 
+                       
+
+
+                          <div id="Babclass">
+                             <div class="form-group col-md-6" id="listsubbab" >  
+                            <label>Sub Bab </label>
+                                <select required="required" class="form-control "name="SubbabId[]" style="width: 100%;" id="subbabId" disabled>
+                                    <option selected value="0">--Pilih Subbab--</option>
+
+                                  @*@foreach (var item in Model.M_SubBab)
+                                   {
+                                        <option value="@item.Id">@item.Nama</option>
+                                   }*@
+                             </select>                  
+                       </div>
+
+                        
+                       <div id="tambahbab">
+          
+                      </div>
+                     </div>
+                  
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnAddData" onclick="AddData();"> Simpan</button>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Rumusan Sub Bab</h5>
+                                       
+                                  
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table id="Table" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Nama Template</th>
+                                                        <th>Nama Nasabah</th>
+                                                        <th id="idNasabah" hidden>Id Nasabah</th>
+                                                        <th>Jumlah Bab</th>
+                                                        <th>Jumlah SubBab</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabelShow"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div id="namatemplate"> 
+                                      <div class="form-group col-md-6">  
+                                        <label>Nama Template</label>
+                                        <input type="text" class="form-control" id="templateshow" placeholder="Nama Template" readonly/>     
+                                      </div>
+                                      <div class="form-group col-md-6">  
+                                       <label>Pilih Nasabah</label>
+                                           <select required="required" class="form-control" style="width: 100%;" id="nasabahidshow" disabled>
+
+                                                @foreach (var item in Model.M_Nasabah)
+                                       {
+                                            <option value="@item.Id">@item.Nama</option>
+                                       }
+                                            </select>                  
+                                       </div>
+                                   </div>
+                                  <div class="col-md-6" id="selectbabdelete"></div>
+                                  <div class = "col-md-6" id="selectbabdelete2"></div>
+                                </form>
+                              </div>
+                              <div class="modal-footer" id="delete-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabelShowEdit"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div id="namatemplate"> 
+                                      <div class="form-group col-md-6">  
+                                        <label>Nama Templatse</label>
+                                        <input type="text" class="form-control" id="templateshowEdit" placeholder="Nama Template" readonly/>     
+                                      </div>
+                                      <div class="form-group col-md-6">  
+                                       <label>Pilih Nasabah</label>
+                                           <select required="required" class="form-control" style="width: 100%;" id="nasabahidshowEdit" disabled>
+
+                                                @foreach (var item in Model.M_Nasabah)
+                                       {
+                                            <option value="@item.Id">@item.Nama</option>
+                                       }
+                                            </select>                  
+                                       </div>
+                                   </div>
+                                  <div class="col-md-6" id="selectbabEdit"></div>
+                                  <div class = "col-md-6" id="selectbabEdit2"></div>
+                                </form>
+                              </div>
+                              <div class="modal-footer" id="edit-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                       
+                       
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="md-overlay"></div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
+
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script>
+   $(document).ready(function () {                      
+            LoadTable();
+        })
+        
+   var room = 1;
+
+    function tambahbab() {
+ 
+    var babId = document.getElementById("selectbab").value;
+        
+        if(babId!=""){
+            
+            CheckSubBabAdd(1);
+        }
+}
+   function remove_tambahbab(rid) {
+	   $('.removeclass'+rid).remove();
+    room--;
+   }
+
+     function LoadTable() {
+            var t = $("#Table").DataTable({
+                "ajax": function (data, callback, settings) {
+                    $.ajax({
+                        "url": "@Url.Action("GetTable", "Rumusan")",
+                        "type": "GET",
+                        "datatype": "json",
+                        "data" : data,
+                        "beforeSend": function () {
+                            materialLoading(true);
+                        }
+                    }).then(
+                        (data) => {
+                            callback(data);                            
+                            materialLoading(false);
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            materialLoading(false);
+                        });
+                },
+                "columns": [
+                    { "data": null },
+                    { "data": "template" },
+                    { "data": "namaNasabah" },
+                    { "data": "nasabahId" },
+                    { "data": "bab" },  
+                    { "data": "subBab" },{
+                        "render": function (data, type, row) {
+                            //console.log(row)
+                            return "<button type='button' class='btn btn-sm btn-success text-dark' onclick = AddBab('" + row.id + "');><span><i class='fa fa-plus'></i></span></button> " +
+                             "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModal('" + row.id + "');><span><i class='fa fa-eye'></i></span></button> " +
+                              "<button class='btn btn-light btn-sm text-dark text-center'  onclick = ShowModalEdit('" + row.id + "');><span><i class='fas fa-pencil-alt'></i></span></button>"+
+                             "<button class='btn btn-light btn-sm text-dark text-center' onclick = ShowModalDelete('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
+                             
+                                
+                        },
+                        
+                    },
+                ],
+                  "columnDefs": [
+                        {
+                            "targets": [ 3 ],
+                            "visible": false,
+                            "searchable": false
+                        }
+             
+        ]
+            })
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+
+  
+
+
+   function AddBab(Id) {
+        let userData = $('#Table').DataTable().data();
+            $.each(userData, function (index, value) {
+                if (value.id == Id) { 
+                     
+                    $("#rumusanId").val(Id);
+                    $("#template").val(value.template);
+                    return false;
+                }
+            })
+
+            $.ajax({
+                url: "@Url.Action("GetDataById", "Rumusan")",
+                type: 'GET',
+                data: { Id:Id},
+                dataType: 'json',
+                success: function (result) { 
+                    //console.log(result.data.value)
+                   var html = '';
+                   
+                    for (let i = 0; i < result.data.value.length; ++i) {  
+                         html += '<option value="' +  result.data.value[i].bab.id + '">' + result.data.value[i].bab.nama  + '</option>'; 
+                      } 
+
+                     
+                    $('#selectbab').html(html);
+                    $('#selectbab').val("--Pilih Bab--");
+
+                }
+            })
+
+            //$("#Babclass").hide();
+            //$("#btnAddData").hide();
+            $("#btnUpdateUser").show();
+            $("#Addbab").modal('show');
+        };
+      
+          function GetBab() {
+            $.ajax({
+                     url: "@Url.Action("GetAllData", "Rumusan")",  
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (result) {
+                        var $main = $("#babId");
+                        $.each(result, function (i, value) {   
+                             $.each(value.m_Bab, function (ix, value2) { 
+                             $main.append($("<option />").val(this.id).text(this.nama));
+                             });
+                        });
+                    }
+                  })
+             }; 
+
+function ShowModal(Id) {
+      debugger;
+        let userData = $('#Table').DataTable().data();
+            $.each(userData, function (index, value) {
+                if (value.id == Id) { 
+                    $("#template").val(value.template);
+                    $("#nasabahId").val(value.nasabahId).change();
+                    return false;
+                }
+            })
+            var nasabahId=Id;
+            $.ajax({
+                url: '@Url.Action("GetBabById", "Rumusan")',
+                type: 'GET',
+                data: { Id:Id},
+                dataType: 'json',
+                success: function (result) { 
+                    //console.log(result.data.value)
+                 
+                    
+                    
+                   var html = '';
+                   
+                   html += '<div class="form-group select-bab">';
+                    html += '<label class="control-label">Pilih Bab</label>';
+                    html += '<select required="required" class="form-control" style="width: 100%;" id="babId2" onchange=CheckSubBab("'+nasabahId+'")>';  
+                    
+                       
+                   for (let i = 0; i < result.data.value.length; ++i) { 
+                      // console.log(i);
+                      var no= i+1;
+         
+                                html += '<option value='+ result.data.value[i].babId + '>'+ result.data.value[i].bab.nama + '</option>';    
+                       
+                     } 
+                      html += '<option selected value="0" >--Pilih Bab--</option>';    
+                      html += ' </select>';
+                                html += ' </div>';
+                    
+                  
+                    
+                    $('#selectbabdelete').html(html);
+                    var html2='';
+                    html2 += '<label class="control-label">Pilih SubBab</label>';
+
+                    html2 += '<select required="required" class="form-control" style="width: 100%;" id="subbabIdDelete" disabled>';  
+                    html2 += '<option selected value="0">--Pilih SubBab--</option>';  
+                    $('#selectbabdelete2').html(html2);
+
+                    $("#templateshow").val(result.data.value[0].rumusanNasabah.nama);
+                    $("#nasabahidshow").val(result.data.value[0].rumusanNasabah.nasabahId);
+                    $("#deletebutton").hide();
+                }
+            })
+            
+            $("#ModalLabelShow").html('Data Sub Bab');
+
+           
+            $("#namatemplate").show();
+            $("#btnUpdateUser").show();
+           
+           
+            $("#ModalDelete").modal('show');
+ };
+function ShowModalEdit(Id) {
+      debugger;
+        let userData = $('#Table').DataTable().data();
+            $.each(userData, function (index, value) {
+                if (value.id == Id) { 
+                    $("#template").val(value.template);
+                    $("#nasabahId").val(value.nasabahId).change();
+                    return false;
+                }
+            })
+            var nasabahId=Id;
+            $.ajax({
+                url: '@Url.Action("GetBabById", "Rumusan")',
+                type: 'GET',
+                data: { Id:Id},
+                dataType: 'json',
+                success: function (result) { 
+                    //console.log(result.data.value)
+              
+                    
+                    
+                   var html = '';
+                   
+                   html += '<div class="form-group select-bab">';
+                    html += '<label class="control-label">Pilih Bab</label>';
+                    html += '<select required="required" class="form-control" style="width: 100%;" id="babId3" onchange=CheckSubBabEdit("'+nasabahId+'",0)>';  
+                    
+                       
+                   for (let i = 0; i < result.data.value.length; ++i) { 
+                 
+                      var no= i+1;
+         
+                                html += '<option value='+ result.data.value[i].babId + '>'+ result.data.value[i].bab.nama + '</option>';    
+                       
+                     } 
+                      html += '<option selected value="0" >--Pilih Bab--</option>';    
+                      html += ' </select>';
+                                html += ' </div>';
+                    
+                  
+                    
+                    $('#selectbabEdit').html(html);
+                    var html2='';
+                    html2 += '<label name="labelsubbab" class="control-label">SubBab</label>';
+
+                    html2 += '<select required="required" class="form-control" style="width: 100%;" id="subbabIdEdit" disabled>';  
+                    html2 += '<option selected value="0">--Pilih SubBab--</option>';  
+                    $('#selectbabEdit2').html(html2);
+
+                    $("#templateshowEdit").val(result.data.value[0].rumusanNasabah.nama);
+                    $("#nasabahidshowEdit").val(result.data.value[0].rumusanNasabah.nasabahId);
+                    $("#editbutton").hide();
+                }
+            })
+            
+            $("#ModalLabelShowEdit").html('Edit Sub Bab');
+
+           
+            $("#namatemplate").show();
+            $("#btnUpdateUser").show();
+           
+           
+            $("#ModalEdit").modal('show');
+ };
+
+function ShowModalDelete(Id) {
+      debugger;
+        let userData = $('#Table').DataTable().data();
+            $.each(userData, function (index, value) {
+                if (value.id == Id) { 
+                    $("#template").val(value.template);
+                    $("#nasabahId").val(value.nasabahId).change();
+                    return false;
+                }
+            })
+            var nasabahId=Id;
+            $.ajax({
+                url: '@Url.Action("GetBabById", "Rumusan")',
+                type: 'GET',
+                data: { Id:Id},
+                dataType: 'json',
+                success: function (result) { 
+                    //console.log(result.data.value)
+              
+                    
+                    
+                   var html = '';
+                   
+                   html += '<div class="form-group select-bab">';
+                    html += '<label class="control-label">Pilih Bab</label>';
+                    html += '<select required="required" class="form-control" style="width: 100%;" id="babId2" onchange=CheckSubBab("'+nasabahId+'",1)>';  
+                    
+                      html += '<option selected value="0">--Pilih Bab--</option>';    
+                       
+                   for (let i = 0; i < result.data.value.length; ++i) { 
+               
+                      var no= i+1;
+         
+                                html += '<option value='+ result.data.value[i].babId + '>'+ result.data.value[i].bab.nama + '</option>';    
+                       
+                     } 
+                      html += ' </select>';
+                                html += ' </div>';
+                    
+                  
+                    
+                    $('#selectbabdelete').html(html);
+                    var html2='';
+                    html2 += '<label class="control-label">Pilih SubBab</label>';
+                    html2 += '<select required="required" class="form-control" style="width: 100%;" id="subbabIdDelete" disabled>';  
+                    html2 += '<option selected value="0">--Pilih Sub Bab--</option>';  
+                    $('#selectbabdelete2').html(html2);
+                    
+                    
+                }
+            })
+           
+            $("#ModalLabelShow").html('Hapus Data');
+       
+            
+            $("#namatemplate").hide();
+            $("#btnUpdateUser").show();
+            
+            $("#ModalDelete").modal('show');
+        };
+
+function CheckSubBab(Id,Cek) {
+      debugger;
+       var babId = document.getElementById("babId2").value;
+       
+    
+       if(babId=="0"){
+           
+           $('#subbabIdDelete').val('');
+           $('#subbabIdDelete').prop('disabled', 'disabled');
+           
+           return false;
+       }
+       // $('#subbabId').removeAttr('disabled');
+       var nasabahId=Id;
+       //console.log(babId);
+       $.ajax({
+                url: '@Url.Action("GetSubBabByBab", "Rumusan")',
+                type: 'GET',
+                data: { Id:Id, BabId:babId},
+                dataType: 'json',
+                success: function (result) { 
+                    //console.log(result.data.value)
+                   
+                    
+                    
+                   var html = '';
+                   
+                   html += '<label class="control-label">Pilih SubBab</label>';
+                   html += '<select required="required" class="form-control" style="width: 100%;" id="subbabIdDelete">';  
+                   for (let i = 0; i < result.data.value.length; ++i) { 
+                       
+                       var no= i+1;
+         
+                                html += '<option value='+ result.data.value[i].subBab.id + '>'+ result.data.value[i].subBab.nama + '</option>';    
+                                        //console.log(result.data.value[i].subBab.id);
+                      } 
+                       html += ' </select>';
+                                html += ' </div>';
+                    
+                  
+                    
+                   $('#selectbabdelete2').html(html);
+
+
+
+                   if(Cek==1){
+                       var html2=' <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
+                       html2 += '<button type="button" class="btn btn-danger" id="deletebutton" onclick = DeleteData("' +nasabahId +'")>Delete</button>';
+                       $('#delete-footer').html(html2);
+                   }
+                   
+                  }
+            }) 
+                   
+};
+
+  function CheckSubBabAdd(NewBab){
+     
+      babId = $("#selectbab option:selected").val();
+      //console.log(babId);
+       //console.log($("#selectbab option:selected").text());
+       $.ajax({
+                url: '@Url.Action("GetSubBabByNasabah", "Rumusan")',
+                type: 'GET',
+                data: { babId:babId},
+                dataType: 'json',
+                success: function (result) { 
+                    //console.log(result.data.value);
+                   
+                    
+                   if(NewBab==0){
+                   
+                       var html = '<label>Sub Bab</label>';
+                       var html2 = '<select required="required" class="form-control "name="SubbabId[]" style="width: 100%;" id="subbabId">';
+                        for (let i = 0; i < result.data.value.length; ++i) { 
+                       
+                            var no= i+1;
+                            html2 += '<option value='+ result.data.value[i].id + '>'+ result.data.value[i].nama + '</option>';    
+                          } 
+                           html2 += '</select>';
+                    
+                       $('#listsubbab').html(html+html2);
+                       $("div[name='selecttambahan']").html(html2);
+
+                    }
+                    else{
+                        room++;
+                        var objTo = document.getElementById('tambahbab');
+                        var divtest = document.createElement("div");
+	                    divtest.setAttribute("class", "form-group removeclass"+room);
+	                    var rdiv = 'removeclass'+room;
+                        html = '<div class="form-group col-md-12" id="listsubbab"> <label> Sub Bab </label>';
+                        html += '<div class="row"> <div class="col-md-6" name="selecttambahan"><select required="required" class="form-control" name="SubbabId[]" style="width: 100%;" id="subbabId">';
+                         for (let i = 0; i < result.data.value.length; ++i) { 
+                       
+                            var no= i+1;
+                            html += '<option value='+ result.data.value[i].id + '>'+ result.data.value[i].nama + '</option>';    
+                          } 
+                        html += '</select> </div>  <button class="btn btn-danger btn-sm" type="button" onclick="remove_tambahbab('+ room +');" style="padding-top: 10px;" > <span class="glyphicon glyphicon-minus font-weight-bold" aria-hidden="true" >-</span> </button><div class="clear"></div></div></div>'
+                        //divtest.innerHTML = '<div class="form-group col-md-12" id="listbab"> <label> Bab '+room+' </label><div class="row"> <div class="col-md-6"><select required="required" class="form-control" name="babId[]" style="width: 100%;" id="babId"> @foreach (var item in Model.M_Bab)  {  <option value="@item.Id">@item.Nama</option>  } </select> </div>  <button class="btn btn-danger btn-sm" type="button" onclick="remove_tambahbab('+ room +');" style="padding-top: 10px;" > <span class="glyphicon glyphicon-minus font-weight-bold" aria-hidden="true" >-</span> </button><div class="clear"></div></div></div>';
+                        divtest.innerHTML = html;
+                        objTo.appendChild(divtest);
+
+                    }
+
+                  }
+           }) 
+           $('#btntambahsubbab').removeClass('btn-secondary').addClass('btn-success');
+      
+
+  }
+  function CheckSubBabEdit(Id) {
+      debugger;
+       var babId = document.getElementById("babId3").value;
+       
+    
+       if(babId=="0"){
+           $("label[ name='labelsubbab']").remove();
+           $("select[name='subbabEdit']").remove();
+           $("select[name='subbabEdit']").prop('disabled', 'disabled');
+           var html2 = '';
+           html2 += '<label class="control-label">Pilih SubBab</label>';
+           html2 += '<select required="required" class="form-control" style="width: 100%;" id="subbabIdEdit" disabled>';  
+           html2 += '<option selected value="0">--Pilih SubBab--</option>';  
+           $('#selectbabEdit2').html(html2);
+           $("#editbutton").hide();
+           
+           return false;
+       }
+       // $('#subbabId').removeAttr('disabled');
+       var nasabahId=Id;
+   
+      var ceksubbab;
+      
+      
+       $.ajax({
+                url: '@Url.Action("GetSubBabByBab", "Rumusan")',
+                type: 'GET',
+                data: { Id:Id, BabId:babId},
+                dataType: 'json',
+                success: function (result) { 
+                //console.log(result.data.value);
+                $.ajax({
+                      url: '@Url.Action("GetSubBabByNasabah", "Rumusan")',
+                      type: 'GET',
+                      data: { BabId: babId },
+                      dataType: 'json',
+                      success: function(hasil) {
+                        var html = '';
+                        //console.log(result.data.value);
+                        //  console.log(hasil.data.value);
+                        for (let i = 0; i < result.data.value.length; ++i) { 
+                            var no =  i + 1;
+                            if (i > 0) {
+                                html += '<label name="labelsubbab" class="control-label pt-3">SubBab ' + no + '</label>';
+                            }
+                            else{
+                                 html += '<label name="labelsubbab" class="control-label">SubBab ' + no + '</label>';
+                            }
+                            html += '<select required="required" class="form-control" style="width: 100%;" name="subbabEdit">';
+                            html += '<option value="' + result.data.value[i].subBab.id + '" selected>' + result.data.value[i].subBab.nama + '</option>';
+                       
+                            for (let j = 0; j < hasil.data.value.length; ++j) {
+                        
+                                if (result.data.value[i].subBab.id != hasil.data.value[j].id) { 
+                                    html += '<option value=' + hasil.data.value[j].id + '>' + hasil.data.value[j].nama + '</option>';
+                                }
+                       
+                            }
+                             html += ' </select>';
+                         } 
+                
+                        $('#selectbabEdit2').html(html);
+                      }
+                })
+                    
+                    
+
+                   
+                if (result.data.value.length != 0) {
+                        var html2 = ' <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=ClearScreen()>Close</button>';
+                        html2 += '<button type="button" class="btn btn-primary" id="editbutton" onclick = UpdateData("' + nasabahId + '")>Perbarui</button>';
+                        $('#edit-footer').html(html2);
+                    }
+                    else{
+                        var html2 = ' <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=ClearScreen()>Close</button>';
+                        $('#edit-footer').html(html2);
+                    }
+                   
+                   
+                  }
+            }) 
+                   
+};
+
+      
+          function GetBab() {
+            $.ajax({
+                     url: "@Url.Action("GetAllData", "Rumusan")",  
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (result) {
+                        var $main = $("#babId");
+                        $.each(result, function (i, value) {   
+                             $.each(value.m_Bab, function (ix, value2) { 
+                             $main.append($("<option />").val(this.id).text(this.nama));
+                             });
+                        });
+                    }
+                  })
+             };
+
+   function AddData() {
+       debugger;
+         var data = new Array(); 
+         var RumusanId = $("#rumusanId").val();
+         var BabIdd = $('#selectbab option:selected').val();
+       //console.log(BabIdd);
+
+         $("select[name^=SubbabId]").each(function(){
+            var subbabIdd = $(this).val();
+            //console.log(subbabIdd);
+             data.push({SubBabId :subbabIdd }); 
+          }); 
+          //console.log(data)
+            if($('#nasabahId').val()=='' || $('#babId').val()==''|| $('#template').val()==''){
+                swal({
+                    text: "Nama Template harus diisi!",
+                    icon: "warning"                    
+                });
+            }
+            else
+            {  
+                $.ajax({ 
+                    url: "@Url.Action("SaveSubBab","Rumusan")",
+                    type: 'POST',
+                    data: { data: data, rumusanId: RumusanId, BabId : BabIdd  },
+                    contenttype: "application/json; charset=utf-8",
+                    datatype: 'json',
+                }).then(
+                    (result) => {
+                       
+                        if (result != null) {
+                          
+                            swal({
+                                text: "Berhasil Disimpan",
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500
+                            }).then(() => {
+                                
+                                $("#Addbab").modal('hide');
+                                
+                                $('#Table').DataTable().ajax.reload();
+                                ClearScreen();
+                                
+                                
+
+                            })
+                        }
+                        else {
+                          
+                            swal({
+                                text: "Gagal menyimpan", 
+                                icon: "error",                            
+                            }).then(() => {
+                               
+                                $("#Addbab").modal('hide');
+                                ClearScreen();
+                                $('#Table').DataTable().ajax.reload();
+                            })
+                        }
+                        RequestDone();
+                    },
+                    (XMLHttpRequest, textStatus, errorThrown) => {
+                        alert("Error : " + textStatus);
+                        RequestDone();
+                    }
+                );
+            }
+        }
+   
+function UpdateData(Id) {
+    var data = new Array();
+    var BabIdd = $('#selectbabEdit option:selected').val();
+
+    //console.log(BabIdd);
+
+    $("select[name=subbabEdit]").each(function() {
+        var subbabIdd = $(this).val();
+        //console.log(subbabIdd);
+        data.push({ SubBabId: subbabIdd });
+    });
+    
+    //console.log(data);
+    var nasabahId = Id;
+    $.ajax({
+        url: "@Url.Action("UpdateSubBab","Rumusan")",
+        type: 'POST',
+        data: { data: data, BabId: BabIdd, NasabahId: nasabahId },
+        datatype: 'json',
+    }).then(
+        (result) => {
+            
+        if (result != null) {
+            
+            swal({
+                text: "Berhasil Disimpan",
+                icon: "success",
+                buttons: false,
+                timer: 1500
+            }).then(() => {
+                                
+                $("#ModalEdit").modal('hide');
+                                
+                $('#Table').DataTable().ajax.reload();
+                ClearScreen();
+                                
+                                
+
+            })
+        }
+        else {
+           
+            swal({
+                text: "Gagal menyimpan", 
+                icon: "error",                            
+            }).then(() => {
+                               
+                $("#Addbab").modal('hide');
+                ClearScreen();
+                $('#Table').DataTable().ajax.reload();
+            })
+        }
+        RequestDone();
+    },
+    (XMLHttpRequest, textStatus, errorThrown) => {
+        alert("Error : " + textStatus);
+        RequestDone();
+    }
+        )
+    
+}
+
+   function DeleteData(Id) {
+
+       var babId = document.getElementById("babId2").value;
+       var subbabId =  $('#subbabIdDelete option:selected').val();
+       //console.log("tes");
+       //console.log(babId);
+       //console.log(subbabId);
+
+            swal({
+                title: "Hapus Data",
+                text: "Apakah anda yakin akan menghapus data ini?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        "url": "@Url.Action("DeleteSubBab","Rumusan")",
+                        "type": "DELETE",
+                        "datatype": "json",
+                        "data": { Id: Id, BabId: babId , subbabId: subbabId}
+                    }).then(
+                        (result) => {
+                            //console.log(result);
+                            if (result) {
+                                swal({
+                                    text: "Berhasil Dihapus",
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    $('#Table').DataTable().ajax.reload();
+                                    $('#ModalDelete').modal('hide');
+                                })
+                            }
+                            else {
+                                swal({
+                                    text: "Gagal Dihapus",
+                                    icon: "error",
+                                    buttons: true
+                                }).then(() => {
+                                    $('#Table').DataTable().ajax.reload();
+                                })
+                            }
+                            RequestDone();
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            alert("Error : " + textStatus);
+                            RequestDone();
+                        }
+                    )
+                }
+            })
+        }
+        function ClearScreen() {
+          
+             $("selectbab").val("");
+             $("div[class*='removeclass']").remove();
+             $('#btntambahsubbab').removeClass('btn-success').addClass('btn-secondary');
+        }
+        
+    </script>
+}

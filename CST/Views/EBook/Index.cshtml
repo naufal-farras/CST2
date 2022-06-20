@@ -1,0 +1,396 @@
+﻿@model CST.ViewModels.Rumusan.RumusVM;
+
+@{
+    ViewData["Title"] = "Halaman E-Book";
+}
+
+<div class="modal fade" id="ebookModal" tabindex="-1" role="dialog" aria-labelledby="ebookModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<h4 class="modal-title" id="ebookModalLabel">Upload Data</h4>*@
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="boxIdLaporan">
+                    @*<div class="form-row">
+                        <div class="col-md-8 mb-3">
+                           <label for="boxNamaNasabah">Nama Nasabah</label>
+                           <input type="text" class="form-control" id="boxNamaNasabah" placeholder="Nama Nasabah ..." required>
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <label for="boxNamaNasabah">Nama Nasabah</label>
+                        <select class="form-control" id="boxNamaNasabah">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-5 mb-3">
+                           <label for="boxNamaSubMenu">Nama Sub-Menu</label>
+                            <select class="form-control" id="boxNamaSubMenu">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            </select>
+                            <label for="boxFileSO">Upload File</label>
+                            <input type="file" accept="application/pdf" class="form-control mb-3" id="boxFile" placeholder="Choose File ....">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-5 mb-3">
+                           <label for="boxNamaCST">Nama Inputer</label>
+                           <input type="text" class="form-control" id="boxNamaCST" readonly placeholder="Nama Inputer ...">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="boxNPPCST">NPP Inputer</label>
+                            <input type="text" class="form-control" id="boxNPPCST" readonly placeholder="NPP Inputer....">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                           <label for="boxTanggal">Tanggal Upload</label>
+                        <input type="text" class="form-control" id="boxTanggal" readonly placeholder="Tanggal Upload....">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnAddData" onclick="AddData();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Simpan</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnUpdateData" onclick="UpdateData();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Perbarui</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Halaman E-Book</h5>
+                                        @*<button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>*@
+                                        <button class="btn btn-sm btn-success fa-pull-right" onclick="location.href='@Url.Action("TambahEbook", "EBook")'" title="Tambah Data"> Tambah Data</button>   
+                                    </div>
+                                    <div class="card-block">
+                                          
+                                               <div class="form-group"> 
+                                                    <label><strong> Pilih Nasabah Untuk Di Tampilkan</strong></label>
+                                                   
+                                                     <select required="required" class="form-control" style="width: 100%;" onchange="LoadTable()"  id="idNasabah">  
+                                                        <option value="0">--Pilih Nasabah--</option>
+                                                        
+                                                         @foreach (var item in Model.T_RumusanNasabah)
+                                                           {
+                                                                <option value="@item.Id">@item.Nama</option>
+                                                           }
+                                                     </select>  
+                                                 </div>
+                                        <div class="table-responsive"> 
+
+                                            <table id="Table" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Judul</th>
+                                                        <th>Kelompok</th>
+                                                        @*<th>Nasabah</th>*@
+                                                        <th>Tanggal Upload</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="row mt-5">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>EBook / History</h5>
+                                        <button class="btn btn-sm btn-light fa-pull-right" data-toggle="modal" data-target="#ebookModal" onclick="ClearScreen()" data-backdrop="static" data-keyboard="false" title="Add Data">Add Data</button>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table id="historyTable" class="display table-sm nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>No</th>
+                                                        <th>Nama Nasabah</th>
+                                                        <th>Inputer</th>
+                                                        <th>Tanggal Upload</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="md-overlay"></div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
+
+    <!-- modal-window-effects css -->
+    <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+}
+
+@section Scripts{
+    <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
+    <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
+
+    <!-- modal-window-effects Js -->
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
+    <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    <script>
+         $(document).ready(function () {  
+        })
+           
+     function LoadTable() 
+     { 
+
+         debugger;
+           var IdNasabah = document.getElementById("idNasabah").value; 
+               if(IdNasabah != 0)
+               {
+                   
+                   var t = $("#Table").DataTable({                
+                        "ajax": function (data, callback, settings) {
+                            $.ajax({
+                                "url": "@Url.Action("GetTable","EBook")/"+IdNasabah,
+                                "type": "GET",
+                                "datatype": "json",
+                                "data" : data,
+                                "beforeSend": function () {
+                                    materialLoading(true);
+                                }
+                            }).then(
+                                (data) => {
+                                    callback(data);
+                                    materialLoading(false);                            
+                                },
+                                (XMLHttpRequest, textStatus, errorThrown) => {
+                                    materialLoading(false);
+                                });
+                        },
+                        "columns": [
+                            { "data": null },
+                            { "data": "nama" },
+                            { "data": "kelompok" },
+                            //{ "data": "rumusanNasabahId" },
+                             {
+                                "render": function (data, type, row) {
+                                    if (row.createdDate != null) {
+                                        let val = row.createdDate.replace("T", " ");
+                                        return moment(val, 'YYYY-MM-DD hh:mm:ss').locale("id").format('DD MMMM YYYY hh:mm A');
+                                    }
+                                    else
+                                    {
+                                        return "-";
+                                    }
+                                }
+                            },
+                            {
+                                "render": function (data, type, row) {
+                                    let buttonDownload = '<a class="btn btn-sm btn-light" href="@Url.Action("GenerateEbook", "EBook")/'+row.id+'" target="_blank"><span><i class="fas fa-file-pdf" "></i> Download</span></a>';
+                                    let buttonDetail = '<a class="btn btn-sm btn-primary" href="@Url.Action("EditEbook", "EBook")/'+row.id+'"><span><i class="fas fa-eye""></i> Edit</span></a>';
+                                    let buttonDelete = '<button type="button" class="btn btn-sm btn-danger" onclick="DeleteData('+row.id+')"><span><i class="fas fa-trash-alt""></i> Delete</span></button>';
+
+                              
+
+                                    return  buttonDownload +buttonDetail + buttonDelete ; 
+                                    //return buttonDetail + buttonEdit + buttonDelete + buttonDownload; 
+                                }
+                            }
+                        ],
+                        "columnDefs": [
+                            {
+                                "targets": [0,2],
+                                "className": "text-center",
+                            }
+                        ]
+                    })
+                    t.on('order.dt search.dt', function () {
+                        t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+                  
+                     //clear datatable
+                    t.clear().draw();
+
+                    //destroy datatable
+                    t.destroy(); 
+               }
+               else
+               {   
+                        var t = $("#Table").DataTable({          
+                  
+                        "ajax": function (data, callback, settings) {
+                            $.ajax({
+                                "url": "@Url.Action("GetTable","EBook")/"+IdNasabah,
+                                "type": "GET",
+                                "datatype": "json",
+                                "data" : data,
+                                "beforeSend": function () {
+                                    materialLoading(true);
+                                }
+                            }).then(
+                                (data) => {
+                                    callback(data);
+                                    materialLoading(false);   
+                  
+                                },
+                               
+                                (XMLHttpRequest, textStatus, errorThrown) => {
+                                    materialLoading(false);
+                                });
+                                 
+                        },
+                        
+
+                        "columns": [
+                            { "data": null },
+                            { "data": "nama" },
+                            { "data": "kelompok" },
+                            //{ "data": "rumusanNasabahId" },
+                             {
+                                "render": function (data, type, row) {
+                                    if (row.createdDate != null) {
+                                        let val = row.createdDate.replace("T", " ");
+                                        return moment(val, 'YYYY-MM-DD hh:mm:ss').locale("id").format('DD MMMM YYYY hh:mm A');
+                                    }
+                                    else
+                                    {
+                                        return "-";
+                                    }
+                                }
+                            },
+                            {
+                                "render": function (data, type, row) {
+                                    let buttonDownload = '<a class="btn btn-sm btn-light" href="@Url.Action("GenerateEbook", "EBook")/'+row.id+'" target="_blank"><span><i class="fas fa-file-pdf" "></i> Download</span></a>';
+                                    let buttonDetail = '<a class="btn btn-sm btn-primary" href="@Url.Action("EditEbook", "EBook")/'+row.id+'"><span><i class="fas fa-eye""></i> Edit</span></a>';
+                                    let buttonDelete = '<button type="button" class="btn btn-sm btn-danger" onclick="DeleteData('+row.id+')"><span><i class="fas fa-trash-alt""></i> Delete</span></button>';
+
+                              
+
+                                    return  buttonDownload +buttonDetail + buttonDelete ; 
+                                    //return buttonDetail + buttonEdit + buttonDelete + buttonDownload; 
+                                }
+                            }
+                        ],
+                        "columnDefs": [
+                            {
+                                "targets": [0,2],
+                                "className": "text-center",
+                            }
+                        ]
+                    })
+                    t.on('order.dt search.dt', function () {
+                        t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+                  
+                    //clear datatable
+                    t.clear().draw();
+
+                    //destroy datatable
+                    t.destroy(); 
+               }
+         
+      }
+           
+
+    function DeleteData(Id) {
+            swal({
+                title: "Hapus Data",
+                text: "Apakah anda yakin akan menghapus data Ebook ini?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        "url": "@Url.Action("Delete","EBook")",
+                        "type": "DELETE",
+                        "beforeSend": function () {
+                            ProcessingRequest();
+                        },
+                        "datatype": "json",
+                        "data": { Id: Id }
+                    }).then(
+                        (result) =>{
+                            if (result) {
+                                swal({
+                                    text: "Berhasil di Hapus",
+                                    icon: "success",
+                                    buttons: false,
+                                    timer:1500
+                                }).then(() => {
+                                    location.reload();
+                                })
+                            }
+                            else
+                            {
+                                swal({
+                                    text: "Gagal di Hapus",
+                                    icon: "error",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    $('#Table').DataTable().ajax.reload();
+                                })
+                            }
+                            RequestDone();
+                        },
+                        (XMLHttpRequest, textStatus, errorThrown) => {
+                            alert("Error : " + textStatus);
+                            RequestDone();
+                        }
+                    )
+                }
+            })
+        }
+       
+        function ProcessingRequest()
+        {
+            $('.spinnerButtonProccess').show();
+            $(':input').prop('disabled', true);
+        }
+
+        function RequestDone()
+        {
+            $('.spinnerButtonProccess').hide();
+            $(':input').prop('disabled', false);
+        }
+    </script>
+}
