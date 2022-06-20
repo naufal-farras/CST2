@@ -956,7 +956,9 @@ function ShowModalDelete(Id) {
         $("select[name=subsubbabEdit]").each(function() {
             var subsubbabIdd = $(this).val();
             //console.log(subsubbabIdd);
-            data.push({ SubSubBabId: subsubbabIdd });
+            if (subsubbabIdd != "empty") {
+                data.push({ SubSubBabId: subsubbabIdd });
+            }
         });
     
         //console.log(data);
