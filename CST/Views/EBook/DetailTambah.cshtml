@@ -16,7 +16,9 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Tambah Data E-Book</h5>
+                                       
                                         <button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>
+                                        <button class="btn btn-sm btn-success fa-pull-right" onclick="location.href='@Url.Action("GabungFile", "EBook")'" title="Gabung PDF"> Gabung PDF</button>   
                                     </div>
                                     
                                       
@@ -35,7 +37,7 @@
                                          @*batas atas accordion*@
                                        <div class="accordion" id="accordionPanelsStayOpenExample">
                                             @{
-                                                var nobab = 1;
+                                                var nobab = 1; 
                                                 
                                              }
                                            

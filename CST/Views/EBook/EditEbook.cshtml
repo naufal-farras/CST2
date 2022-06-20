@@ -62,7 +62,10 @@
                                                  
                                                     <div id="panelsStayOpen-collapseOne-@nobab" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                                       <div class="accordion-body">
-                                                  @{var nosub = 1;}
+                                                    
+                                
+
+                                                    @{var nosub = 1;}
                                                     @foreach (var item2 in item.SubBabs)
                                                      { 
                                                         <input id="subBabId-@nobab-@nosub" name="subbabId"  value="@item2.SubBabId " hidden>
@@ -76,16 +79,20 @@
                                                                   <div class="col-xs-2">
                                                                     <span><strong>  @nosubsub.@item3.namaSubSubBab </strong></span>
                                                                            
-                                                                       <input class="form-control" type="file" style="width:250px" accept="application/pdf" name="subsubbabId" id="subSubBabId-@nobab-@nosub-@nosubsub"> 
-                                                             
-                                                                       <a onclick="EditData(@noIndex,@nobab,@nosub,@nosubsub)" class="btn btn-primary">Ubah File</a>
+                                                                      
                                                                         @foreach (var item5 in Model.T_TransDetail)
-                                                                       {
+                                                                       { 
                                                                           if(noIndex == item5.Index)
                                                                           {
-                                                                                             
-                                                                                            <a class="btn btn-warning" href="@Url.Action("Preview", "EBook")/@item5.Id" target="_blank">Lihat File</a>
-                                                                          }
+                                                                                         <input class="form-control" type="file" style="width:350px" accept="application/pdf" name="subsubbabId" id="subSubBabId-@nobab-@nosub-@nosubsub"> 
+                                                                                         <span>Nama File :</span> <label class="font-italic">@item5.Path</label>
+                                                                                         <div>
+                                                                                              <a onclick="EditData(@noIndex,@nobab,@nosub,@nosubsub)" class="btn btn-primary m-2">Ubah File</a>
+
+                                                                                            <a class="btn btn-warning m-2" href="@Url.Action("Preview", "EBook")/@item5.Id" target="_blank">Lihat File</a>
+                                                                         
+                                                                                         </div>
+                                                                                            }
                                                                                         continue;
 
                                                                       }
@@ -156,9 +163,21 @@
        
 
            function EditData(id,nobab,nosub,nosubsub) 
-           { 
-             debugger;
-             var IdFile= "#subSubBabId-"+nobab+"-"+nosub+"-"+nosubsub;
+           {   
+               swal("Apakah anda yakin mau update file ini?", {
+                  buttons: {
+                    cancel: "Tidak",
+                    catch: {
+                      text: "Ya",
+                      value: "success",
+                    }, 
+                  },
+                })
+                .then((value) => {
+                  switch (value) {  
+                    case "success":
+
+                var IdFile= "#subSubBabId-"+nobab+"-"+nosub+"-"+nosubsub;
             
                if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
                {
@@ -176,8 +195,7 @@
                    fileData.append('selectedUpload',$(IdFile)[0].files[0]);  
                    fileData.append('Index', indx); 
                    fileData.append('RumusanId', rumusanId); 
-
-
+                    
                                  $.ajax({ 
                                        url: "@Url.Action("UpdateFileEbook", "Ebook")", 
                                        type: 'POST', 
@@ -190,9 +208,7 @@
                                             html: true,
                                             title: 'Sukses',
                                             text: 'Data Anda Berhasil Disimpan',
-                                            type: "success",
-                                            showCancelButton: false,
-                                            showConfirmButton: true,
+                                            type: "success", 
                                         }).then(() => {
                                          window.location.reload();
                                         }) 
@@ -201,17 +217,38 @@
                                         swal("Oops", "We couldn't connect to the server!", "error");
                                     }
                                 });
-               } 
+                          } 
 
+                    //  swal("Gotcha!", "Pikachu was caught!", "success");
+                      break;
+ 
+                   
+                  }
+                })
+
+           
 
            }
+
+
            function UpdateJudul()
-           {
-               debugger;
+           { 
+                 swal("Apakah anda yakin mau mengganti judul ini?", {
+                  buttons: {
+                    cancel: "Tidak",
+                    catch: {
+                      text: "Ya",
+                      value: "success",
+                    }, 
+                  },
+                })
+                .then((value) => {
+                  switch (value) {  
+                    case "success":
+
                var namaEbook = $('#namaBab').val();
                var kelompok = $('#kelompok').val();
-
-            debugger;
+                
                if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
                {
                 swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok!");
@@ -234,9 +271,7 @@
                                             html: true,
                                             title: 'Sukses',
                                             text: 'Data Anda Berhasil Di Update',
-                                            type: "success",
-                                            showCancelButton: false,
-                                            showConfirmButton: true,
+                                            type: "success", 
                                         }).then(() => {
                                          window.location.reload();
                                         }) 
@@ -246,6 +281,17 @@
                                     }
                                 });
                }                 
+
+                    //  swal("Gotcha!", "Pikachu was caught!", "success");
+                      break;
+ 
+                   
+                  }
+                })
+
+           
+
+               
            }
      
            
