@@ -31,7 +31,7 @@
                                             <tr class="mycontainer" id="mainrow">
                                                 
                                                 <td>
-                                                    <input type="file" id="subsubbabId" accept="application/pdf" name="subsubbabId" class="form-control" />
+                                                    <input  required  type="file" id="subsubbabId" accept="application/pdf" name="subsubbabId" class="form-control" />
                                                 </td>
                                                 <td>
 
@@ -100,13 +100,23 @@
        {  
                        var fileData = new FormData();   
                            console.log( $('input[name^="subsubbabId"]'));
-
+                           var cek = 0;
                         $('input[name^="subsubbabId"]').each(function(){
-                        
-                           fileData.append('selectedUpload',$(this)[0].files[0]);  
+                                   console.log( $(this)[0].files);
+                                    debugger;
+                                if($(this)[0].files.length == 0)
+                                {
+                                    cek = 1;
+                                }
+                                else{
+
+                                   fileData.append('selectedUpload',$(this)[0].files[0]);  
+                                }
                          
                          })    
-                            $.ajax({ 
+                         if(cek == 0 )
+                         {
+                              $.ajax({ 
                                        url: "@Url.Action("GabungFilePDF", "Ebook")", 
                                        type: 'POST', 
                                         data:fileData, 
@@ -121,6 +131,13 @@
                                         swal("Oops", "We couldn't connect to the server!", "error");
                                     }
                                 });
+                         }
+                         else
+                         {
+                                    return swal("Oops", "Tidak boleh ada inputan kosong", "error");
+
+                         }
+                           
                        } 
                    
 

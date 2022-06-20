@@ -206,8 +206,8 @@
                     {
                         "render": function (data, type, row) {
                             return "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModalEdit('" + row.id + "');><span><i class='fas fa-user-edit'></i></span></button> " +
-                                "<button class='btn btn-light btn-sm text-dark text-center' onclick = DeleteUser('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" +
-                                "<button class='btn btn-light btn-sm text-dark text-center' onclick = ResetPassword('" + row.npp + "');><span>Reset Password <i class='fas fa-sync-alt'></i></span></button>";
+                                "<button class='btn btn-danger btn-sm text-center' onclick = DeleteUser('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" +
+                                "<button class='btn btn-warning btn-sm text-dark text-center' onclick = ResetPassword('" + row.npp + "');><span>Reset Password <i class='fas fa-sync-alt'></i></span></button>";
                         },
 
                     },
