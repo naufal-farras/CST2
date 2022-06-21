@@ -364,23 +364,20 @@ function ShowModal(Id) {
                     nobab = i+1;
                     html += '<div class="form-group col-sm-12">';
                     html += '<div class="row">';
-                    html += '<label class="col-sm-2 col-form-label"><b>Bab '+nobab+'</b></label>';
-                    html += '<div class="col-sm-4">';
+                    html += '<label class="col-form-label text-md-right pl-3 pt-3"><b>Bab '+nobab+'</b></label>';
+                    html += '<div class="col-sm-5">';
                     html += '<input type="text" class="form-control" id="showrumusanbab" value="'+result.babs[i].namaBab+'" disabled>';
-                    html += '</div></div>';
+                    html += '</div></div></div>';
 
                     for (let j = 0; j < result.babs[i].subBabs.length; ++j){
                         //console.log(result.babs[i].subBabs[j].namaSubBab);
                         nosub = j+1;
-                        if (j == 0) {
-                            html += '<div class="form-group col-sm-12 pt-3">';
-                        }
-                        else {
-                            html += '<div class="form-group col-sm-12">';
-                        }
+                       
+
+                        html += '<div class="form-group col-sm-12">';
                         html += '<div class="row">';
                         html += '<div class="col-sm-1"></div>';
-                        html += '<label class="col-sm-2 "><b>'+nobab+'.'+nosub+'</b></label>';
+                        html += '<label class="text-md-right pl-6 pt-3"><b>'+nobab+'.'+nosub+'</b></label>';
                         html += '<div class="col-sm-5">';
                         html += '<input type="text" class="form-control" id="showrumusanbab" value="'+ result.babs[i].subBabs[j].namaSubBab +'" disabled>';
                         html += '</div></div></div>';
@@ -389,8 +386,8 @@ function ShowModal(Id) {
                             //console.log(result.babs[i].subBabs[j].subSubBabs[k].namaSubSubBab);
                             html += '<div class="form-group col-sm-12">';
                             html += '<div class="row">';
-                            html += '<div class="col-sm-2"></div>';
-                            html += '<label class="col-sm-2 "><b>'+nobab+'.'+nosub+'.'+nosubsub+'</b></label>';
+                            html += '<div class="pl-25"></div>';
+                            html += '<label class="text-md-right col-sm-2 pl-25 pt-3"><b>'+nobab+'.'+nosub+'.'+nosubsub+'</b></label>';
                             html += '<div class="col-sm-5">';
                             html += '<input type="text" class="form-control" id="showrumusanbab" value="'+ result.babs[i].subBabs[j].subSubBabs[k].namaSubSubBab +'" disabled>';
                             html += '</div></div></div>';
@@ -568,7 +565,7 @@ function ShowModal(Id) {
             $.each(userData, function (index, value) {
                 if (value.id == Id) { 
                     $("#templateEdit").val(value.template);
-                    $("#nasabahId").val(value.nasabahId).change();
+                    $("#nasabahIdEdit").val(value.nasabahId).change();
                     return false;
                 }
             })
@@ -587,7 +584,7 @@ function ShowModal(Id) {
                        var no= i+1;
                                 html += ' <div class="form-group col-md-6" >  ';
                                 html += '<label>Bab '+ no +'</label>';
-                                html += '<select required="required" class="form-control" name="babId"'+i+' style="width: 100%;" id="babId2" disabled>';  
+                                html += '<select required="required" class="form-control" name="babEditId"'+i+' style="width: 100%;" id="babId3" disabled>';  
                                 html += '<option selected value='+ result.data.value[i].babId + '>'+ result.data.value[i].bab.nama + '</option>';
 
                                 html += ' </select>';
