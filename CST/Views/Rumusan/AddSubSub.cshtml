@@ -215,7 +215,7 @@
     var subbabId = document.getElementById("selectsubbab").value;
         //console.log(subbabId);
        
-        if(subbabId!=""){
+        if(subbabId!="empty"){
            
             CheckSubSubBabAdd(1);
         }
@@ -358,8 +358,9 @@
 
             //$("#Babclass").hide();
             //$("#btnAddData").hide();
-          
+            
             $("#Addbab").modal('show');
+            $('#btntambahsubsubbab').removeClass('btn-success').addClass('btn-secondary');
         };
       
           function GetBab() {
