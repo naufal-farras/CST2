@@ -220,7 +220,7 @@
  
     var babId = document.getElementById("selectbab").value;
         
-        if(babId!=""){
+        if(babId!="0"){
             
             CheckSubBabAdd(1);
         }
@@ -307,19 +307,20 @@
                 success: function (result) { 
                     //console.log(result.data.value)
                    var html = '';
-                    html += '<option selected value="empty" hidden selected disabled>--Pilih Bab--</option>';
+                    html += '<option selected value="0" hidden selected disabled>--Pilih Bab--</option>';
                     for (let i = 0; i < result.data.value.length; ++i) {  
                          html += '<option value="' +  result.data.value[i].bab.id + '">' + result.data.value[i].bab.nama  + '</option>'; 
                       } 
 
                      
                     $('#selectbab').html(html);
-                    $('#selectbab').val("empty");
+                    $('#selectbab').val("0");
 
                 }
             })
 
             //$("#Babclass").hide();
+             $('#btntambahsubbab').removeClass('btn-success').addClass('btn-secondary');
             //$("#btnAddData").hide();
             $("#btnUpdateUser").show();
             $("#Addbab").modal('show');
