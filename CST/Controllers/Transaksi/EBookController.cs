@@ -474,9 +474,11 @@ namespace CST.Controllers.Transaksi
             //finalDoc.Template.Top = header;
             //PdfPageTemplateElement footer = new PdfPageTemplateElement(10, 0, 50, 10);
             //finalDoc.Template.Bottom = footer;
-            PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            //PdfStringFormat format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            PdfStringFormat format = new PdfStringFormat();
+            //Set the text alignment.
+            format.Alignment = PdfTextAlignment.Center;
             pageTOC.Graphics.DrawString("DAFTAR ISI", fontBAB, PdfBrushes.Black, new RectangleF(new PointF(5, 10), new SizeF(pageTOC.Graphics.ClientSize.Width, 30)), format);
-
             PdfPage pageTOC2 = finalDoc.Pages.Add();  
             PdfPage pageTOC3 = finalDoc.Pages.Add();  
             PdfPage pageTOC4 = finalDoc.Pages.Add();   
@@ -500,10 +502,10 @@ namespace CST.Controllers.Transaksi
             var x2C = 51;
             var x3C = 63;
 
-            var xD = 15;
-            var yD = 40;
-            var x2D = 51;
-            var x3D = 63;
+            //var xD = 15;
+            //var yD = 40;
+            //var x2D = 51;
+            //var x3D = 63;
 
             var nobab = 1;
 
@@ -514,10 +516,20 @@ namespace CST.Controllers.Transaksi
                 PdfPage page = finalDoc.Pages.Add();
                 finalDoc.PageSettings.Orientation = PdfPageOrientation.Portrait; 
                 finalDoc.PageSettings.Size = PdfPageSize.A4;
-                PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica,30, PdfFontStyle.Bold );
-                graphics.DrawString(items.namaBab, font, PdfBrushes.Black, new PointF(275, 410), format);
+                //PdfGraphics graphics = page.Graphics;
+                PdfGraphics graphics;
+                graphics = page.Graphics;
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier,35, PdfFontStyle.Bold );
+                if (graphics.Size.Width != 595 && graphics.Size.Height != 842)
+                {
+                    graphics.DrawString(items.namaBab, font, PdfBrushes.Black, new RectangleF(310, 500, 300, 200), format);
 
+                }
+                else
+                {
+                    graphics.DrawString(items.namaBab, font, PdfBrushes.Black, new RectangleF(200, 400, 200, 100), format);
+
+                }
                 //AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, "BAB " + nobab + " " + items.namaBab, new PointF(x, y));
                 //y += 23;
 
@@ -551,7 +563,6 @@ namespace CST.Controllers.Transaksi
 
 
                 }
-
                 //Set the font.
                 PdfFont fonts3 = new PdfStandardFont(PdfFontFamily.Helvetica, 12f);
 
@@ -564,12 +575,22 @@ namespace CST.Controllers.Transaksi
                 //Add the fields in composite fields.
                 PdfCompositeField compositeField = new PdfCompositeField(fonts3, PdfBrushes.Black, "Page {0} of {1}", pageNumber, count);
 
-                for (int i = 1; i < finalDoc.Pages.Count; i++)
-                {
-                    //Draw the composite field.
-                    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF(finalDoc.Pages[i].Size.Width / 2 - 20, finalDoc.Pages[i].Size.Height - 20));
-                }
-                 
+               
+                    for (int i = 1; i < finalDoc.Pages.Count; i++)
+                    {
+                        if (graphics.Size.Width == 595 && graphics.Size.Height == 842)
+                        {
+                           //Draw the composite field. 
+                            compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 30));
+                        }
+                        else
+                        {
+                            //Draw the composite field. 
+                            compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 20));
+                        }
+                    }
+
+              
                 var subnobab = 1;
 
                 foreach (var items2 in items.SubBabs)
@@ -580,10 +601,18 @@ namespace CST.Controllers.Transaksi
                     finalDoc.PageSettings.Orientation = PdfPageOrientation.Portrait;
                     finalDoc.PageSettings.Size = PdfPageSize.A4;
 
-                    PdfGraphics graphicss = pages.Graphics;
-                    PdfFont fonts = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
-                    graphicss.DrawString(items2.namaSubBab, fonts, PdfBrushes.Black, new PointF(270, 410), format);
+                    PdfGraphics graphicss;
+                    graphicss = pages.Graphics;
+                    PdfFont fonts = new PdfStandardFont(PdfFontFamily.Courier, 30, PdfFontStyle.Bold);
+                    if (graphicss.Size.Width != 595 && graphicss.Size.Height != 842)
+                    {
+                        graphicss.DrawString(items2.namaSubBab, fonts, PdfBrushes.Black, new RectangleF(310, 500, 300, 200), format);
 
+                    }
+                    else
+                    {
+                    graphicss.DrawString(items2.namaSubBab, fonts, PdfBrushes.Black, new RectangleF(200, 400, 200, 100), format);
+                    }
                     //AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + ". " + items2.namaSubBab, new PointF(x2, y));
                     //y += 23;
 
@@ -617,25 +646,35 @@ namespace CST.Controllers.Transaksi
                         y += 23;
 
                     }
-                    
-                    for (int i = 1; i < finalDoc.Pages.Count; i++)
-                    {
-                        //Draw the composite field.
-                        compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF(finalDoc.Pages[i].Size.Width / 2 - 20, finalDoc.Pages[i].Size.Height - 20));
-                    }
+                   
+                    //for (int i = 1; i < finalDoc.Pages.Count; i++)
+                    //{
+                    //    //Draw the composite field.
+                    //    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 20));
+                    //}
                     var subsubnobab = 1;
 
                     foreach (var items3 in items2.SubSubBabs)
                     {
                         finalDoc.PageSettings.Orientation = PdfPageOrientation.Portrait;
                         finalDoc.PageSettings.Size = PdfPageSize.A4;
+
                         PdfPage pagess = finalDoc.Pages.Add(); 
                         finalDoc.PageSettings.Orientation = PdfPageOrientation.Portrait;
                         finalDoc.PageSettings.Size = PdfPageSize.A4;
+                        PdfGraphics graphicsss;
+                        graphicsss  = pagess.Graphics;
+                        PdfFont fontss = new PdfStandardFont(PdfFontFamily.Courier, 30, PdfFontStyle.Bold);
 
-                        PdfGraphics graphicsss = pagess.Graphics;
-                        PdfFont fontss = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
-                        graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new PointF(270, 410), format);
+                        if (graphicsss.Size.Width != 595 && graphicsss.Size.Height != 842)
+                        {
+                            graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new RectangleF(300, 500, 300, 200), format);
+
+                        }
+                        else
+                        {
+                        graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new RectangleF(200, 400, 200, 100), format);
+                        }
 
                         //y += 23;
 
@@ -670,7 +709,7 @@ namespace CST.Controllers.Transaksi
                             y += 23;
 
                         }
-
+                      
 
                         //for (int i = 1; i < finalDoc.Pages.Count; i++)
                         //{
@@ -683,15 +722,17 @@ namespace CST.Controllers.Transaksi
                             {
                                 if (items4.Path == "PDFkosong.pdf")
                                 {
-                                    FileStream stream1 =null; 
-                                     
+                                    FileStream stream1 = null; 
                                 }
                                 else
                                 {
+                           
                                     FileStream stream1 = new FileStream(Path.Combine(path, items4.Path), FileMode.Open, FileAccess.Read);
-                                    loadedDocument = new PdfLoadedDocument(stream1);
+                                 
+                                    loadedDocument = new PdfLoadedDocument(stream1); 
                                     PdfDocumentBase.Merge(finalDoc, loadedDocument);
                                 }
+
                                
                             }
                             continue;
