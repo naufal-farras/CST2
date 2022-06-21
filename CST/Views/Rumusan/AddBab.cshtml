@@ -26,11 +26,12 @@
                     <div class="form-group col-md-6">  
                             <label>Pilih Nasabah</label>
                                 <select required="required" class="form-control" style="width: 100%;" id="nasabahId" onchange="CheckBab(0)">
-                                  <option value="">--Pilih Nasabah--</option>
+                                  
                                   @foreach (var item in Model.M_Nasabah)
                                    {
                                         <option value="@item.Id">@item.Nama</option>
                                    }
+                                   <option value="0"  hidden selected disabled>--Pilih Nasabah--</option>
                              </select>                  
                        </div>
 
@@ -43,7 +44,7 @@
                              <div class="form-group col-md-6" id="listbab" >  
                                 <label>Bab </label>
                                 <select required="required" class="form-control "name="babId[]" style="width: 100%;" id="babId" disabled>
-                                   <option selected value="empty">--Pilih Nasabah Terlebih Dahulu--</option>
+                                   <option selected value="empty">--Pilih Bab--</option>
                                 </select>
                             </div>
                         
@@ -269,8 +270,8 @@
                         "render": function (data, type, row) {
                             //console.log(row)
                             return "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModal('" + row.id + "');><span><i class='fa fa-eye'></i></span></button> "+
-                            "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModalEdit('" + row.id + "');><span><i class='fa fa-edit'></i></span></button> " +
-                                "<button class='btn btn-light btn-sm text-dark text-center' onclick = DeleteData('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
+                            "<button type='button' class='btn btn-sm btn-warning text-dark' onclick = ShowModalEdit('" + row.id + "');><span><i class='fa fa-edit'></i></span></button> " +
+                                "<button class='btn btn-danger btn-sm text-dark text-center' onclick = DeleteData('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
                         },
 
                     },
@@ -366,18 +367,23 @@ function ShowModal(Id) {
                     html += '<label class="col-sm-2 col-form-label"><b>Bab '+nobab+'</b></label>';
                     html += '<div class="col-sm-4">';
                     html += '<input type="text" class="form-control" id="showrumusanbab" value="'+result.babs[i].namaBab+'" disabled>';
-                    html += '</div></div><br>';
+                    html += '</div></div>';
 
                     for (let j = 0; j < result.babs[i].subBabs.length; ++j){
                         //console.log(result.babs[i].subBabs[j].namaSubBab);
                         nosub = j+1;
-                        html += '<div class="form-group col-sm-12">';
+                        if (j == 0) {
+                            html += '<div class="form-group col-sm-12 pt-3">';
+                        }
+                        else {
+                            html += '<div class="form-group col-sm-12">';
+                        }
                         html += '<div class="row">';
                         html += '<div class="col-sm-1"></div>';
                         html += '<label class="col-sm-2 "><b>'+nobab+'.'+nosub+'</b></label>';
                         html += '<div class="col-sm-5">';
                         html += '<input type="text" class="form-control" id="showrumusanbab" value="'+ result.babs[i].subBabs[j].namaSubBab +'" disabled>';
-                        html += '</div></div></div><br>';
+                        html += '</div></div></div>';
                         for (let k = 0; k < result.babs[i].subBabs[j].subSubBabs.length; ++k){
                             nosubsub = k+1;
                             //console.log(result.babs[i].subBabs[j].subSubBabs[k].namaSubSubBab);
@@ -387,7 +393,7 @@ function ShowModal(Id) {
                             html += '<label class="col-sm-2 "><b>'+nobab+'.'+nosub+'.'+nosubsub+'</b></label>';
                             html += '<div class="col-sm-5">';
                             html += '<input type="text" class="form-control" id="showrumusanbab" value="'+ result.babs[i].subBabs[j].subSubBabs[k].namaSubSubBab +'" disabled>';
-                            html += '</div></div></div><br>';
+                            html += '</div></div></div>';
                         }
                         
                     }
@@ -597,7 +603,7 @@ function ShowModal(Id) {
 
                     var html2 ='<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>';
                     
-                    html2 +='<button type="button" class="btn btn-sm btn-primary" id="btnUpdateUser" onclick="UpdatedData('+Id+');"> Perbarui</button>';
+                    html2 +='<button type="button" class="btn btn-sm btn-warning" id="btnUpdateUser" onclick="UpdatedData('+Id+');"> Perbarui</button>';
                    $('#modal-footerEdit').html(html2);         
 
                 }
@@ -737,8 +743,8 @@ function ShowModal(Id) {
         }
      function ClearScreen() {
              $("#template").val("");
-             $("#nasabahId").val("Pilih Nasabah");
-             html='<label>Bab</label><select required="required" class="form-control "name="babId[]" style="width: 100%;" id="babId" disabled><option selected value="empty">--Pilih Nasabah Terlebih Dahulu--</option></select>';
+            
+             html='<label>Bab</label><select required="required" class="form-control "name="babId[]" style="width: 100%;" id="babId" disabled><option selected value="empty">--Pilih Bab--</option></select>';
              $("#listbab").html(html);
              $("div[class*='removeclass']").remove();
              $('#btntambahbab').removeClass('btn-success').addClass('btn-secondary');
