@@ -27,7 +27,7 @@
                                     <label class="col-sm-2 control-label">Pilih Bab</label>
                                     <div class="col-sm-6" >
                                         <select required="required" class="form-control" id="selectbab" style="width: 100%;" onchange="CheckSubBabAdd(0)" >
-                                            
+                                             
                                          </select>
                                     </div>
                                  </div>
@@ -261,8 +261,8 @@
                             //console.log(row)
                             return "<button type='button' class='btn btn-sm btn-success text-dark' onclick = AddBab('" + row.id + "');><span><i class='fa fa-plus'></i></span></button> " +
                              "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModal('" + row.id + "');><span><i class='fa fa-eye'></i></span></button> " +
-                              "<button class='btn btn-light btn-sm text-dark text-center'  onclick = ShowModalEdit('" + row.id + "');><span><i class='fas fa-pencil-alt'></i></span></button>"+
-                             "<button class='btn btn-light btn-sm text-dark text-center' onclick = ShowModalDelete('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
+                              "<button class='btn btn-warning btn-sm text-dark text-center'  onclick = ShowModalEdit('" + row.id + "');><span><i class='fa fa-edit'></i></span></button>"+
+                             "<button class='btn btn-danger btn-sm text-dark text-center' onclick = ShowModalDelete('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
                              
                                 
                         },
@@ -307,14 +307,14 @@
                 success: function (result) { 
                     //console.log(result.data.value)
                    var html = '';
-                   
+                    html += '<option selected value="empty" hidden selected disabled>--Pilih Bab--</option>';
                     for (let i = 0; i < result.data.value.length; ++i) {  
                          html += '<option value="' +  result.data.value[i].bab.id + '">' + result.data.value[i].bab.nama  + '</option>'; 
                       } 
 
                      
                     $('#selectbab').html(html);
-                    $('#selectbab').val("--Pilih Bab--");
+                    $('#selectbab').val("empty");
 
                 }
             })
@@ -712,7 +712,7 @@ function CheckSubBab(Id,Cek) {
                    
                 if (result.data.value.length != 0) {
                         var html2 = ' <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=ClearScreen()>Close</button>';
-                        html2 += '<button type="button" class="btn btn-primary" id="editbutton" onclick = UpdateData("' + nasabahId + '")>Perbarui</button>';
+                        html2 += '<button type="button" class="btn btn-warning" id="editbutton" onclick = UpdateData("' + nasabahId + '")>Perbarui</button>';
                         $('#edit-footer').html(html2);
                     }
                     else{

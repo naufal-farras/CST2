@@ -24,7 +24,7 @@
                       
                          
                                   <div class="form-group">
-                                    <label class="col-sm-2 control-label">Pilih Sub Bab</label>
+                                    <label class="col-sm-2 control-label">Pilih SubBab</label>
                                     <div class="col-sm-6" >
                                         <select required="required" class="form-control" id="selectsubbab" style="width: 100%;" onchange="CheckSubSubBabAdd(0)">
 
@@ -257,8 +257,8 @@
                             //console.log(row)
                             return "<button type='button' class='btn btn-sm btn-success text-dark' onclick = AddsubBab('" + row.id + "');><span><i class='fa fa-plus'></i></span></button> " +
                              "<button type='button' class='btn btn-sm btn-light text-dark' onclick = ShowModal('" + row.id + "');><span><i class='fa fa-eye'></i></span></button> " +
-                              "<button class='btn btn-light btn-sm text-dark text-center'  onclick = ShowModalEdit('" + row.id + "');><span><i class='fas fa-pencil-alt'></i></span></button>"+
-                                "<button class='btn btn-light btn-sm text-dark text-center' onclick = ShowModalDelete('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
+                              "<button class='btn btn-warning btn-sm text-dark text-center'  onclick = ShowModalEdit('" + row.id + "');><span><i class='fa fa-edit'></i></span></button>"+
+                                "<button class='btn btn-danger btn-sm text-dark text-center' onclick = ShowModalDelete('" + row.id + "');><span><i class='fas fa-trash-alt'></i></span></button>" 
                         },
 
                     },
@@ -350,9 +350,9 @@
                     for (let i = 0; i < result.data.value.length; ++i) {  
                          html += '<option value="' +  result.data.value[i].id + '">' + result.data.value[i].rumusanBab.bab.nama  + ' - ' + result.data.value[i].subBab.nama   + '</option>'; 
                       } 
-                     
+                    html += '<option value="empty"  hidden selected disabled>--Pilih SubBab--</option>'
                     $('#selectsubbab').html(html);
-                    $('#selectsubbab').val("--Pilih SubBab--");
+                    $('#selectsubbab').val("empty");
                 }
             })
 
@@ -858,7 +858,7 @@ function ShowModalDelete(Id) {
 
                     if (result.data.value.length != 0) {
                         var html2 = ' <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=ClearScreen()>Close</button>';
-                        html2 += '<button type="button" class="btn btn-primary" id="editbutton" onclick = UpdateData("' + nasabahId + '")>Perbarui</button>';
+                        html2 += '<button type="button" class="btn btn-warning" id="editbutton" onclick = UpdateData("' + nasabahId + '")>Perbarui</button>';
                         $('#edit-footer').html(html2);
                     }
                     else{
