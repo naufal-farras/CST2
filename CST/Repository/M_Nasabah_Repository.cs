@@ -54,7 +54,7 @@ namespace CST.Repository
                 }
             }
 
-            return statusHelperVM;
+            return statusHelperVM; 
         }
 
         public StatusHelperVM Update(M_Nasabah nasabah)
@@ -140,8 +140,39 @@ namespace CST.Repository
 
         public StatusHelperVM Delete(int dataId)
         {
+            var getDataBab = _context.M_Bab.Where(x => x.NasabahId == dataId).ToList();
+            var getDataSubBab = _context.M_SubBab.Where(x => x.NasabahId == dataId).ToList();
+            var getDataSubSubBab = _context.M_SubSubBab.Where(x => x.NasabahId == dataId).ToList();
+
+            if (getDataBab.Count() !=0)
+            {
+                foreach (var item in getDataBab)
+                {
+                    _context.Remove(item);
+                    _context.SaveChanges();
+                }
+                
+            }
+            else if (getDataSubBab.Count() != 0)
+            {
+                foreach (var item in getDataSubBab)
+                {
+                    _context.Remove(item);
+                    _context.SaveChanges();
+                }
+            }
+            if (getDataSubSubBab.Count != 0)
+            {
+                foreach (var item in getDataSubSubBab)
+                {
+                    _context.Remove(item);
+                    _context.SaveChanges();
+                }
+            }
+
             StatusHelperVM result = new StatusHelperVM();
             var getData = _context.M_Nasabah.Where(x => x.Id == dataId).SingleOrDefault();
+            
             if (getData == null)
             {
                 result.StatusCategory = StatusCategory.NotFound;
