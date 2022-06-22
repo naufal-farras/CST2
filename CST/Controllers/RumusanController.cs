@@ -150,7 +150,12 @@ namespace CST.Controllers
             var result = _rumusanNasabah_Repository.GetSubSubBabByNasabah(SubBabId);
             return Json(new { data = result });
         }
-
+        [HttpGet("Rumusan/GetSubSubBabByNasabahEdit")]
+        public JsonResult GetSubSubBabByNasabahEdit(int SubBabId)
+        {
+            var result = _rumusanNasabah_Repository.GetSubSubBabByNasabahEdit(SubBabId);
+            return Json(new { data = result });
+        }
 
         [HttpGet("Rumusan/GetSubById")]
         public JsonResult GetSubById(int Id)

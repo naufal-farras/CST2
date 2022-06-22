@@ -618,6 +618,7 @@ function ShowModalDelete(Id) {
                                 html += '<option  value='+ result.data.value[i].subBab.id + '>'+ result.data.value[i].subBab.nama + '</option>';    
                        
                       } 
+                      html += '<option selected hidden disable value="empty">--Pilih SubBab--</option>';    
                        html += ' </select>';
                                 html += ' </div>';
                     
@@ -826,7 +827,7 @@ function ShowModalDelete(Id) {
                   //console.log(result.data.value);
                  
                 $.ajax({
-                      url: '@Url.Action("GetSubSubBabByNasabah", "Rumusan")',
+                      url: '@Url.Action("GetSubSubBabByNasabahEdit", "Rumusan")',
                       type: 'GET',
                       data: { SubbabId:subbabId },
                       dataType: 'json',

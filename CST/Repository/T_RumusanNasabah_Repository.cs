@@ -171,6 +171,13 @@ namespace CST.Repository
             var result = _context.M_SubSubBab.Where(x => x.NasabahId == nasabahId.NasabahId).ToList();
             return new JsonResult(result);
         }
+        public JsonResult GetSubSubBabByNasabahEdit(int SubBabId)
+        {
+      
+            var nasabahId = _context.M_SubBab.Where(x => x.Id == SubBabId).FirstOrDefault();
+            var result = _context.M_SubSubBab.Where(x => x.NasabahId == nasabahId.NasabahId).ToList();
+            return new JsonResult(result);
+        }
         public JsonResult GetSubById(int Id)
         {
             var result = _context.T_RumusanSubBab.Include(x => x.RumusanBab).Include(x => x.SubBab).Include(x => x.RumusanBab.Bab).Where(x => x.RumusanBab.RumusanNasabahId == Id).ToList();
