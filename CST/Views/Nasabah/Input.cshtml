@@ -26,7 +26,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" onclick="ClearScreen();">Close</button>
                 <button type="button" class="btn btn-sm btn-primary" id="btnAddNasabah" onclick="AddNasabah();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Simpan</button>
-                <button type="button" class="btn btn-sm btn-primary" id="btnUpdateNasabah" onclick="UpdateNasabah();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Perbarui</button>
+                <button type="button" class="btn btn-sm btn-warning" id="btnUpdateNasabah" onclick="UpdateNasabah();"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Perbarui</button>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Master / Nasabah</h5>
-                                        <button class="btn btn-sm btn-light fa-pull-right" data-toggle="modal" data-target="#nasabahModal" onclick="ClearScreen()" data-backdrop="static" data-keyboard="false" title="Add Data">Add Nasabah</button>
+                                        <button class="btn btn-sm btn-success fa-pull-right" data-toggle="modal" data-target="#nasabahModal" onclick="ClearScreen()" data-backdrop="static" data-keyboard="false" title="Add Data">Add Nasabah</button>
                                     </div>
                                     <div class="card-block">
                                         <div class="table-responsive">
@@ -153,9 +153,9 @@
                     { "data": "nama" },
                     {
                         "render": function (data, type, row) {
-                            let buttonEdit = '<button type="button" class="btn btn-sm btn-light" onclick="ShowData('+row.id+')"><span><i class="fas fa-edit"></i> Edit</span></button>';
-                            let buttonDetail = '<button type="button" class="btn btn-sm btn-light" onclick="DetailData('+row.id+')"><span><i class="fas fa-info-circle"></i> Detail</span></button>';
-                            let buttonDelete = '<button type="button" class="btn btn-sm btn-light" onclick="DeleteData('+row.id+')"><span><i class="fas fa-trash-alt""></i> Delete</span></button>';
+                            let buttonEdit = '<button type="button" class="btn btn-sm btn-warning" onclick="ShowData('+row.id+')"><span><i class="fas fa-edit"></i></span></button>';
+                            let buttonDetail = '<button type="button" class="btn btn-sm btn-light" onclick="DetailData('+row.id+')"><span><i class="fa fa-eye"></i></span></button>';
+                            let buttonDelete = '<button type="button" class="btn btn-sm btn-danger" onclick="DeleteData('+row.id+')"><span><i class="fas fa-trash-alt""></i></span></button>';
 
                             return buttonDetail + buttonEdit + buttonDelete; 
                         }
