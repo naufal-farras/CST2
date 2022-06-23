@@ -12,7 +12,7 @@
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12"> 
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Edit Data E-Book</h5>
@@ -21,22 +21,40 @@
                                     
                                       
                                     <div class="card-block">
+                                       
+                                      <div class="form-row">
+                                       <div class="col-3">
+                                          <h5>Judul</h5>
+                                        </div> 
+                                         <div class="col-3">
+                                          <h5>Kelompok</h5>
+                                        </div> 
+                                         <div class="col-3">
+                                          <h5>Tanggal</h5>
+                                        </div>
+                                      </div>
 
                                       <div class="form-row">
-                                      
-                                          <div class="col">
+
+                                         <div class="col-3">
                                           <input type="text" class="form-control" id="namaBab" placeholder="@Model.Kelompok" value="@Model.Kelompok" required>
+
                                         </div>
-                                       
-                                        <div class="col">
+                                           <div class="col-3">
                                           <input type="text" class="form-control" id="kelompok" placeholder="@Model.NamaEbook" value="@Model.NamaEbook"  required>
+
+                                        </div>
+                                        <div class=col-3>
+                                          <input type="date" class="form-control" id="date" value="@Model.TanggalSampul?.ToString("yyyy-MM-dd", new System.Globalization.CultureInfo("id-ID"))" required>
+                                           
                                         </div>
                                          <div class="float-right"> 
                                              
-                                            <a  onclick="UpdateJudul()" class="btn btn-sm btn-primary">Update Judul/Kelompok</a>
+                                            <a  onclick="UpdateJudul()" class="btn btn-sm btn-primary text-white">Update Judul/Kelompok</a>
 
                                          </div>
                                       </div>
+                                      
                                       
                                       <br>
 
@@ -160,8 +178,7 @@
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
     <script> 
-       
-
+        
            function EditData(id,nobab,nosub,nosubsub) 
            {   
                swal("Apakah anda yakin mau update file ini?", {
@@ -179,12 +196,12 @@
 
                 var IdFile= "#subSubBabId-"+nobab+"-"+nosub+"-"+nosubsub;
             
-               if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
+               if($('#namaBab').val() == ""|| $('#kelompok').val() == "" || $('#date').val()=="")
                {
-                swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok!");
+                swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok/Tanggal!");
                }
                else
-               {   
+               {    
                    var indx = id;
                    var url = window.location.href;
                    var parts = url.split("/");
@@ -249,12 +266,15 @@
                var namaEbook = $('#namaBab').val();
                var kelompok = $('#kelompok').val();
                 
-               if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
+              if($('#namaBab').val() == ""|| $('#kelompok').val() == "" || $('#date').val()=="")
                {
-                swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok!");
+                swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok/Tanggal!");
                }
                else
                {   
+                   var Date= $('#date').val();
+                   console.log(Date)
+                  
                    var url = window.location.href;
                    var parts = url.split("/");
                    var beforeLast = parts[parts.length - 1]; //keep in mind that since array starts with 0, last part is [length - 1]
@@ -263,7 +283,7 @@
                                  $.ajax({ 
                                        url: "@Url.Action("UpdateJudul", "Ebook")", 
                                        type: 'POST', 
-                                        data:{Id:rumusanId,NamaEbook: namaEbook,Kelompok:kelompok}, 
+                                        data:{Id:rumusanId,NamaEbook: namaEbook,Kelompok:kelompok,TanggalSampul:Date}, 
                                         cache: false, 
                                          dataType: 'json',
                                     success: function (result) {
