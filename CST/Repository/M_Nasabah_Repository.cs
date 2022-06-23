@@ -153,19 +153,19 @@ namespace CST.Repository
                 }
                 
             }
-            else if (getDataSubBab.Count() != 0)
+            if (getDataSubBab.Count() != 0)
             {
-                foreach (var item in getDataSubBab)
+                foreach (var item2 in getDataSubBab)
                 {
-                    _context.Remove(item);
+                    _context.Remove(item2);
                     _context.SaveChanges();
                 }
             }
             if (getDataSubSubBab.Count != 0)
             {
-                foreach (var item in getDataSubSubBab)
+                foreach (var item3 in getDataSubSubBab)
                 {
-                    _context.Remove(item);
+                    _context.Remove(item3);
                     _context.SaveChanges();
                 }
             }
