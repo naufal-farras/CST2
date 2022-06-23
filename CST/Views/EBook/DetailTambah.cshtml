@@ -20,16 +20,32 @@
                                         <button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>
                                         <button class="btn btn-sm btn-success fa-pull-right" onclick="location.href='@Url.Action("GabungFile", "EBook")'" title="Gabung PDF"> Gabung PDF</button>   
                                     </div>
-                                    
-                                      
+                                     
                                     <div class="card-block">
 
                                       <div class="form-row">
-                                        <div class="col">
+                                       <div class="col-4">
+                                          <h5>Judul</h5>
+                                        </div> 
+                                         <div class="col-4">
+                                          <h5>Kelompok</h5>
+                                        </div> 
+                                         <div class="col-4">
+                                          <h5>Tanggal</h5>
+                                        </div>
+                                      </div>
+
+                                      <div class="form-row">
+
+                                         <div class="col-4">
                                           <input type="text" class="form-control" id="namaBab" placeholder="Masukan Judul" required>
                                         </div>
-                                        <div class="col">
+                                           <div class="col-4">
                                           <input type="text" class="form-control" id="kelompok" placeholder="Masukan Kelompok" required>
+                                        </div>
+                                        <div class=col-4>
+                                            <input type="date" class="form-control" id="date"/>
+
                                         </div>
                                       </div>
                                       <br>
@@ -119,12 +135,13 @@
 @section Styles{
     <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
     <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
-    
     <!-- modal-window-effects css -->
     <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
+ 
 }
 
-@section Scripts{
+@section Scripts{  
+
     <script src="~/vendor/jazztemplate/plugins/data-tables/js/datatables.min.js"></script>    
     <script src="~/vendor/moment-js/moment-with-locales-IDN.min.js"></script>
     <script src="~/vendor/bootstrap.bundle.min.js"></script>
@@ -132,8 +149,7 @@
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
     <script> 
-      
-
+       
        function AddData() 
        {
 
@@ -142,14 +158,18 @@
            var datasNew = new Array();
            var namaBab= null;
            var kelompok= null;
+           var Date= null;
 
-           if($('#namaBab').val() == ""|| $('#kelompok').val() == "")
+
+           if($('#namaBab').val() == ""|| $('#kelompok').val() == "" || $('#date').val()=="")
            {
-            swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok!");
+            swal("Data Tidak Lengkap", "Harap isi Judul/Kelompok/Tanggal!");
            }
            else
            {
                          namaBab= $('#namaBab').val();
+                         Date= $('#date').val();
+                         
                          kelompok= $('#kelompok').val();  
 
                         var url = window.location.href;
@@ -185,6 +205,7 @@
                          }) 
                            //fileData.append('selectedUpload', selectUploads);
                            fileData.append('Nama', namaBab);
+                           fileData.append('TanggalSampul', Date);
                            fileData.append('Kelompok', kelompok);
                            fileData.append('RumusanId', rumusanId); 
 

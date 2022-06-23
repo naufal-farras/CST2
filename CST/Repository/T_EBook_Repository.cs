@@ -97,6 +97,7 @@ namespace CST.Repository
                       }).FirstOrDefault();
             result.T_TransDetail = _context.T_TransDetail.Where(x => x.TransaksiId == Id).ToList();
             result.Kelompok = _context.T_Transaksi.Where(x => x.Id == Id).SingleOrDefault().Nama;
+            result.TanggalSampul = _context.T_Transaksi.Where(x => x.Id == Id).SingleOrDefault().TanggalSampul;
             result.NamaEbook = _context.T_Transaksi.Where(x => x.Id == Id).SingleOrDefault().Kelompok;
 
             return result;

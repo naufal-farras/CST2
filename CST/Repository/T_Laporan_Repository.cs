@@ -5,6 +5,7 @@ using CST.ViewModels.EBook;
 using CST.ViewModels.HelperVM;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Pdf;
@@ -13,32 +14,43 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CST.Repository
 {
     public class T_Laporan_Repository
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<M_User> _userManager;
+        private readonly SignInManager<M_User> _signInManager;
+
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public T_Laporan_Repository(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+        public T_Laporan_Repository(AppDbContext context, IWebHostEnvironment webHostEnvironment,
+            SignInManager<M_User> signInManager, UserManager<M_User> userManager)
         {
             _webHostEnvironment = webHostEnvironment;
+            _signInManager = signInManager;
+            _userManager = userManager;
             _context = context;
         }
-      
+
         #region PROSES
         //public JsonResult TambahEbook(int Index, string Path)
-        public JsonResult TambahEbook(List<IFormFile> selectedUpload, string Nama , string Kelompok, int RumusanId)
+ 
+
+        public JsonResult TambahEbook(List<IFormFile> selectedUpload, string Nama , string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
         {
+           
             int transId = 0;
             var trans  = new T_Transaksi();
             trans.Nama = Nama;
             trans.Kelompok = Kelompok;
             trans.Status = 0;
             trans.CreatedDate = DateTime.Now;
+            trans.TanggalSampul = TanggalSampul;
             trans.IsDelete = false;
-            trans.CreaterId = ""; 
+            trans.CreaterId = createId; 
             trans.RumusanNasabahId = RumusanId;
             _context.T_Transaksi.Add(trans);
             _context.SaveChanges();
@@ -130,7 +142,7 @@ namespace CST.Repository
 
         }
 
-        public JsonResult UpdateJudul(int Id, string NamaEbook, string Kelompok)
+        public JsonResult UpdateJudul(int Id, string NamaEbook, string Kelompok, DateTime TanggalSampul)
         {
             bool result = false;
             var getData = _context.T_Transaksi.Where(x => x.Id == Id).FirstOrDefault();
@@ -140,6 +152,7 @@ namespace CST.Repository
             {
                 getData.Nama = NamaEbook;
                 getData.Kelompok = Kelompok;
+                getData.TanggalSampul = TanggalSampul;
                 getData.UpdatedDate = date;
                 _context.Entry(getData).State = EntityState.Modified;
                 _context.SaveChanges();

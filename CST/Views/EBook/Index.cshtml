@@ -220,7 +220,7 @@
                             },
                             {
                                 "render": function (data, type, row) {
-                                    let buttonDownload = '<a class="btn btn-sm text-danger btn-muted" href="@Url.Action("GenerateEbook", "EBook")/'+row.id+'" target="_blank"><span><i class="fas fa-file-pdf" "></i> Download</span></a>';
+                                    let buttonDownload = '<a class="btn btn-sm text-danger btn-light" href="@Url.Action("GenerateEbook", "EBook")/'+row.id+'" target="_blank"><span><i class="fas fa-file-pdf" "></i> Download</span></a>';
                                     let buttonDetail = '<a class="btn btn-sm btn-warning" href="@Url.Action("EditEbook", "EBook")/'+row.id+'"><span><i class="fas fa-eye""></i> Edit</span></a>';
                                     let buttonDelete = '<button type="button" class="btn btn-sm btn-danger" onclick="DeleteData('+row.id+')"><span><i class="fas fa-trash-alt""></i> Delete</span></button>';
 
