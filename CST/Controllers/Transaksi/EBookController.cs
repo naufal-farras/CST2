@@ -24,36 +24,30 @@ using System.Linq;
 using System.Drawing.Imaging;
 using CST.Models;
 using Syncfusion.Pdf.Interactive;
+using System.Threading.Tasks;
 //using Syncfusion.EJ2.PdfViewer;
 
 namespace CST.Controllers.Transaksi
 {
     public class EBookController : Controller
     {
-
-        //private readonly IWebHostEnvironment _webHostEnvironment;
-        //private readonly UserManager<M_User> _userManager;
-        //private readonly M_User_Repository _userRepository;
-        //private readonly T_Laporan_Repository _laporanRepository;
+         
         private readonly T_EBook_Repository _ebook_Repository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly AppDbContext _context;
         private readonly T_Laporan_Repository _laporan_Repository;
-       
+        private readonly UserManager<M_User> _userManager;
+        private readonly SignInManager<M_User> _signInManager;
 
-        //public EBookController(IWebHostEnvironment webHostEnvironment, UserManager<M_User> userManager,
-        //    M_User_Repository userRepository, T_Laporan_Repository laporanRepository)
-        //{
-        //    _webHostEnvironment = webHostEnvironment;
-        //    _userManager = userManager;
-        //    _userRepository = userRepository;
-        //    _laporanRepository = laporanRepository;
-        //}
-        public EBookController(AppDbContext context,
+
+     
+        public EBookController(AppDbContext context, SignInManager<M_User> signInManager, UserManager<M_User> userManager,
             IWebHostEnvironment webHostEnvironment,
             T_EBook_Repository ebook_Repository,
             T_Laporan_Repository laporan_Repository)
         {
+            _signInManager = signInManager;
+            _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
             _ebook_Repository = ebook_Repository;
             _laporan_Repository = laporan_Repository;
@@ -98,6 +92,15 @@ namespace CST.Controllers.Transaksi
         {
             return View();
         }
+        public async Task<M_User> GetCurrentUser()
+        {
+            var result = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = _context.M_User
+                .Where(x => x.Id == result.Id)
+                .FirstOrDefault();
+
+            return user ?? throw new Exception("User Not Found");
+        }
 
         [HttpDelete("Ebook/Delete")]
         public JsonResult Delete(int id)
@@ -122,9 +125,9 @@ namespace CST.Controllers.Transaksi
         }
 
         [HttpPost("EBook/UpdateJudul")]
-        public JsonResult UpdateJudul(int Id, string NamaEbook, string Kelompok)
+        public JsonResult UpdateJudul(int Id, string NamaEbook, string Kelompok, DateTime TanggalSampul)
         {
-            var result = _laporan_Repository.UpdateJudul(Id, NamaEbook,Kelompok);
+            var result = _laporan_Repository.UpdateJudul(Id, NamaEbook,Kelompok, TanggalSampul);
             return Json(new { data = result });
 
         }
@@ -297,9 +300,12 @@ namespace CST.Controllers.Transaksi
         }
 
         [HttpPost("EBook/Upload")]
-        public JsonResult Upload(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId)
+        public JsonResult Upload(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul)
         {
-            var result = _laporan_Repository.TambahEbook(selectedUpload, Nama, Kelompok, RumusanId);
+            var currentUser = GetCurrentUser().Result;
+            var createId = currentUser.Id;
+
+            var result = _laporan_Repository.TambahEbook(selectedUpload, Nama, Kelompok, RumusanId, TanggalSampul,createId);
             return Json(new { data = result });
         }
       
@@ -353,6 +359,7 @@ namespace CST.Controllers.Transaksi
             string webRootPath = _webHostEnvironment.WebRootPath;
             string path = Path.Combine(webRootPath, "Files/Data");
 
+
             //Loads a template document
             string webRootPaths= _webHostEnvironment.WebRootPath;
             string paths = Path.Combine(webRootPaths, "Files");
@@ -363,9 +370,9 @@ namespace CST.Controllers.Transaksi
 
             document.Replace("%%NamaSampul%%", getSampul.Nama, false, true);
             document.Replace("%%Kelompok%%", getSampul.Kelompok, false, true);
-            document.Replace("%%Tanggal%%", DateTime.Now.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("id-ID")), false, true);
+            document.Replace("%%Tanggal%%", getSampul.TanggalSampul?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("id-ID")), false, true);
 
-            var date = DateTime.Now.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("id-ID"));
+            var date = getSampul.TanggalSampul?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("id-ID"));
            
             //Word Tdk di Pake
             #region

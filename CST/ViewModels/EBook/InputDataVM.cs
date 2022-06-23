@@ -1,6 +1,7 @@
 ﻿using CST.Models.EBook;
 using CST.Models.Master;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 namespace CST.ViewModels.EBook
@@ -8,6 +9,7 @@ namespace CST.ViewModels.EBook
     public class InputDataVM
     {
         public string NamaEbook { get; set; }
+        public DateTime? TanggalSampul { get; set; }
         public string Kelompok { get; set; }
         public List<T_TransDetail> T_TransDetail { get; set; }
 
