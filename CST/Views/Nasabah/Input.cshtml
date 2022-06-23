@@ -190,6 +190,8 @@
                     return false;
                 }
             })
+             $("#nasabahModalLabel").html('Edit Nasabah');
+           
         }        
 
         function DetailData(id)
@@ -383,6 +385,7 @@
                     )
                 }
             })
+      
         }
 
         function ProcessingRequest() {
@@ -395,11 +398,12 @@
         }
 
         function ClearScreen() {
+            $('#btnUpdateNasabah').hide();
             $("#boxKode").val("");
             $("#boxNama").val("");
-
+            $("#nasabahModalLabel").html('Tambah Nasabah');
             $('#btnAddNasabah').show();
-            $('#btnUpdateNasabah').hide();
+           
         }
     </script>
 }
