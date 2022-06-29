@@ -486,9 +486,46 @@ namespace CST.Controllers.Transaksi
             //Set the text alignment.
             format.Alignment = PdfTextAlignment.Center;
             pageTOC.Graphics.DrawString("DAFTAR ISI", fontBAB, PdfBrushes.Black, new RectangleF(new PointF(5, 10), new SizeF(pageTOC.Graphics.ClientSize.Width, 30)), format);
-            PdfPage pageTOC2 = finalDoc.Pages.Add();  
-            PdfPage pageTOC3 = finalDoc.Pages.Add();  
-            PdfPage pageTOC4 = finalDoc.Pages.Add();   
+            var countBab = 0;  
+            var countSub = 0;
+            var countSubSub = 0;
+            foreach (var item in getTemplate.Babs)
+            {
+                countBab += 1;
+                foreach (var item2 in item.SubBabs)
+                {
+
+                    countSub += 1;
+
+                    foreach (var item3 in item2.SubSubBabs)
+                    {
+                        countSubSub += 1;
+                    }
+
+                }
+            }
+            var totalCount = countBab + countSub + countSubSub;
+            PdfPage pageTOC2 = null;
+            PdfPage pageTOC3 = null;
+            PdfPage pageTOC4 = null;
+
+
+
+            if (totalCount < 66)
+            {
+                 pageTOC2 = finalDoc.Pages.Add();
+                 pageTOC3 = finalDoc.Pages.Add();
+            }
+            else if (totalCount < 99)
+            {
+                pageTOC2 = finalDoc.Pages.Add();
+                pageTOC3 = finalDoc.Pages.Add();
+                //pageTOC4 = finalDoc.Pages.Add();
+            }
+
+            //PdfPage pageTOC2 = finalDoc.Pages.Add();  
+            //PdfPage pageTOC3 = finalDoc.Pages.Add();  
+            //PdfPage pageTOC4 = finalDoc.Pages.Add();   
 
 
             var indx = 0;
@@ -752,7 +789,9 @@ namespace CST.Controllers.Transaksi
                 }
                 nobab++;
             }
-  
+
+           
+
             //Save the document into stream 
             MemoryStream stream = new MemoryStream(); 
             finalDoc.Save(stream);
