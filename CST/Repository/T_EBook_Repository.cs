@@ -148,7 +148,7 @@ namespace CST.Repository
         {
             InputDataVM result = new InputDataVM();
 
-
+             
             result = (from head in _context.T_RumusanNasabah.Where(x => x.Id == getIdrumusan).ToList()
                       select new InputDataVM
                       {
@@ -157,6 +157,7 @@ namespace CST.Repository
                                   {
                                       BabId = head2.BabId,
                                       namaBab = head2.Bab.Nama,
+                                      
 
                                       SubBabs = (from head3 in _context.T_RumusanSubBab.Include(x => x.SubBab).Where(x => x.RumusanBabId == head2.Id).ToList()
                                                  select new SubBabs
