@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Tambah E-Book";
 } 
+
+
 <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -52,7 +54,8 @@
                                         <a class="btn btn-sm btn-info shadow-2 text-white" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></a>
                                        
                                         @*<button class="btn btn-sm btn-info shadow-2 text-white" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>*@
-                                        <button class="btn btn-sm btn-success fa-pull-right" onclick="location.href='@Url.Action("GabungFile", "EBook")'" title="Gabung PDF"> Gabung PDF</button>   
+                                        <button class="btn btn-sm btn-success fa-pull-right" onclick="location.href='@Url.Action("GabungFile", "EBook")'" title="Gabung PDF"> Gabung PDF</button>
+                                        <button type="button" class="btn btn-primary fa-pull-right" id="uploadaallfile" data-toggle="modal" data-target="#modalfilemultiple" onclick="ShowModal(@nobab)">Upload multiple file</button>
                                     </div>
                                      
                                     <div class="card-block">
@@ -94,18 +97,25 @@
                                           @foreach (var item in Model.Babs)
                                           {
                                               <div class="accordion-item">
+                                                   
                                                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                                   
                                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@nobab"  aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
                                                       
                                                       Bab @nobab @item.namaBab
 
                                                   </button>
+                                                
                                                   <input id="babId-@nobab" name="babId"  value="@item.BabId" hidden>
+                                                  
                                                 </h2>
                                                  
                                                     <div id="panelsStayOpen-collapseOne-@nobab" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                                       <div class="accordion-body">
-                                                  @{var nosub = 1;}
+                                 
+                                                         <button type="button" class="btn btn-primary float-end" id="uploadaall-@nobab" data-toggle="modal" data-target="#modalfilemultiple" onclick="ShowModal(@nobab)">Upload multiple file</button>
+                                                            
+                                                  @{var nosub = 1; var hasil = 1;}
                                                     @foreach (var item2 in item.SubBabs)
                                                      { 
                                                         <input id="subBabId-@nobab-@nosub" name="subbabId"  value="@item2.SubBabId " hidden>
@@ -117,9 +127,14 @@
                                                            { 
                                                             <input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab"  value="@item3.SubSubBabId" hidden>
 
-                                                               <span for="formFileMultiple"  ><strong>  @nosubsub.@item3.namaSubSubBab </strong></span>
+                                                               <span for="formFileMultiple" id="nama-@nobab-@nosub-@nosubsub"><strong>@nosubsub.@item3.namaSubSubBab</strong></span>
                                                                <input class="form-control" type="file" accept="application/pdf" name="subsubbabId"  id="subSubBabId-@nobab-@nosub-@nosubsub"> 
+        
+                                                                            
+                                                               <span id="name-@nobab-@hasil">wkwkwk</span>
+                                                               <br/>
                                                                nosubsub++;
+                                                               hasil++;
                                                            } 
                                                       
                                                            </div>
@@ -154,6 +169,7 @@
                                 </div>
                             </div>
                         </div>
+                        
 
                         <!-- [ Main Content ] end -->
 
@@ -162,8 +178,39 @@
                 </div>
             </div>
         </div>
+         
     </div>
+
+   
 </section>
+
+<div class="modal fade" id="modalfilemultiple" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form method="post" class="file-uploader" action="" enctype="multipart/form-data">
+                                  <div class="file-uploader__message-area">
+                                    <p>Select a file to upload</p>
+                                  </div>
+                                  <div class="file-chooser">
+                                    <input class="file-chooser__input" type="file" multiple>
+                                  </div>
+                                 
+                                </form>
+                              </div>
+                              <div class="modal-footer" id="modalfooterfile">
+                              
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
 <div class="md-overlay"></div>
 
 @section Styles{
@@ -171,7 +218,105 @@
     <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
     <!-- modal-window-effects css -->
     <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
- 
+    <style>
+    
+     .file-uploader__message-area {
+	     font-size: 18px;
+	     padding: 1em;
+	     text-align: center;
+	     color: #377a65;
+    }
+     .file-list {
+	     background-color: #1F51ED;
+	     font-size: 16px;
+    }
+     .file-list__name {
+	     white-space: nowrap;
+	     overflow: hidden;
+	     text-overflow: ellipsis;
+         color: white;
+    }
+     .file-list li {
+	     height: 50px;
+	     line-height: 50px;
+	     margin-left: 0.5em;
+	     border: none;
+	     overflow: hidden;
+    }
+     .removal-button {
+	     width: 20%;
+	     border: none;
+	     background-color: #d65d38;
+	     color: white;
+    }
+     .removal-button::before {
+	     content: "X";
+	    
+    }
+     .removal-button:focus {
+	     outline: 0;
+    }
+     .file-chooser {
+	     padding: 1em;
+	     transition: background-color 1s, height 1s;
+    }
+     .file-chooser p {
+	     font-size: 18px;
+	     padding-top: 1em;
+    }
+     .file-uploader {
+	     max-width: 400px;
+	     height: auto;
+	     margin: 2em auto;
+    }
+     .file-uploader * {
+	     display: block;
+    }
+     .file-uploader input[type=&#34;
+    submit&#34;
+    ] {
+	     margin-top: 2em;
+	     float: right;
+    }
+     .file-list {
+	     margin: 0 auto;
+	     max-width: 90%;
+    }
+     .file-list__name {
+	     max-width: 70%;
+	     float: left;
+    }
+     .removal-button {
+	     display: inline-block;
+	     height: 100%;
+	     float: right;
+    }
+     .file-chooser {
+	     width: 90%;
+	     margin: 0.5em auto;
+    }
+     .file-chooser__input {
+	     margin: 0 auto;
+    }
+     
+     .hidden {
+	     display: none;
+    }
+     .hidden input {
+	     display: none;
+    }
+     .error {
+	     background-color: #d65d38;
+	     color: white;
+    }
+     *, *::before, *::after {
+	     box-sizing: border-box;
+    }
+     ul, li {
+	     margin: 0;
+	     padding: 0;
+    }
+</style>
 }
 
 @section Scripts{  
@@ -182,8 +327,206 @@
     <!-- modal-window-effects Js -->
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
+    
     <script> 
        
+        
+       
+       function Upload(bab) {
+           var list_name=[];
+           var list_bab =[]
+           $('.file-list__name').each(function() { list_name.push($(this).text().split("_")[2].split(".pdf")[0]); });
+           $("span[id^='nama-"+bab+"']").each(function() { list_bab.push($(this).text().split(".")[1]); });
+           console.log(list_name);
+           console.log(list_bab);
+     
+           hideModal();
+        
+           for (let i = 0; i < list_name.length; i++) {
+               for (let j = 0; j < list_bab.length; j++) { 
+                
+                   if (list_name[i].toLowerCase() ==  list_bab[j].toLowerCase()) { 
+                       console.log(j);
+                       //var hasil = $(".file-list").files;
+                       var hasil = document.querySelector(".file-chooser__input").files[i].name;
+                       var jj = j + 1;
+                       console.log(hasil);
+                       $("span[id='name-"+bab+"-"+jj+"']").text(hasil);
+                  
+                       //$("input[id^='subSubBabId-" + bab + "']").val(hasil);
+                       
+                       break;
+                   }
+               }
+            }
+
+           // $("#.file-list__name").val();
+           
+        
+       }
+       function ShowModal(bab) {              
+           var html = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
+           html += '<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="Upload('+bab+')">Upload</button>';
+           $('#modalfooterfile').html(html);
+       }
+       function hideModal() {
+          $(".modal-backdrop").remove();
+      
+        }
+
+       (function ($) {
+          $.fn.uploader = function (options) {
+            var settings = $.extend(
+              {
+                MessageAreaText: "No files selected.",
+                MessageAreaTextWithFiles: "File List:",
+                DefaultErrorMessage: "Unable to open this file.",
+                BadTypeErrorMessage: "We cannot accept this file type at this time.",
+                acceptedFileTypes: [
+                  "pdf",
+                ]
+              },
+              options
+            );
+
+            var uploadId = 1;
+            //update the messaging
+            $(".file-uploader__message-area p").text(
+              options.MessageAreaText || settings.MessageAreaText
+            );
+
+            //create and add the file list and the hidden input list
+            var fileList = $('<ul class="file-list"></ul>');
+            var hiddenInputs = $('<div class="hidden-inputs hidden"></div>');
+            $(".file-uploader__message-area").after(fileList);
+            $(".file-list").after(hiddenInputs);
+
+            //when choosing a file, add the name to the list and copy the file input into the hidden inputs
+            $(".file-chooser__input").on("change", function () {
+              var files = document.querySelector(".file-chooser__input").files;
+               
+
+              for (var i = 0; i < files.length; i++) {
+                console.log(files[i]);
+
+                var file = files[i];
+                var fileName = file.name.match(/([^\\\/]+)$/)[0];
+
+                //clear any error condition
+                $(".file-chooser").removeClass("error");
+                $(".error-message").remove();
+
+                //validate the file
+                var check = checkFile(fileName);
+                if (check === "valid") {
+                  // move the 'real' one to hidden list
+                  $(".hidden-inputs").append($(".file-chooser__input"));
+
+                  //insert a clone after the hiddens (copy the event handlers too)
+                  $(".file-chooser").append(
+                    $(".file-chooser__input").clone({ withDataAndEvents: true })
+                  );
+
+                  //add the name and a remove button to the file-list
+                  $(".file-list").append(
+                    '<li style="display: none;"><span class="file-list__name">' +
+                      fileName +
+                      '</span><button class="removal-button" data-uploadid="' +
+                      uploadId +
+                      '"></button></li>'
+                  );
+                  $(".file-list").find("li:last").show(800);
+
+                  //removal button handler
+                  $(".removal-button").on("click", function (e) {
+                    e.preventDefault();
+
+                    //remove the corresponding hidden input
+                    $(
+                      '.hidden-inputs input[data-uploadid="' +
+                        $(this).data("uploadid") +
+                        '"]'
+                    ).remove();
+
+                    //remove the name from file-list that corresponds to the button clicked
+                    $(this)
+                      .parent()
+                      .hide("puff")
+                      .delay(10)
+                      .queue(function () {
+                        $(this).remove();
+                      });
+
+                    //if the list is now empty, change the text back
+                    if ($(".file-list li").length === 0) {
+                      $(".file-uploader__message-area").text(
+                        options.MessageAreaText || settings.MessageAreaText
+                      );
+                    }
+                  });
+
+                  //so the event handler works on the new "real" one
+                  $(".hidden-inputs .file-chooser__input")
+                    .removeClass("file-chooser__input")
+                    .attr("data-uploadId", uploadId);
+
+                  //update the message area
+                  $(".file-uploader__message-area").text(
+                    options.MessageAreaTextWithFiles ||
+                      settings.MessageAreaTextWithFiles
+                  );
+
+                  uploadId++;
+                } else {
+                  //indicate that the file is not ok
+                  $(".file-chooser").addClass("error");
+                  var errorText =
+                    options.DefaultErrorMessage || settings.DefaultErrorMessage;
+
+                  if (check === "badFileName") {
+                    errorText =
+                      options.BadTypeErrorMessage || settings.BadTypeErrorMessage;
+                  }
+
+                  $(".file-chooser__input").after(
+                    '<p class="error-message">' + errorText + "</p>"
+                  );
+                }
+              }
+            });
+
+            var checkFile = function (fileName) {
+              var accepted = "invalid",
+                acceptedFileTypes =
+                  this.acceptedFileTypes || settings.acceptedFileTypes,
+                regex;
+
+              for (var i = 0; i < acceptedFileTypes.length; i++) {
+                regex = new RegExp("\\." + acceptedFileTypes[i] + "$", "i");
+
+                if (regex.test(fileName)) {
+                  accepted = "valid";
+                  break;
+                } else {
+                  accepted = "badFileName";
+                }
+              }
+
+              return accepted;
+            };
+          };
+        })($);
+     
+
+        //init
+        $(document).ready(function () {
+       
+          $(".fileUploader").uploader({
+            MessageAreaText: "No files selected. Please select a file."
+          });
+        });
+
+
        function AddData() 
        {
 
