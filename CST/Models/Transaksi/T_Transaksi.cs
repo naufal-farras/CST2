@@ -15,7 +15,7 @@ namespace CST.Models.Master
         public Nullable<DateTime> UpdatedDate { get; set; }
 
         public T_RumusanNasabah RumusanNasabah { get; set; }
-        public int RumusanNasabahId { get; set; }
+        public int? RumusanNasabahId { get; set; }
         public DateTime? TanggalSampul { get; set; }
 
 
