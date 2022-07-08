@@ -144,7 +144,7 @@ namespace CST.Repository
 
 
         }
-        public InputDataVM GetTemplatePDF(int getIdrumusan)
+        public InputDataVM GetTemplatePDF(int? getIdrumusan)
         {
             InputDataVM result = new InputDataVM();
 

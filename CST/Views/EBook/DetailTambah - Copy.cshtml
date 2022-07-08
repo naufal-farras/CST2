@@ -76,25 +76,17 @@
                                         </div>
                                            <div class="col-4">
                                           <input type="text" class="form-control" id="kelompok" placeholder="Masukan Kelompok" required>
-                                          <div class="float-right">
-                                          <h5 class="form-label mt-3">Upload Multiple File</h5>
-
-                                          </div>
                                         </div>
                                         <div class=col-4>
                                             <input type="date" class="form-control" id="date"/>
-                                                     
-                                    <input class="form-control mt-2" type="file" name="file" id="file"  onchange="javascript:updateList()"  multiple>
+
                                         </div>
                                       </div>
                                       <br>
 
                                          @*batas atas accordion*@
-                                       <div class="accordion" id="accordionPanelsStayOpenExample"> 
-                                                          @{var indxx = 0; }
-                                                          @{var indxxx = 0; }
-                                           
-                                           @{
+                                       <div class="accordion" id="accordionPanelsStayOpenExample">
+                                            @{
                                                 var nobab = 1; 
                                                 
                                              }
@@ -103,8 +95,7 @@
                                           {
                                               <div class="accordion-item">
                                                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-
-                                                  <button class="accordion-button collapsed"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@nobab"  aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@nobab"  aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
                                                       
                                                       Bab @nobab @item.namaBab
 
@@ -114,29 +105,20 @@
                                                  
                                                     <div id="panelsStayOpen-collapseOne-@nobab" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                                       <div class="accordion-body">
-                                                     
-                                                          @{ indxxx++;}
-                                                            
-
                                                   @{var nosub = 1;}
                                                     @foreach (var item2 in item.SubBabs)
                                                      { 
-                                                        <input id="subBabId-@nobab-@nosub" name="subbabId"  value="@item2.SubBabId" hidden>
+                                                        <input id="subBabId-@nobab-@nosub" name="subbabId"  value="@item2.SubBabId " hidden>
 
                                                          <h4> @nosub.@item2.namaSubBab </h4>
                                                          <div class="col-5 mb-3">
                                                           @{var nosubsub = 1; }
-
                                                            @foreach (var item3 in item2.SubSubBabs)
                                                            { 
-                                                            <input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab" value="@item.namaBab-@item3.namaSubSubBab-@indxx" hidden>
-                                                            @*<input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab"  value="@item3.SubSubBabId" hidden>*@
+                                                            <input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab"  value="@item3.SubSubBabId" hidden>
 
                                                                <span for="formFileMultiple"  ><strong>  @nosubsub.@item3.namaSubSubBab </strong></span>
                                                                <input class="form-control" type="file" accept="application/pdf" name="subsubbabId"  id="subSubBabId-@nobab-@nosub-@nosubsub"> 
-                                                                <div id="fileList-subSubBabId-@nobab-@nosub-@nosubsub" name="nameFiless"></div>
-
-                                                               indxx++;
                                                                nosubsub++;
                                                            } 
                                                       
@@ -201,87 +183,9 @@
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
     <script> 
-   var fileDatas = new FormData();  
-   var tempFileVM = [];
-   
-   function updateList() {
-       //debugger;
-    //updateList = function() {
-    var input = document.getElementById('file');                
-    //var inputOld = document.getElementById('subSubBabId-1-1-1');
-        for (var i = 0; i < input.files.length; ++i) {
-            var names = input.files.item(i).name;
-            var nameArr = names.split('_');
-             
-            //console.log(input.files[0]);
-
-            $('input[name^="subsubbab"]').each(function(){
-
-            var subsubId = "fileList-"+$(this)[0].id;
-            var namesss = $(this)[0].value;
-            var nameArrr = namesss.split('-');
-            let text = nameArrr[0];
-            var a = nameArr[1];
-            let result = text.match(a);
-            //console.log(result);
-            var output = document.getElementById(subsubId);
-            var children = "";
-                //var namesind = $(this)[0].value;
-                //var indx = namesind.split('-');
-                //console.log(indx);
-                //debugger;
-                 var req = ""; 
-
-                if((nameArr[2] ==  nameArrr[1]) && (nameArr[1] == result))
-                {
-                 //var fileDatasObj = {};   
-
-                 //fileDatas.append('Index',nameArrr[2]+"_"+input.files.item(i).name);  
-                 fileDatas.append('indx',nameArrr[2]+"_"+input.files.item(i).name);  
-                 fileDatas.append('selectedUploads',input.files.item(i));  
-
-                 //fileDatasObj["Index"] = nameArrr[2]+"_"+input.files.item(i).name;
-                 //fileDatasObj["selectUploads"] = input.files[0];
-                 //fileDatasObj('selectUploads',input.files[0]);
-                 //tempFileVM.push(fileDatasObj);
-                 
-                 children = '<li>' + input.files.item(i).name + '</li>';
-
-                 output.innerHTML = '<ul>'+children+'</ul>';
-                }
-                //else
-                //{
-                //         fileDatas.append('indx',nameArrr[2]+"_"+input.files.item(i).name);
-                 
-                //  const blob = new Blob([req], {type : 'application/pdf'})
-                //               fileDatas.append('selectedUploads', blob, 'PDFkosong.pdf')
-                //}
-                 //indx++;
-            })  
-        }
-        
-    }
-
-    
-     
-   
+       
        function AddData() 
        {
-       //var arr3 = [];
-
-       // for(const pair of fileDatas.entries()) {
-       //     var fileDatas2 = new FormData();   
-
-       //   console.log(`${pair[0]}, ${pair[1]}`);
-
-       //   fileDatas2.append('Index',`${pair[1]}`)
-       //   fileDatas2.append('selectUploads',`${pair[1]}`)
-           
-       //   arr3.push(fileDatas2);
-       //   }
-       //console.log(arr3);
-       // console.log(Object.fromEntries(fileDatas2.entries()));
-
 
            var i=0; 
            var datas = new Array();
@@ -289,7 +193,6 @@
            var namaBab= null;
            var kelompok= null;
            var Date= null;
-
 
 
            if($('#namaBab').val() == ""|| $('#kelompok').val() == "" || $('#date').val()=="")
@@ -307,79 +210,49 @@
                         var parts = url.split("/");
                         var beforeLast = parts[parts.length - 1]; //keep in mind that since array starts with 0, last part is [length - 1]
                         var rumusanId=beforeLast;
-
-                        fileDatas.append("Nama",namaBab);
-                        fileDatas.append("Kelompok",kelompok);
-                        fileDatas.append("TanggalSampul",Date);
-                        fileDatas.append("RumusanId",rumusanId);
   
                        var fileData = new FormData();   
-                       //var fileData = new FormData();   
-                       //    //console.log( $('input[name^="subsubbabId"]'));
+                           console.log( $('input[name^="subsubbabId"]'));
 
-                       // $('input[name^="subsubbabId"]').each(function(){
-                            
-                       //      debugger; 
-                       //    var req = "";
-                       //    if($(this)[0].files[0] != null){
-                       //    fileData.append('selectedUpload',$(this)[0].files[0]);  
-                       //    }
-                       //    else
-                       //    {
-                       //    const blob = new Blob([req], {type : 'application/pdf'})
-                       //    fileData.append('selectedUpload', blob, 'PDFkosong.pdf')
-                       //    //fileData.append('selectedUpload',$("#PDFKosong")[0].files[0] );
+                        $('input[name^="subsubbabId"]').each(function(){
+                           var indexx = ++i;   
+                             debugger;
+
+                           console.log($(this)[0].files[0]);
+                           //var getPdfkosong = document.getElementById("PDFKosong").files[0];
+                           //console.log(getPdfkosong)
+                             debugger;
+
+                        
+                             var req = "";
+                           if($(this)[0].files[0] != null){
+                           fileData.append('selectedUpload',$(this)[0].files[0]);  
+                           }
+                           else
+                           {
+                           const blob = new Blob([req], {type : 'application/pdf'})
+                           fileData.append('selectedUpload', blob, 'PDFkosong.pdf')
+                           //fileData.append('selectedUpload',$("#PDFKosong")[0].files[0] );
                 
-                       //    }
+                           }
 
-                       //  }) 
-                           //fileData.append('Nama', namaBab);
-                           //fileData.append('TanggalSampul', Date);
-                           //fileData.append('Kelompok', kelompok);
-                           //fileData.append('RumusanId', rumusanId); 
-                           //var datas = {
-                           //    Nama : namabab,
-                           //    TanggalSampul : Date,
-                           //    Kelompok :kelompok,
-                           //    RumusanId : rumusanId
-                           //}
-                           //fileDatas.append("temp2",datas);
+                         }) 
+                           //fileData.append('selectedUpload', selectUploads);
+                           fileData.append('Nama', namaBab);
+                           fileData.append('TanggalSampul', Date);
+                           fileData.append('Kelompok', kelompok);
+                           fileData.append('RumusanId', rumusanId); 
 
-
-                        //var fileDataFinal = new FormData();  
-                        //   fileDataFinal.append('tempFileVM', fileDatas);
-                        //   fileDataFinal.append('temp2', datas);
-
-                           //return;
-                        //console.log(tempFileVM);
-                        //var tempFileVM2 = [{"index":0}];
-                        var tempFileVM2 = 1;
-
-                       var fileDataFinals = new FormData();
-                       
-                       fileDataFinals.append("data",JSON.stringify(tempFileVM));
-                        //console.log(tempFileVM2);
-                       var filesss = new FormData();
-                       filesss.append("tempFileVM",JSON.stringify(tempFileVM))
-
-                        //$('input[name^="nameFiless"]').each(function(){
-                        //  if()
-                        //  {
-
-                        //  }
-                        //)}
-                      
-
-                 console.log(Object.fromEntries(fileDatas.entries()));
-                           
+                             
                                  $.ajax({ 
-                                       "url": "@Url.Action("Upload", "Ebook")", 
-                                       "type": 'POST', 
-                                        "data": fileDatas,  
-                                          "processData": false,
-                                        "contentType": false,
-                                    success: function (data) {
-                                       swal({
+                                       url: "@Url.Action("Upload", "Ebook")", 
+                                       type: 'POST', 
+                                        data:fileData, 
+                                        cache: false,
+                                        processData: false,
+                                        contentType: false,
+                                    success: function (result) {
+                                        swal({
                                             html: true,
                                             title: 'Sukses',
                                             text: 'Data Anda Berhasil Disimpan',
@@ -394,9 +267,169 @@
                                         swal("Oops", "We couldn't connect to the server!", "error");
                                     }
                                 });
-                       } 
+                       }
+      
+           
+           
+       } 
 
-       }  
+
+
+         //var Data = new Array(); 
+         //var Bab = new Array(); 
+         //var SubBab = new Array(); 
+         //var SubBabNew = new Array(); 
+         //var SubSubBab = new Array(); 
+         //var SubSubBabNew = new Array(); 
+         //var SubSubBabNew2= new Array(); 
+    
+       //function AddData() {
+       //debugger;
+        //   for(var i = 1; i <=  $("input[name^=babId").length;i++)
+        //   {
+        //      //$('input[id^="babId-'+i+'"]').each(function(){
+        //        var babId =  $('input[id^="babId-'+i+'"]').val();
+
+        //             //Bab.push({BabId :babId}); 
+        //             Bab.push({BabId :babId}); 
+                
+
+        //              for(var j = 1; j <=  $('input[id^="subBabId-'+i+'"]').length;j++)
+        //              {
+        //                var subbabId =  $('input[id^="subBabId-'+i+'-'+j+'"]').val();  
+        //                SubBabNew.push({SubBabId :subbabId});  
+                       
+
+        //                //console.log(Data(Bab.push(SubBabNew)));
+                         
+        //                  //SubSubBab.push(SubSubBabNew2);
+        //                  //SubSubBabNew2=[];
+
+        //                  for(var k = 1; k <=  $('input[id^="subSubBabId-'+i+'-'+j+'"]').length;k++)
+        //                  {
+        //                    var subsubbabId =  $('input[id^="subSubBabId-'+i+'-'+j+'-'+k+'"]').val();  
+        //                    SubSubBabNew.push({SubSubBabId :subsubbabId});  
+        //                  }
+
+        //                  SubSubBabNew2.push(SubSubBabNew);
+        //                  SubSubBabNew=[];
+
+                           
+        //              }
+        //             SubSubBab.push(SubSubBabNew2);
+        //             SubSubBabNew2=[];
+
+        //              SubBab.push(SubBabNew);
+        //              SubBabNew=[];
+                      
+
+        //             // $("input[name^=subbabId]").each(function(){
+        //             //   var subbabId = $(this).val(); 
+        //             //    Bab.push.apply(Bab,[{SubBabId :subbabId}]);
+
+        //             //         //$("input[name^=subsubbabId]").each(function(){
+        //             //         //var subsubbabId = $(this).val(); 
+        //             //         //SubSubBab.push({SubSubBabId :subsubbabId }); 
+
+        //             //         //}); 
+        //             //}); 
+        //             //console.log(Bab);
+        //             ////console.log(SubBab);
+        //             ////console.log(SubSubBab);
+        //             //console.log("---------");
+        //            //data.push([Bab,{SubBab},{SubSubBab}])
+
+        //      //}); 
+
+             
+              
+        //   }
+        //     console.log(Bab);   
+        //     console.log(SubBab);  
+        //     console.log(SubSubBab);  
+        //     console.log("---------");
+
+          
+        // //var data = new object(); 
+        // ////var data = new Array(); 
+        // //var Bab = new Array(); 
+        // //var SubBab = new Array(); 
+        // //var SubSubBab = new Array(); 
+        // ////var NasabahId = $("#nasabahId").val();
+        // ////var Template = $("#template").val(); 
+
+        // //$("input[name^=babId").each(function(){
+        // //   var babId = $(this).val();
+
+        // //        Bab.push({BabId :babId }); 
+
+        // //         $("input[name^=subbabId]").each(function(){
+        // //           var subbabId = $(this).val(); 
+        // //            Bab.push.apply(Bab,[{SubBabId :subbabId}]);
+
+        // //                 //$("input[name^=subsubbabId]").each(function(){
+        // //                 //var subsubbabId = $(this).val(); 
+        // //                 //SubSubBab.push({SubSubBabId :subsubbabId }); 
+
+        // //                 //}); 
+        // //        }); 
+        // //        console.log(Bab);
+        // //        //console.log(SubBab);
+        // //        //console.log(SubSubBab);
+        // //        console.log("---------");
+        // //       //data.push([Bab,{SubBab},{SubSubBab}])
+
+        //  //}); 
+        //  //console.log(Bab);
+
+        //    //if($('#nasabahId').val()=='' || $('#babId').val()==''|| $('#template').val()==''){
+        //    //    swal({
+        //    //        text: "Nama Template harus diisi!",
+        //    //        icon: "warning"                    
+        //    //    });
+        //    //}
+        //    //else
+        //    //{  
+        //    //    $.ajax({ 
+        //    //        url: "@Url.Action("SaveBab","Rumusan")",
+        //    //        type: 'POST',
+        //    //        data: { data: data, nasabahId: NasabahId, template : Template},
+        //    //        contenttype: "application/json; charset=utf-8",
+        //    //        datatype: 'json',
+        //    //    }).then(
+        //    //        (result) => {
+                    
+        //    //            if (result != null) {
+        //    //                swal({
+        //    //                    text: "Berhasil di simpan",
+        //    //                    icon: "success",
+        //    //                    buttons: false,
+        //    //                    timer: 1500
+        //    //                }).then(() => {
+        //    //                    $("#Addbab").modal('hide');
+        //    //                    ClearScreen();
+        //    //                    $('#Table').DataTable().ajax.reload();
+        //    //                })
+        //    //            }
+        //    //            else {
+        //    //                swal({
+        //    //                    text: "Gagal menyimpan", 
+        //    //                    icon: "error",                            
+        //    //                }).then(() => {
+        //    //                    $("#Addbab").modal('hide');
+        //    //                    ClearScreen();
+        //    //                    $('#Table').DataTable().ajax.reload();
+        //    //                })
+        //    //            }
+        //    //            RequestDone();
+        //    //        },
+        //    //        (XMLHttpRequest, textStatus, errorThrown) => {
+        //    //            alert("Error : " + textStatus);
+        //    //            RequestDone();
+        //    //        }
+        //    //    );
+        //    //}
+        //}
            
     </script>
 }

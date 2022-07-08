@@ -298,17 +298,87 @@ namespace CST.Controllers.Transaksi
             return File(stream, contentType, fileName);
   
         }
-
-        [HttpPost("EBook/Upload")]
-        public JsonResult Upload(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul)
+       
+        //[HttpPost("Ebook/Upload2")]
+        //public IActionResult Upload([FromBody] List<TempFileVM2> tempFileVM2 )
+        public IActionResult Upload2(string datas)
         {
             var currentUser = GetCurrentUser().Result;
             var createId = currentUser.Id;
 
-            var result = _laporan_Repository.TambahEbook(selectedUpload, Nama, Kelompok, RumusanId, TanggalSampul,createId);
-            return Json(new { data = result });
+            //var result = _laporan_Repository.TambahEbook(tempFileVM, createId);
+
+            return Json(new { data = createId });
         }
-      
+        //[HttpPost("Ebook/Upload")]
+        //public IActionResult Upload([FromBody] List<TempFileVM2> tempFileVM2 )
+        //public IActionResult Upload(List<string> test,List<IFormFile> selectUploads,)
+        public JsonResult Upload(List<string> indx,List<IFormFile> selectedUploads, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul)
+        {
+            var currentUser = GetCurrentUser().Result;
+            var createId = currentUser.Id;
+
+            var result = _laporan_Repository.TambahEbook(indx, selectedUploads, Nama, Kelompok, RumusanId, TanggalSampul, createId);
+
+            return Json(new { data = result });
+
+        }
+        //[HttpPost("EBook/Upload")]
+        //public JsonResult Upload(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul)
+        //{
+        //    var currentUser = GetCurrentUser().Result;
+        //    var createId = currentUser.Id;
+
+        //    var result = _laporan_Repository.TambahEbook(selectedUpload, Nama, Kelompok, RumusanId, TanggalSampul, createId);
+
+        //    return Json(new { data = result });
+        //}
+        //[HttpPost("EBook/Upload")]
+        //public JsonResult Upload(List<TempFileVM> TempFileVM, string Nama)
+        //{
+        //    var currentUser = GetCurrentUser().Result;
+        //    var createId = currentUser.Id;
+        //    int transId = 0;
+        //    var trans = new T_Transaksi();
+        //    trans.Nama = Nama;
+        //    trans.Kelompok = "tesKel";
+        //    trans.Status = 0;
+        //    trans.CreatedDate = DateTime.Now;
+        //    trans.TanggalSampul = DateTime.Now;
+        //    trans.IsDelete = false;
+        //    trans.CreaterId = createId;
+        //    trans.RumusanNasabahId = 1;
+        //    _context.T_Transaksi.Add(trans);
+        //    _context.SaveChanges();
+        //    transId = trans.Id;
+
+        //    bool result = false;
+        //    DateTime date = DateTime.Now;
+
+        //    foreach (var item in TempFileVM)
+        //    {
+        //        var transDetail = new T_TransDetail();
+        //        string webRootPath = _webHostEnvironment.WebRootPath;
+        //        string path = Path.Combine(webRootPath, "Files/Data");
+
+        //        foreach (var item2 in item.Upload)
+        //        {
+        //            FileStream savingFile = new FileStream(Path.Combine(path, item2.selectUploads.FileName), FileMode.Create);
+
+        //            item2.selectUploads.CopyTo(savingFile);
+        //            savingFile.Close();
+        //            transDetail.Index = item.Index;
+        //            transDetail.TransaksiId = transId;
+        //            transDetail.Path = item2.selectUploads.FileName;
+        //            _context.T_TransDetail.Add(transDetail);
+        //            _context.SaveChanges();
+        //        }
+        //        result = true;
+        //    }
+
+        //    return Json(new { data = result });
+        //}
+
         [HttpPost("EBook/UpdateFileEbook")]
         public JsonResult UpdateFileEbook(List<IFormFile> selectedUpload, int Index, int RumusanId)
         {
@@ -349,8 +419,8 @@ namespace CST.Controllers.Transaksi
             finalDoc = new PdfDocument();
             InputDataVM getTemplate = new InputDataVM();
 
-            var getIdrumusan = _context.T_Transaksi.Where(x => x.Id == Id).SingleOrDefault().RumusanNasabahId;
-            getTemplate = _ebook_Repository.GetTemplatePDF(getIdrumusan);
+            var getIdrumusan = _context.T_Transaksi.Where(x => x.Id == Id).SingleOrDefault();
+            getTemplate = _ebook_Repository.GetTemplatePDF(getIdrumusan.RumusanNasabahId??null);
             var getTrans = _context.T_Transaksi.Where(x => x.Id == Id).SingleOrDefault().Id;
             var getSampul = _context.T_Transaksi.Where(x => x.Id == Id).FirstOrDefault();
             var getData = _context.T_TransDetail.Where(x => x.TransaksiId == getTrans).OrderBy(x => x.Index).ToList();
@@ -779,7 +849,11 @@ namespace CST.Controllers.Transaksi
 
                                
                             }
+                            else
+                            {
                             continue;
+
+                            }
 
                         }
                         indx++;
