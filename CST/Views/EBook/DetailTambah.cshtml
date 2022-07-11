@@ -75,7 +75,7 @@
                                           <input type="text" class="form-control" id="namaBab" placeholder="Masukan Judul" required>
                                         </div>
                                            <div class="col-4">
-                                          <input type="text" class="form-control" id="kelompok" placeholder="Masukan Kelompok" required>
+                                          <input type="text" class="form-control"  accept="application/pdf" id="kelompok" placeholder="Masukan Kelompok" required>
                                           <div class="float-right">
                                           <h5 class="form-label mt-3">Upload Multiple File</h5>
 
@@ -94,10 +94,9 @@
                                                           @{var indxx = 0; }
                                                           @{var indxxx = 0; }
                                            
-                                                @{
-                                                    var nobab = 1;
-                                                    var ceksubsub = 1;
-
+                                           @{
+                                                var nobab = 1; 
+                                                
                                              }
                                            
                                           @foreach (var item in Model.Babs)
@@ -107,7 +106,7 @@
 
                                                   <button class="accordion-button collapsed"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@nobab"  aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
                                                       
-                                                      @nobab @item.namaBab
+                                                      Bab @nobab @item.namaBab
 
                                                   </button>
                                                   <input id="babId-@nobab" name="babId"  value="@item.BabId" hidden>
@@ -130,16 +129,15 @@
 
                                                            @foreach (var item3 in item2.SubSubBabs)
                                                            { 
-                                                            <input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab" value="@item.namaBab-@item3.namaSubSubBab-@indxx" hidden>
+                                                            <input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbaB" value="@item.namaBab-@item3.namaSubSubBab-@indxx" hidden>
                                                             @*<input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab"  value="@item3.SubSubBabId" hidden>*@
 
-                                                               <span for="formFileMultiple"  ><strong id="namasubsub-@ceksubsub">@nosubsub.@item3.namaSubSubBab</strong></span>
-                                                               <input class="form-control" type="file" accept="application/pdf" name="subsubbabId"  id="subSubBabId-@nobab-@nosub-@nosubsub"> 
+                                                               <span for="formFileMultiple"  ><strong>  @nosubsub.@item3.namaSubSubBab </strong></span>
+                                                               @*<input class="form-control" type="file" accept="application/pdf" name="subsubbabId"  id="subSubBabId-@nobab-@nosub-@nosubsub"> *@
                                                                 <div id="fileList-subSubBabId-@nobab-@nosub-@nosubsub" name="nameFiless"></div>
 
                                                                indxx++;
                                                                nosubsub++;
-                                                               ceksubsub++;
                                                            } 
                                                       
                                                            </div>
@@ -203,18 +201,40 @@
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
     <script> 
-   var fileDatas = new FormData();
-   var tesfile = []
-   var tempFileVM = [];
-   var listbab= $('strong[id^="namasubsub-"]').map(function(idx, elem) {return $(elem).attr("id").split("-")[1];}).get();
-   var listsubsubbab = $('strong[id^="namasubsub-"]').map(function(idx, elem) {return $(elem).text().split(".")[1];}).get();
-   var gabungan = []
-   for (var i = 0; i < listbab.length; i++) {
-       gabungan[i] = listbab[i] +"_"+ listsubsubbab[i];
-    }
-   console.log(gabungan)
+   
 
+   var fileDatas = new FormData();  
+   //var tempFileVM = [];
+
+    function clearScreen(){
+       var entries = fileDatas.entries();
+        for(var pair of entries ) 
+        {
+           fileDatas.delete(pair[0]);
+          
+        }
+         $('ul[name^="ul"]').each(function(){
+               
+               $(this).remove();
+         })
+
+         
+    }
+   
    function updateList() {
+   //console.log(Object.fromEntries(fileDatas.entries()));
+   var a = fileDatas.get('indx');
+   //var b = Object.fromEntries(fileDatas.entries());
+   if(a != null)
+   {
+          clearScreen();
+
+   }
+  console.log(fileDatas.get('indx'));
+  console.log(fileDatas.get('selectedUploads'));
+   
+  
+
        //debugger;
     //updateList = function() {
     var input = document.getElementById('file');                
@@ -224,8 +244,8 @@
             var nameArr = names.split('_');
              
             //console.log(input.files[0]);
-
-            $('input[name^="subsubbab"]').each(function(){
+           
+            $('input[name^="subsubbaB"]').each(function(){
 
             var subsubId = "fileList-"+$(this)[0].id;
             var namesss = $(this)[0].value;
@@ -240,8 +260,7 @@
                 //var indx = namesind.split('-');
                 //console.log(indx);
                 //debugger;
-                 var req = ""; 
-                
+
                 if((nameArr[2] ==  nameArrr[1]) && (nameArr[1] == result))
                 {
                  //var fileDatasObj = {};   
@@ -257,7 +276,7 @@
                  
                  children = '<li>' + input.files.item(i).name + '</li>';
 
-                 output.innerHTML = '<ul>'+children+'</ul>';
+                 output.innerHTML = '<ul name="ul">'+children+'</ul>';
                 }
                 //else
                 //{
@@ -269,6 +288,7 @@
                  //indx++;
             })  
         }
+
         
     }
 
@@ -308,6 +328,45 @@
            }
            else
            {
+               var totalSubSub=$('input[name^="subsubbaB"]').length;
+                 var req = ""; 
+
+               //console.log(totalSubSub);
+               var tempInd= "";
+                for(const pair of fileDatas.entries()) 
+                       {    
+                            var nameindx =`${pair[1]}`;   
+                            var finalindxx = nameindx.split('_');
+                            tempInd += finalindxx[0]; 
+                       }
+ 
+                  var finalindxcx = tempInd.split('[object File]');
+                           console.log(finalindxcx);
+                for (var i = 0; i<totalSubSub; i++)
+			    {
+                           var result = finalindxcx;  
+                           if(result.find(x => x == i))
+                           {
+                          debugger;
+                               
+                               continue;
+                           }else
+                           {
+
+                                fileDatas.append('indx',i+"_"+"PDFkosong.pdf"); 
+                                const blob = new Blob([req], {type : 'application/pdf'})
+                                var namel= i+"_"+"PDFkosong.pdf";
+                                fileDatas.append('selecteduploads', blob, namel)
+                                continue;
+                           }
+                         
+
+                     
+            
+                    
+
+			    }
+
                          namaBab= $('#namaBab').val();
                          Date= $('#date').val();
                          
@@ -323,7 +382,7 @@
                         fileDatas.append("TanggalSampul",Date);
                         fileDatas.append("RumusanId",rumusanId);
   
-                       var fileData = new FormData();   
+                       //var fileData = new FormData();   
                        //var fileData = new FormData();   
                        //    //console.log( $('input[name^="subsubbabId"]'));
 
@@ -363,14 +422,14 @@
                            //return;
                         //console.log(tempFileVM);
                         //var tempFileVM2 = [{"index":0}];
-                        var tempFileVM2 = 1;
+                       // var tempFileVM2 = 1;
 
-                       var fileDataFinals = new FormData();
+                       //var fileDataFinals = new FormData();
                        
-                       fileDataFinals.append("data",JSON.stringify(tempFileVM));
-                        //console.log(tempFileVM2);
-                       var filesss = new FormData();
-                       filesss.append("tempFileVM",JSON.stringify(tempFileVM))
+                       //fileDataFinals.append("data",JSON.stringify(tempFileVM));
+                       // //console.log(tempFileVM2);
+                       //var filesss = new FormData();
+                       //filesss.append("tempFileVM",JSON.stringify(tempFileVM))
 
                         //$('input[name^="nameFiless"]').each(function(){
                         //  if()
@@ -380,12 +439,8 @@
                         //)}
                       
 
-                 console.log(Object.fromEntries(fileDatas.entries()));
-                 //for (const value of fileDatas.values()) {
-                 //     console.log(value);
-                 //}
-             
-               
+                 //console.log(Object.fromEntries(fileDatas.entries()));
+                           
                                  $.ajax({ 
                                        "url": "@Url.Action("Upload", "Ebook")", 
                                        "type": 'POST', 
