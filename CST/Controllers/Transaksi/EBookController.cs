@@ -25,6 +25,7 @@ using System.Drawing.Imaging;
 using CST.Models;
 using Syncfusion.Pdf.Interactive;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 //using Syncfusion.EJ2.PdfViewer;
 
 namespace CST.Controllers.Transaksi
@@ -385,6 +386,25 @@ namespace CST.Controllers.Transaksi
             var result = _laporan_Repository.UpdateFileEbook(selectedUpload, Index, RumusanId);
             return Json(new { data = result });
         }
+        public JsonResult RemoveFileEbook(int Index, int RumusanId)
+        {
+            bool result = false;
+            var getData = _context.T_TransDetail.Where(x => x.Index == Index && x.TransaksiId == RumusanId).FirstOrDefault();
+            var getDataTrans = _context.T_Transaksi.Where(x => x.Id == RumusanId).FirstOrDefault();
+            DateTime date = DateTime.Now;
+            getDataTrans.UpdatedDate = date;
+
+            string generateNameFile = "PDFkosong.pdf";
+
+            getData.Path = generateNameFile;
+
+            _context.Entry(getData).State = EntityState.Modified;
+            _context.Entry(getDataTrans).State = EntityState.Modified;
+            _context.SaveChanges();
+            result = true;
+            return Json(new { data = result });
+        }
+
         [HttpGet("EBook/Preview/{Id}")]
         public ActionResult Preview(int Id)
         {

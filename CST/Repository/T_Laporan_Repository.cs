@@ -309,6 +309,27 @@ namespace CST.Repository
 
         }
 
+         public JsonResult RemoveFileEbook(string selectedUpload, int Index, int RumusanId)
+        {
+            bool result = false;
+            var getData = _context.T_TransDetail.Where(x => x.Index == Index && x.TransaksiId == RumusanId).FirstOrDefault();
+            var getDataTrans = _context.T_Transaksi.Where(x => x.Id == RumusanId).FirstOrDefault();
+            DateTime date = DateTime.Now;
+            getDataTrans.UpdatedDate = date;
+
+            string generateNameFile = "PDFkosong.pdf";
+
+            getData.Path = generateNameFile;
+
+            _context.Entry(getData).State = EntityState.Modified;
+            _context.Entry(getDataTrans).State = EntityState.Modified;
+            _context.SaveChanges();
+            result = true;
+          
+            return new JsonResult(result);
+
+        }
+
         public JsonResult UpdateJudul(int Id, string NamaEbook, string Kelompok, DateTime TanggalSampul)
         {
             bool result = false;
