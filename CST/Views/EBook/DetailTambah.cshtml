@@ -229,9 +229,7 @@
    {
           clearScreen();
 
-   }
-  console.log(fileDatas.get('indx'));
-  console.log(fileDatas.get('selectedUploads'));
+   } 
    
   
 
@@ -250,8 +248,8 @@
             var subsubId = "fileList-"+$(this)[0].id;
             var namesss = $(this)[0].value;
             var nameArrr = namesss.split('-');
-            let text = nameArrr[0];
-            var a = nameArr[1];
+            let text = nameArrr[0].replace(/ /g,'').toLowerCase();
+            var a = nameArr[1].replace(/ /g,'').toLowerCase();
             let result = text.match(a);
             //console.log(result);
             var output = document.getElementById(subsubId);
@@ -260,8 +258,18 @@
                 //var indx = namesind.split('-');
                 //console.log(indx);
                 //debugger;
+                var namaTemp = nameArr[2].replace(/ /g,'').toLowerCase();
+                var namaTemp2 = nameArrr[1].replace(/ /g,'').toLowerCase();
 
-                if((nameArr[2] ==  nameArrr[1]) && (nameArr[1] == result))
+                var namaFile = nameArr[1].replace(/ /g,'').toLowerCase();
+                //console.log(namaFile);
+                console.log(result);
+                //var namaFile2 = result.replace(/ /g,'');
+                //console.log(namaFile2);
+
+                var aa = namaTemp +" == "+ namaTemp2+ "," +namaFile + "==" +result  ;
+                //console.log(aa);
+                if((namaTemp  ==  namaTemp2) && (namaFile == result ))
                 {
                  //var fileDatasObj = {};   
 

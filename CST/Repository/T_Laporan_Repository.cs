@@ -149,17 +149,17 @@ namespace CST.Repository
                             transDetail.Path = generateNameFile;
                             _context.T_TransDetail.Add(transDetail);
                             _context.SaveChanges();
-                            result = true;
+                            result = true; 
                             continue;
                         }
                       
                     }
                     if (indxHasil.Count > 3 && nameHasil.Count > 2)
                     {
-                        if (indxHasil[2] == nameHasil[1] && indxHasil[3] == nameHasil[2])
+                        if (indxHasil[2].Replace(" ","").ToLower() == nameHasil[1].Replace(" ", "").ToLower() && indxHasil[3].Replace(" ", "").ToLower() == nameHasil[2].Replace(" ", "").ToLower())
                         {
 
-                            string generateNameFile = indxHasil[0] + "_" + item.FileName;
+                            string generateNameFile = indxHasil[0] + "_" + item.FileName.ToUpper();
 
                             FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
 
