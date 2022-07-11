@@ -3,6 +3,39 @@
 @{
     ViewData["Title"] = "Edit E-Book";
 } 
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="infoModalLabel">Panduan</h4>
+            </div>
+            <div class="modal-body">
+                <b>Panduan</b>
+                <ul>
+                    <li>Halaman ini digunakan untuk melakukan mengubah/menghapus file PDF pada Ebook</li>
+                </ul>
+                <b>Hal yang harus diperhatikan dalam upload file</b>
+                <ol>
+                    <li><b>Maksimal 1 file</b> dalam sekali upload pada setiap SubSubBab</li>  
+                    <li>File yang diupload harus berekstensi <b>.Pdf</b></li>
+                </ol>
+                <b>Inputan</b>
+                <ul>
+                    <li>Inputan Judul,Kelompok,Tanggal nantinya akan di tampilkan pada halaman Sampul </li> 
+                    <li>File di Uploadan yang muncul sesuai dengan rumusan daftar isi yang telah dibuats </li> 
+                </ul>
+                <b>Catatan</b>
+                <ul>
+                    <li><b>Lebih dari 1 File Upload</b> Untuk menggabungkan terlebih dahulu File yang sama pada button <b>Gabung PDF</b></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <section class="pcoded-main-container">
     <div class="pcoded-wrapper">
         <div class="pcoded-content">
@@ -16,7 +49,8 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Edit Data E-Book</h5>
-                                        <button class="btn btn-sm btn-info shadow-2" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></button>
+                                          <a class="btn btn-sm btn-info shadow-2 text-white" data-toggle="modal" data-target="#infoModal"><span>Panduan <i class="far fa-question-circle"></i></span></a>
+                                       
                                     </div>
                                     
                                       
