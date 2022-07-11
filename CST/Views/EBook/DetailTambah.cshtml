@@ -94,9 +94,10 @@
                                                           @{var indxx = 0; }
                                                           @{var indxxx = 0; }
                                            
-                                           @{
-                                                var nobab = 1; 
-                                                
+                                                @{
+                                                    var nobab = 1;
+                                                    var ceksubsub = 1;
+
                                              }
                                            
                                           @foreach (var item in Model.Babs)
@@ -106,7 +107,7 @@
 
                                                   <button class="accordion-button collapsed"  type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@nobab"  aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
                                                       
-                                                      Bab @nobab @item.namaBab
+                                                      @nobab @item.namaBab
 
                                                   </button>
                                                   <input id="babId-@nobab" name="babId"  value="@item.BabId" hidden>
@@ -132,12 +133,13 @@
                                                             <input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab" value="@item.namaBab-@item3.namaSubSubBab-@indxx" hidden>
                                                             @*<input id="subSubBabId-@nobab-@nosub-@nosubsub" name="subsubbab"  value="@item3.SubSubBabId" hidden>*@
 
-                                                               <span for="formFileMultiple"  ><strong>  @nosubsub.@item3.namaSubSubBab </strong></span>
+                                                               <span for="formFileMultiple"  ><strong id="namasubsub-@ceksubsub">@nosubsub.@item3.namaSubSubBab</strong></span>
                                                                <input class="form-control" type="file" accept="application/pdf" name="subsubbabId"  id="subSubBabId-@nobab-@nosub-@nosubsub"> 
                                                                 <div id="fileList-subSubBabId-@nobab-@nosub-@nosubsub" name="nameFiless"></div>
 
                                                                indxx++;
                                                                nosubsub++;
+                                                               ceksubsub++;
                                                            } 
                                                       
                                                            </div>
@@ -201,9 +203,17 @@
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/classie.js"></script>
     <script src="~/vendor/jazztemplate/plugins/modal-window-effects/js/modalEffects.js"></script>
     <script> 
-   var fileDatas = new FormData();  
+   var fileDatas = new FormData();
+   var tesfile = []
    var tempFileVM = [];
-   
+   var listbab= $('strong[id^="namasubsub-"]').map(function(idx, elem) {return $(elem).attr("id").split("-")[1];}).get();
+   var listsubsubbab = $('strong[id^="namasubsub-"]').map(function(idx, elem) {return $(elem).text().split(".")[1];}).get();
+   var gabungan = []
+   for (var i = 0; i < listbab.length; i++) {
+       gabungan[i] = listbab[i] +"_"+ listsubsubbab[i];
+    }
+   console.log(gabungan)
+
    function updateList() {
        //debugger;
     //updateList = function() {
@@ -231,7 +241,7 @@
                 //console.log(indx);
                 //debugger;
                  var req = ""; 
-
+                
                 if((nameArr[2] ==  nameArrr[1]) && (nameArr[1] == result))
                 {
                  //var fileDatasObj = {};   
@@ -371,7 +381,11 @@
                       
 
                  console.log(Object.fromEntries(fileDatas.entries()));
-                           
+                 //for (const value of fileDatas.values()) {
+                 //     console.log(value);
+                 //}
+             
+               
                                  $.ajax({ 
                                        "url": "@Url.Action("Upload", "Ebook")", 
                                        "type": 'POST', 
