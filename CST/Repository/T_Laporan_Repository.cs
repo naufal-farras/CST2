@@ -128,19 +128,18 @@ namespace CST.Repository
 
                 foreach (var item2 in indx)
                 {
+                    var transDetail = new T_TransDetail();
+
+
+                    string webRootPath = _webHostEnvironment.WebRootPath;
+                    string path = Path.Combine(webRootPath, "Files/Data");
 
                     var indxHasil = item2.Split('_').ToList();
-
-                    if (indxHasil[2] == nameHasil[1] && indxHasil[3] == nameHasil[2] )
+                    if (nameHasil[1] == "PDFkosong.pdf" && indxHasil.Count() < 3)
                     {
-                        var transDetail = new T_TransDetail();
-
-                        string webRootPath = _webHostEnvironment.WebRootPath;
-                        string path = Path.Combine(webRootPath, "Files/Data");
-
-                        if (item.FileName == "PDFkosong.pdf")
+                        if (indxHasil[0] == nameHasil[0])
                         {
-                            string generateNameFile = item.FileName;
+                            string generateNameFile = nameHasil[1];
                             FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
 
                             item.CopyTo(savingFile);
@@ -148,27 +147,37 @@ namespace CST.Repository
                             transDetail.TransaksiId = transId;
                             transDetail.Index = Convert.ToInt32(indxHasil[0]);
                             transDetail.Path = generateNameFile;
-
+                            _context.T_TransDetail.Add(transDetail);
+                            _context.SaveChanges();
+                            result = true;
+                            continue;
                         }
-                        else
-                        {
-                            string generateNameFile = indxHasil[0]+"_"+item.FileName;
-
-                            FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
-
-                            item.CopyTo(savingFile);
-                            savingFile.Close();
-                            transDetail.TransaksiId = transId;
-                            transDetail.Index = Convert.ToInt32(indxHasil[0]);
-                            transDetail.Path = generateNameFile;
-
-                        }
-
-                        _context.T_TransDetail.Add(transDetail);
-                        _context.SaveChanges();
-                        result = true;
-                        continue;
+                      
                     }
+                    if (indxHasil.Count > 3 && nameHasil.Count > 2)
+                    {
+                        if (indxHasil[2] == nameHasil[1] && indxHasil[3] == nameHasil[2])
+                        {
+
+                            string generateNameFile = indxHasil[0] + "_" + item.FileName;
+
+                            FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
+
+                            item.CopyTo(savingFile);
+                            savingFile.Close();
+                            transDetail.TransaksiId = transId;
+                            transDetail.Index = Convert.ToInt32(indxHasil[0]);
+                            transDetail.Path = generateNameFile;
+
+
+
+                            _context.T_TransDetail.Add(transDetail);
+                            _context.SaveChanges();
+                            result = true;
+                            continue;
+                        }
+                    }
+                   
                 }
             }
            

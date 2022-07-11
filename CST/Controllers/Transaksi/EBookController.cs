@@ -79,7 +79,7 @@ namespace CST.Controllers.Transaksi
             var result = _ebook_Repository.GetDataNasabah();
             return View("Index", result);
         }
-
+       
         [AllowAnonymous] 
         [HttpGet("EBook/GetTable/{id}")] 
         public JsonResult GetTable(int id)
