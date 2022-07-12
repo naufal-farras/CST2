@@ -27,6 +27,8 @@
     <!-- vendor css -->
     <link rel="stylesheet" href="~/vendor/jazztemplate/css/style.css">
     <link rel="stylesheet" href="~/vendor/jazztemplate/css/layouts/dark.css">
+     <link rel="icon" href="../wwwroot/images/faviconSAFE.png" type="image/x-icon">
+    <link rel="icon" href="~/images/faviconSAFE.png" type="image/x-icon">
 
 </head>
 
@@ -56,6 +58,9 @@
                         @*<button class="btn btn-primary shadow-2 mb-4">Login</button>*@
                         <button class="btn btn-primary shadow-2 mb-4" onclick="Login()"><span class="spinner-border spinner-border-sm spinnerButtonProccess" role="status"></span> Login</button>
                     </form>
+                    <a class="text-white" target="_blank" href="@Url.Action("DownloadEbook", "Account")">Download Manual Application</a>  
+
+
                 </div>
             </div>
         </div>

@@ -10,21 +10,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace APD.Controllers
 {
     public class AccountController : Controller
     {
         private readonly SignInManager<M_User> _signInManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<M_User> _userManager;
         private readonly M_User_Repository _userRepository;
 
         public AccountController(SignInManager<M_User> signInManager, UserManager<M_User> userManager,
-            M_User_Repository userRepository)
+            M_User_Repository userRepository, IWebHostEnvironment webHostEnvironment)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _userRepository = userRepository;
+            _webHostEnvironment = webHostEnvironment;
 
         }
 
@@ -47,6 +51,18 @@ namespace APD.Controllers
         #endregion
 
         #region PROCESS
+        public  ActionResult DownloadEbook()
+        { 
+
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            string filePath = Path.Combine(webRootPath, "Files/AM/"); 
+            string fileName = "Manual Book Aplikasi - CST(E-Book).pdf";
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath+ fileName);
+
+            return File(fileBytes, "application/force-download", fileName);
+        }
+
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Login(LoginVM loginVM)
         {

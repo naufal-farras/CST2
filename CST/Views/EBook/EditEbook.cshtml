@@ -139,9 +139,10 @@
                                                                                          <input class="form-control" type="file" style="width:350px" accept="application/pdf" name="subsubbabId" id="subSubBabId-@nobab-@nosub-@nosubsub"> 
                                                                                          <span>Nama File :</span> <label class="font-italic">@item5.Path</label>
                                                                                          <div>
-                                                                                              <a onclick="EditData(@noIndex,@nobab,@nosub,@nosubsub)" class="btn btn-primary m-2">Ubah File</a>
+                                                                                              <a onclick="EditData(@noIndex,@nobab,@nosub,@nosubsub)" class="btn btn-primary m-2 text-white">Ubah File</a>
 
-                                                                                            <a class="btn btn-warning m-2" href="@Url.Action("Preview", "EBook")/@item5.Id" target="_blank">Lihat File</a>
+                                                                                              <a class="btn btn-warning m-2 text-white" href="@Url.Action("Preview", "EBook")/@item5.Id" target="_blank">Lihat File</a>
+                                                                                              <a onclick="RemoveData(@noIndex,@nobab,@nosub,@nosubsub)" class="btn btn-danger m-2 text-white">Delete File</a>
                                                                          
                                                                                          </div>
                                                                                             }
@@ -198,7 +199,7 @@
 
 @section Styles{
     <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
-    <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap.min.css" rel="stylesheet"> 
     
     <!-- modal-window-effects css -->
     <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/modal-window-effects/css/md-modal.css">
@@ -280,6 +281,61 @@
 
            }
 
+           function RemoveData(id,nobab,nosub,nosubsub)
+           { 
+               swal("Apakah anda yakin mau hapus file ini?", {
+                  buttons: {
+                    cancel: "Tidak",
+                    catch: {
+                      text: "Ya",
+                      value: "success",
+                    }, 
+                  },
+                })
+                .then((value) => {
+                  switch (value) {  
+                    case "success":
+
+                var IdFile= "#subSubBabId-"+nobab+"-"+nosub+"-"+nosubsub; 
+                   var indx = id;
+                   var url = window.location.href;
+                   var parts = url.split("/");
+                   var beforeLast = parts[parts.length - 1]; //keep in mind that since array starts with 0, last part is [length - 1]
+                   var rumusanId=beforeLast;
+                   var req ="";
+                   var fileData = new FormData();    
+                   fileData.append('Index', indx); 
+                   fileData.append('RumusanId', rumusanId); 
+                    
+                                 $.ajax({ 
+                                       url: "@Url.Action("RemoveFileEbook", "Ebook")", 
+                                       type: 'POST', 
+                                        data:fileData, 
+                                        cache: false,
+                                        processData: false,
+                                        contentType: false,
+                                    success: function (result) {
+                                        swal({
+                                            html: true,
+                                            title: 'Sukses',
+                                            text: 'Data Anda Berhasil Di Hapus',
+                                            type: "success", 
+                                        }).then(() => {
+                                         window.location.reload();
+                                        }) 
+                                    },
+                                    error: function (response) {
+                                        swal("Oops", "We couldn't connect to the server!", "error");
+                                    }
+                                });
+                           
+
+                      break;
+ 
+                   
+                  }
+                })
+           }
 
            function UpdateJudul()
            { 

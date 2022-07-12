@@ -36,7 +36,8 @@
                                                  </div>
                                             </div>
                                              <div class="col-sm-3" id="ButtonAdd">
-                                                 <a class="btn btn-sm btn-success"  id="buttonId" title="Tambah Ebook"> Tambah Ebook</a> 
+                                                 <a class="btn btn-sm btn-success"  id="buttonId" title="Tambah Ebook"> Tambah Ebook satu kali Upload</a> 
+                                                 <a class="btn btn-sm btn-primary"  id="buttonId2" title="Tambah Ebook"> Tambah Ebook Satu Satu</a> 
                                              </div>     
                                         </div>  
 
@@ -80,7 +81,10 @@
             function selectRumusan() {
              var rumusId = document.getElementById("rumusanId").value; 
                 $('#buttonId').attr('href','@Url.Action("DetailTambah", "EBook")/'+rumusId);
+
+                $('#buttonId2').attr('href','@Url.Action("DetailTambah2", "Ebook")/'+rumusId);
             }
+             
           
           
     </script>

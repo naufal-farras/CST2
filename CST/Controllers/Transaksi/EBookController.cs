@@ -25,6 +25,7 @@ using System.Drawing.Imaging;
 using CST.Models;
 using Syncfusion.Pdf.Interactive;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 //using Syncfusion.EJ2.PdfViewer;
 
 namespace CST.Controllers.Transaksi
@@ -116,7 +117,13 @@ namespace CST.Controllers.Transaksi
             var result = _ebook_Repository.GetTemplate(Id);
             return View("DetailTambah", result);
         }
-     
+
+        [HttpGet("Ebook/DetailTambah2/{Id}")]
+        public IActionResult DetailTambah2(int Id)
+        {
+            var result = _ebook_Repository.GetTemplate(Id);
+            return View("DetailTambah2", result);
+        }
         [HttpGet("EBook/EditEbook/{Id}")]
         public IActionResult EditEbook(int Id)
         {
@@ -301,15 +308,15 @@ namespace CST.Controllers.Transaksi
        
         //[HttpPost("Ebook/Upload2")]
         //public IActionResult Upload([FromBody] List<TempFileVM2> tempFileVM2 )
-        public IActionResult Upload2(string datas)
-        {
-            var currentUser = GetCurrentUser().Result;
-            var createId = currentUser.Id;
+        //public IActionResult Upload2(string datas)
+        //{
+        //    var currentUser = GetCurrentUser().Result;
+        //    var createId = currentUser.Id;
 
-            //var result = _laporan_Repository.TambahEbook(tempFileVM, createId);
+        //    var result = _laporan_Repository.TambahEbook2(tempFileVM, createId);
 
-            return Json(new { data = createId });
-        }
+        //    return Json(new { data = createId });
+        //}
         //[HttpPost("Ebook/Upload")]
         //public IActionResult Upload([FromBody] List<TempFileVM2> tempFileVM2 )
         //public IActionResult Upload(List<string> test,List<IFormFile> selectUploads,)
@@ -323,16 +330,16 @@ namespace CST.Controllers.Transaksi
             return Json(new { data = result });
 
         }
-        //[HttpPost("EBook/Upload")]
-        //public JsonResult Upload(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul)
-        //{
-        //    var currentUser = GetCurrentUser().Result;
-        //    var createId = currentUser.Id;
+        [HttpPost("Ebook/Upload2")]
+        public JsonResult Upload2(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul)
+        {
+            var currentUser = GetCurrentUser().Result;
+            var createId = currentUser.Id;
 
-        //    var result = _laporan_Repository.TambahEbook(selectedUpload, Nama, Kelompok, RumusanId, TanggalSampul, createId);
+            var result = _laporan_Repository.TambahEbook2(selectedUpload, Nama, Kelompok, RumusanId, TanggalSampul, createId);
 
-        //    return Json(new { data = result });
-        //}
+            return Json(new { data = result });
+        }
         //[HttpPost("EBook/Upload")]
         //public JsonResult Upload(List<TempFileVM> TempFileVM, string Nama)
         //{
@@ -385,6 +392,25 @@ namespace CST.Controllers.Transaksi
             var result = _laporan_Repository.UpdateFileEbook(selectedUpload, Index, RumusanId);
             return Json(new { data = result });
         }
+        public JsonResult RemoveFileEbook(int Index, int RumusanId)
+        {
+            bool result = false;
+            var getData = _context.T_TransDetail.Where(x => x.Index == Index && x.TransaksiId == RumusanId).FirstOrDefault();
+            var getDataTrans = _context.T_Transaksi.Where(x => x.Id == RumusanId).FirstOrDefault();
+            DateTime date = DateTime.Now;
+            getDataTrans.UpdatedDate = date;
+
+            string generateNameFile = "PDFkosong.pdf";
+
+            getData.Path = generateNameFile;
+
+            _context.Entry(getData).State = EntityState.Modified;
+            _context.Entry(getDataTrans).State = EntityState.Modified;
+            _context.SaveChanges();
+            result = true;
+            return Json(new { data = result });
+        }
+
         [HttpGet("EBook/Preview/{Id}")]
         public ActionResult Preview(int Id)
         {
@@ -676,35 +702,7 @@ namespace CST.Controllers.Transaksi
                     y += 23;
 
 
-                }
-                //Set the font.
-                PdfFont fonts3 = new PdfStandardFont(PdfFontFamily.Helvetica, 12f);
-
-                //Create page number field.
-                PdfPageNumberField pageNumber = new PdfPageNumberField(fonts3, PdfBrushes.Black);
-
-                //Create page count field.
-                PdfPageCountField count = new PdfPageCountField(fonts3, PdfBrushes.Black);
-
-                //Add the fields in composite fields.
-                PdfCompositeField compositeField = new PdfCompositeField(fonts3, PdfBrushes.Black, "Page {0} of {1}", pageNumber, count);
-
-               
-                    for (int i = 1; i < finalDoc.Pages.Count; i++)
-                    {
-                        if (graphics.Size.Width == 595 && graphics.Size.Height == 842)
-                        {
-                           //Draw the composite field. 
-                            compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 30));
-                        }
-                        else
-                        {
-                            //Draw the composite field. 
-                            compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 20));
-                        }
-                    }
-
-              
+                } 
                 var subnobab = 1;
 
                 foreach (var items2 in items.SubBabs)
@@ -859,9 +857,38 @@ namespace CST.Controllers.Transaksi
                         indx++;
                         subsubnobab++;
                     }
+                   
                     subnobab++;
                 }
+
                 nobab++;
+
+                //Set the font.
+                PdfFont fonts3 = new PdfStandardFont(PdfFontFamily.Helvetica, 12f);
+
+                //Create page number field.
+                PdfPageNumberField pageNumber = new PdfPageNumberField(fonts3, PdfBrushes.Black);
+
+                //Create page count field.
+                PdfPageCountField count = new PdfPageCountField(fonts3, PdfBrushes.Black);
+
+                //Add the fields in composite fields.
+                PdfCompositeField compositeField = new PdfCompositeField(fonts3, PdfBrushes.Black, "Page {0} of {1}", pageNumber, count);
+
+
+                for (int i = 1; i < finalDoc.Pages.Count; i++)
+                {
+                    if (graphics.Size.Width == 595 && graphics.Size.Height == 842)
+                    {
+                        //Draw the composite field. 
+                        compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 33));
+                    }
+                    else
+                    {
+                        //Draw the composite field. 
+                        compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 23));
+                    }
+                }
             }
 
            
