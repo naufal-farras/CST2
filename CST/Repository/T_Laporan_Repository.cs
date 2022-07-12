@@ -36,69 +36,69 @@ namespace CST.Repository
         }
 
         #region PROSES 
-        //public JsonResult TambahEbook(List<TempFileVM> tempFileVMs, string createId)
-        //{
+        public JsonResult TambahEbook2(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
+        {
 
-        //    int transId = 0;
-        //    var trans = new T_Transaksi();
-        //    trans.Nama = null;
-        //    trans.Kelompok = null;
-        //    trans.Status = 0;
-        //    trans.CreatedDate = DateTime.Now;
-        //    trans.TanggalSampul = null;
-        //    trans.IsDelete = false;
-        //    trans.CreaterId = createId;
-        //    trans.RumusanNasabahId = null;
-        //    _context.T_Transaksi.Add(trans);
-        //    _context.SaveChanges();
+            int transId = 0;
+            var trans = new T_Transaksi();
+            trans.Nama = Nama;
+            trans.Kelompok = Kelompok;
+            trans.Status = 0;
+            trans.CreatedDate = DateTime.Now;
+            trans.TanggalSampul = TanggalSampul;
+            trans.IsDelete = false;
+            trans.CreaterId = createId;
+            trans.RumusanNasabahId = RumusanId;
+            _context.T_Transaksi.Add(trans);
+            _context.SaveChanges();
 
-        //    transId = trans.Id;
-        //    DateTime date = DateTime.Now;
-        //    //var Index = 0;
-
-
-        //    //foreach (var item in tempFileVMs)
-        //    //{
-
-        //    //    var transDetail = new T_TransDetail();
-
-        //    //    string webRootPath = _webHostEnvironment.WebRootPath;
-        //    //    string path = Path.Combine(webRootPath, "Files/Data");
-
-        //    //    if (item.selectUploads.FileName == "PDFkosong.pdf")
-        //    //    {
-        //    //        string generateNameFile = item.selectUploads.FileName;
-        //    //        FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
-
-        //    //        item.selectUploads.CopyTo(savingFile);
-        //    //        savingFile.Close();
-        //    //        transDetail.TransaksiId = transId;
-        //    //        transDetail.Index = item.Index;
-        //    //        transDetail.Path = generateNameFile;
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        string generateNameFile = item.Index + "_" + DateTime.Now.ToString("ddMMyyHHMMss") + "_" + item.selectUploads.FileName;
-
-        //    //        FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
-
-        //    //        item.selectUploads.CopyTo(savingFile);
-        //    //        savingFile.Close();
-        //    //        transDetail.TransaksiId = transId;
-        //    //        transDetail.Index = item.Index;
-        //    //        transDetail.Path = generateNameFile;
-
-        //    //    }
-
-        //    //    _context.T_TransDetail.Add(transDetail);
-        //    //    _context.SaveChanges();
+            transId = trans.Id;
+            DateTime date = DateTime.Now;
+            var Index = 0;
 
 
-        //    //}
+            foreach (var item in selectedUpload)
+            {
 
-        //    return new JsonResult(trans);
+                var transDetail = new T_TransDetail();
 
-        //}
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string path = Path.Combine(webRootPath, "Files/Data");
+
+                if (item.FileName == "PDFkosong.pdf")
+                {
+                    string generateNameFile = item.FileName;
+                    FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
+
+                    item.CopyTo(savingFile);
+                    savingFile.Close();
+                    transDetail.TransaksiId = transId;
+                    transDetail.Index = Index;
+                    transDetail.Path = generateNameFile;
+                }
+                else
+                {
+                    string generateNameFile = Index + "_" + DateTime.Now.ToString("ddMMyyHHMMss") + "_" + item.FileName;
+
+                    FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
+
+                    item.CopyTo(savingFile);
+                    savingFile.Close();
+                    transDetail.TransaksiId = transId;
+                    transDetail.Index = Index;
+                    transDetail.Path = generateNameFile;
+
+                }
+
+                _context.T_TransDetail.Add(transDetail);
+                _context.SaveChanges();
+
+
+            }
+
+            return new JsonResult(trans);
+
+        }
 
         //public JsonResult TambahEbook(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
         public JsonResult TambahEbook(List<string> indx, List<IFormFile> selectedUploads, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
@@ -229,7 +229,7 @@ namespace CST.Repository
 
 
         //public JsonResult TambahEbook2(List<TempFileVM> TempFileVM, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
-        //public JsonResult TambahEbook2(List<TempFileVM> TempFileVM, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
+        //public JsonResult TambahEbook2(List<IFormFile> selectedUpload, string Nama, string Kelompok, int RumusanId, DateTime TanggalSampul, string createId)
         //{
         //    int transId = 0;
         //    var trans = new T_Transaksi();
@@ -242,20 +242,20 @@ namespace CST.Repository
         //    trans.CreaterId = createId;
         //    trans.RumusanNasabahId = RumusanId;
         //    _context.T_Transaksi.Add(trans);
-        //    _context.SaveChanges(); 
+        //    _context.SaveChanges();
         //    transId = trans.Id;
 
         //    bool result = false;
-        //    DateTime date = DateTime.Now; 
+        //    DateTime date = DateTime.Now;
 
-        //    foreach (var item in TempFileVM)
+        //    foreach (var item in selectedUpload)
         //    {
-        //        var transDetail = new T_TransDetail(); 
+        //        var transDetail = new T_TransDetail();
         //        string webRootPath = _webHostEnvironment.WebRootPath;
         //        string path = Path.Combine(webRootPath, "Files/Data");
 
-        //        foreach (var item2 in item.Upload)
-        //        { 
+        //        foreach (var item2 in item)
+        //        {
         //            FileStream savingFile = new FileStream(Path.Combine(path, item2.selectUploads.FileName), FileMode.Create);
 
         //            item2.selectUploads.CopyTo(savingFile);
@@ -265,9 +265,9 @@ namespace CST.Repository
         //            transDetail.Path = item2.selectUploads.FileName;
         //            _context.T_TransDetail.Add(transDetail);
         //            _context.SaveChanges();
-        //        } 
-        //         result = true;
-        //     }
+        //        }
+        //        result = true;
+        //    }
 
         //    return new JsonResult(result);
 
@@ -290,7 +290,7 @@ namespace CST.Repository
                 string path = Path.Combine(webRootPath, "Files/Data");
 
 
-                string generateNameFile = Index + "_" + DateTime.Now.ToString("ddMMyyHH") + "_" + item.FileName;
+                string generateNameFile = "Updated_" +item.FileName ;
                 FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
                 item.CopyTo(savingFile);
                 savingFile.Close();

@@ -1,7 +1,7 @@
 ﻿@model CST.ViewModels.EBook.InputDataVM;
  
 @{
-    ViewData["Title"] = "Tambah E-Book";
+    ViewData["Title"] = "Tambah E-Book-2";
 } 
 <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -245,7 +245,7 @@
 
                              
                                  $.ajax({ 
-                                       url: "@Url.Action("Upload", "Ebook")", 
+                                       url: "@Url.Action("Upload2", "Ebook")", 
                                        type: 'POST', 
                                         data:fileData, 
                                         cache: false,
