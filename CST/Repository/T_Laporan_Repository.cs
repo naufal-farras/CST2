@@ -73,7 +73,7 @@ namespace CST.Repository
                     item.CopyTo(savingFile);
                     savingFile.Close();
                     transDetail.TransaksiId = transId;
-                    transDetail.Index = Index;
+                    transDetail.Index = Index++;
                     transDetail.Path = generateNameFile;
                 }
                 else
@@ -85,7 +85,7 @@ namespace CST.Repository
                     item.CopyTo(savingFile);
                     savingFile.Close();
                     transDetail.TransaksiId = transId;
-                    transDetail.Index = Index;
+                    transDetail.Index = Index++;
                     transDetail.Path = generateNameFile;
 
                 }
@@ -158,23 +158,33 @@ namespace CST.Repository
                     {
                         if (indxHasil[2].Replace(" ","").ToLower() == nameHasil[1].Replace(" ", "").ToLower() && indxHasil[3].Replace(" ", "").ToLower() == nameHasil[2].Replace(" ", "").ToLower())
                         {
+                            int indexFile = Convert.ToInt32(indxHasil[0]);
+                            var cekDetail = _context.T_TransDetail.Include(x => x.Transaksi).Where(x => x.TransaksiId == transId && x.Index == indexFile).Count();
+                            if (cekDetail == 0)
+                            {
+                                string generateNameFile = indxHasil[0] + "_" + item.FileName.ToUpper();
 
-                            string generateNameFile = indxHasil[0] + "_" + item.FileName.ToUpper();
+                                FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
 
-                            FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
-
-                            item.CopyTo(savingFile);
-                            savingFile.Close();
-                            transDetail.TransaksiId = transId;
-                            transDetail.Index = Convert.ToInt32(indxHasil[0]);
-                            transDetail.Path = generateNameFile;
+                                item.CopyTo(savingFile);
+                                savingFile.Close();
+                                transDetail.TransaksiId = transId;
+                                transDetail.Index = Convert.ToInt32(indxHasil[0]);
+                                transDetail.Path = generateNameFile;
 
 
 
-                            _context.T_TransDetail.Add(transDetail);
-                            _context.SaveChanges();
-                            result = true;
-                            continue;
+                                _context.T_TransDetail.Add(transDetail);
+                                _context.SaveChanges();
+                                result = true;
+                                continue;
+                            }
+                            else
+                            {
+                                continue;
+
+                            }
+
                         }
                     }
                    
