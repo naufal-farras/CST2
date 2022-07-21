@@ -228,7 +228,7 @@ namespace CST.Controllers.Transaksi
         //    return Json(result);
         //}
         [AllowAnonymous]
-        //[HttpPost("EBook/GabungFile")]
+        //[HttpPost("EBook/GabungFile")] 
         public ActionResult GabungFilePDF(List<IFormFile> selectedUpload)
         {
             string webRootPath = _webHostEnvironment.WebRootPath;
@@ -410,6 +410,21 @@ namespace CST.Controllers.Transaksi
             result = true;
             return Json(new { data = result });
         }
+
+        //public JsonResult RemoveFromList(int Index, int RumusanId)
+        //{
+        //    bool result = false;
+        //    var getDataTrans = _context.T_Transaksi.Where(x => x.Id == RumusanId).FirstOrDefault();
+        //    var getData = _context.T_TransDetail.Where(x => x.Index == Index && x.TransaksiId == RumusanId).FirstOrDefault();
+        //    DateTime date = DateTime.Now;
+        //    getDataTrans.UpdatedDate = date; 
+            
+        //    _context.Entry(getData).State = EntityState.Modified;
+        //    _context.Entry(getDataTrans).State = EntityState.Modified;
+        //    _context.SaveChanges();
+        //    result = true;
+        //    return Json(new { data = result });
+        //}
 
         [HttpGet("EBook/Preview/{Id}")]
         public ActionResult Preview(int Id)
@@ -612,11 +627,17 @@ namespace CST.Controllers.Transaksi
                  pageTOC2 = finalDoc.Pages.Add();
                  pageTOC3 = finalDoc.Pages.Add();
             }
-            else if (totalCount < 99)
+            else if (totalCount > 65 && totalCount < 99)
             {
                 pageTOC2 = finalDoc.Pages.Add();
                 pageTOC3 = finalDoc.Pages.Add();
                 //pageTOC4 = finalDoc.Pages.Add();
+            }
+            else if (totalCount > 98 && totalCount < 132)
+            {
+                pageTOC2 = finalDoc.Pages.Add();
+                pageTOC3 = finalDoc.Pages.Add();
+                pageTOC4 = finalDoc.Pages.Add();
             }
 
             //PdfPage pageTOC2 = finalDoc.Pages.Add();  
@@ -642,10 +663,10 @@ namespace CST.Controllers.Transaksi
             var x2C = 51;
             var x3C = 63;
 
-            //var xD = 15;
-            //var yD = 40;
-            //var x2D = 51;
-            //var x3D = 63;
+            var xD = 15;
+            var yD = 40;
+            var x2D = 51;
+            var x3D = 63;
 
             var nobab = 1;
 
@@ -673,8 +694,14 @@ namespace CST.Controllers.Transaksi
                 //AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, "BAB " + nobab + " " + items.namaBab, new PointF(x, y));
                 //y += 23;
 
+                if (pageTOC.Annotations.Count < 33)
+                {
+                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, "BAB " + nobab + " " + items.namaBab, new PointF(x, y));
+                    y += 23;
 
-                if (pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
+
+                }
+                else if (pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
                 { 
                     AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, "BAB " + nobab + " " + items.namaBab, new PointF(xB, yB));
 
@@ -689,20 +716,14 @@ namespace CST.Controllers.Transaksi
                     yC += 23;
 
                 }
-                //else if (pageTOC2.Annotations.Count > 32 && pageTOC2.Annotations.Count < 64)
-                //{
-                 
-                //    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, "BAB " + nobab + " " + items.namaBab, new PointF(xD, yD)); 
-                //    yD += 23;
-
-                //}
-                else if(pageTOC.Annotations.Count < 33)
+                else if (pageTOC3.Annotations.Count >= 32 && pageTOC4.Annotations.Count < 33)
                 {
-                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, "BAB " + nobab + " " + items.namaBab, new PointF(x, y));
-                    y += 23;
 
+                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, "BAB " + nobab + " " + items.namaBab, new PointF(xD, yD));
+                    yD += 23;
 
-                } 
+                }
+
                 var subnobab = 1;
 
                 foreach (var items2 in items.SubBabs)
@@ -728,7 +749,14 @@ namespace CST.Controllers.Transaksi
                     //AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + ". " + items2.namaSubBab, new PointF(x2, y));
                     //y += 23;
 
-                    if (pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
+                    if (pageTOC.Annotations.Count < 33)
+                    {
+                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + ". " + items2.namaSubBab, new PointF(x2, y));
+
+                        y += 23;
+
+                    }
+                    else if(pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
                     {
                         
                         AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, subnobab + ". " + items2.namaSubBab, new PointF(x2B, yB));
@@ -743,22 +771,16 @@ namespace CST.Controllers.Transaksi
 
                         yC += 23;
                     }
-                    //else if (pageTOC3.Annotations.Count > 33 && pageTOC3.Annotations.Count < 64)
-                    //{
-                    //    //y = 40;
-
-                    //    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + ". " + items2.namaSubBab, new PointF(x2D, yD));
-
-                    //    yD += 23;
-                    //}
-                    else if (pageTOC.Annotations.Count < 33)
+                    else if (pageTOC3.Annotations.Count >= 32 && pageTOC4.Annotations.Count < 33)
                     {
-                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + ". " + items2.namaSubBab, new PointF(x2, y));
+                        //y = 40;
 
-                        y += 23;
+                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + ". " + items2.namaSubBab, new PointF(x2D, yD));
 
+                        yD += 23;
                     }
-                   
+
+
                     //for (int i = 1; i < finalDoc.Pages.Count; i++)
                     //{
                     //    //Draw the composite field.
@@ -789,8 +811,15 @@ namespace CST.Controllers.Transaksi
                         }
 
                         //y += 23;
+                         if (pageTOC.Annotations.Count < 33)
+                        {
+                            AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3, y));
 
-                        if (pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
+                            y += 23;
+
+                        }
+
+                       else if (pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
                         {
                             //y = 40;
 
@@ -807,21 +836,15 @@ namespace CST.Controllers.Transaksi
 
                             yC += 23;
                         }
-                        //else if (pageTOC3.Annotations.Count > 32 && pageTOC3.Annotations.Count < 64)
-                        //{
-
-                        //    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3D, yD));
-
-                        //    yD += 23;
-                        //}
-                        else if(pageTOC.Annotations.Count < 33)
+                        else if (pageTOC3.Annotations.Count >= 32 && pageTOC4.Annotations.Count < 33)
                         {
-                            AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3, y));
 
-                            y += 23;
+                            AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3D, yD));
 
+                            yD += 23;
                         }
-                      
+
+
 
                         //for (int i = 1; i < finalDoc.Pages.Count; i++)
                         //{
@@ -863,6 +886,7 @@ namespace CST.Controllers.Transaksi
 
                 nobab++;
 
+
                 //Set the font.
                 PdfFont fonts3 = new PdfStandardFont(PdfFontFamily.Helvetica, 12f);
 
@@ -875,23 +899,26 @@ namespace CST.Controllers.Transaksi
                 //Add the fields in composite fields.
                 PdfCompositeField compositeField = new PdfCompositeField(fonts3, PdfBrushes.Black, "Page {0} of {1}", pageNumber, count);
 
-
                 for (int i = 1; i < finalDoc.Pages.Count; i++)
                 {
-                    if (graphics.Size.Width == 595 && graphics.Size.Height == 842)
-                    {
-                        //Draw the composite field. 
-                        compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 33));
-                    }
-                    else
-                    {
-                        //Draw the composite field. 
-                        compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 23));
-                    }
+                    //if (graphics.Size.Width == 595 && graphics.Size.Height == 842)
+                    //{
+                    //    //Draw the composite field. 
+                    //    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 33));
+                    //}
+                    //else
+                    //{
+                    //    //Draw the composite field. 
+                    //    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 23));
+                    //}
+                    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 33));
+
+
                 }
+
             }
 
-           
+          
 
             //Save the document into stream 
             MemoryStream stream = new MemoryStream(); 
