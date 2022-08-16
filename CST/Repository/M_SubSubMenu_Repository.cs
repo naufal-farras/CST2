@@ -65,13 +65,13 @@ namespace CST.Repository
             StatusHelperVM statusHelperVM = new StatusHelperVM();
 
             #region PENGECEKAN
-            var existingData = _context.M_SubSubBab.Where(x => x.Id == subSubMenu.Id).SingleOrDefault();
+            var existingData = _context.M_SubSubBab.Where(x => x.Id == subSubMenu.Id && x.NasabahId == subSubMenu.NasabahId).SingleOrDefault();
             if (existingData != null)
             {
                 isDataFounded = true;
                 if (existingData.Nama != subSubMenu.Nama)//jika ada perubahan nama
                 {
-                    var checkKode = _context.M_SubSubBab.Where(x => x.Nama == subSubMenu.Nama).SingleOrDefault();
+                    var checkKode = _context.M_SubSubBab.Where(x => x.Nama == subSubMenu.Nama && x.NasabahId == subSubMenu.NasabahId).SingleOrDefault();
                     if (checkKode == null)
                     {
                         isKodeFounded = false;

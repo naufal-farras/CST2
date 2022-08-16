@@ -17,8 +17,8 @@
                 <b>Hal yang harus diperhatikan dalam upload file</b>
                 <ol>
                     <li>Nama File yang di Upload harus sesuai dengan rumusan template <b> contoh nama file :</b></li>
-                    <li><b> Format : {Nasabah}_{BAB}_{SubSubBab}_Tanggal</b></li>
-                    <li><b> contoh nama file : BPJS_JHT_Laporan Pendapatan Bunga Deposito_22052022</b></li>
+                    <li><b> Format : {SubSubBab} - {BAB}</b></li>
+                    <li><b> contoh nama file : Laporan Pendapatan Bunga Deposito - JHT </b></li>
                     <li><b> JHT = Nama Bab dari rumusan (harus sesuai rumusan)</b></li>
                     <li><b> Laporan Pendapatan Bunga Deposito = Nama SubSubBab dari Rumusan (harus sesuai rumusan)</b></li>
                     <li>File yang di Upload <b>bisa lebih dari 1</b></li>  
@@ -32,6 +32,9 @@
                 <b>Catatan</b>
                 <ul>
                     <li><b>Jika ada 1 File yang di-upload dalam 1 SubSub-Bab</b> bisa menggabungkan terlebih dahulu File yang sama pada button <b>Gabung PDF</b></li>
+                    <li><b>File yang di upload harus sesuai dengan rumusan yang telah di buat</b></li>
+                    <li><b>Jikalau rumusan di singkat file yang di upload juga harus di singkat</b></li>
+                    <li><b>Pastikan data yang di upload sudah sesuai sebelum di simpan</b></li>
                 </ul>
             </div>
             <div class="modal-footer">
@@ -244,17 +247,20 @@
     //var inputOld = document.getElementById('subSubBabId-1-1-1');
         for (var i = 0; i < input.files.length; ++i) {
             var names = input.files.item(i).name;
-            var nameArr = names.split('_');
+            let namesSplitPdf = names.replace(/.pdf/g, '');
+            var nameArr = namesSplitPdf.split('-');
+            //var nameArr = names.split('_'); // old
              
             //console.log(input.files[0]);
-           
             $('input[name^="subsubbaB"]').each(function(){
-
             var subsubId = "fileList-"+$(this)[0].id;
             var namesss = $(this)[0].value;
             var nameArrr = namesss.split('-');
             let text = nameArrr[0].replace(/ /g,'').toLowerCase();
             var a = nameArr[1].replace(/ /g,'').toLowerCase();
+            //var a = nameArr[1].replace(/ /g,'').toLowerCase(); //yg bener pake bpjsd
+            debugger;
+            
             let result = text.match(a);
             //console.log(result);
             var output = document.getElementById(subsubId);
@@ -263,23 +269,31 @@
                 //var indx = namesind.split('-');
                 //console.log(indx);
                 //debugger;
-                var namaTemp = nameArr[2].replace(/ /g,'').toLowerCase();
-                var namaTemp2 = nameArrr[1].replace(/ /g,'').toLowerCase();
+                
+                //var namaTemp = nameArr[2].replace(/ /g,'').toLowerCase();//yg bener pake bpjsd
+                var potongLap = nameArr[0].replace(/Laporan/g,'').toLowerCase();
+                var potongLap2 = potongLap.replace(/laporan/g,'');
+                var namaTemp = potongLap2.replace(/ /g,'');
+
+                var potongLapa = nameArrr[1].replace(/Laporan/g,'').toLowerCase();
+                var potongLapa2 = potongLapa.replace(/laporan/g,'');
+                var namaTemp2 = potongLapa2.replace(/ /g,'').toLowerCase();
 
                 var namaFile = nameArr[1].replace(/ /g,'').toLowerCase();
+                //var namaFile = nameArr[1].replace(/ /g,'').toLowerCase(); //yg bener pake bpjsd
                 //console.log(namaFile);
                 console.log(result);
                 //var namaFile2 = result.replace(/ /g,'');
                 //console.log(namaFile2);
 
-                var aa = namaTemp +" == "+ namaTemp2+ "," +namaFile + "==" +result  ;
+                //var aa = namaTemp +" == "+ namaTemp2+ "," +namaFile + "==" +result  ;
                 //console.log(aa);
                 if((namaTemp  ==  namaTemp2) && (namaFile == result ))
                 {
                  //var fileDatasObj = {};   
 
                  //fileDatas.append('Index',nameArrr[2]+"_"+input.files.item(i).name);  
-                 fileDatas.append('indx',nameArrr[2]+"_"+input.files.item(i).name);  
+                 fileDatas.append('indx',nameArrr[2]+"-"+input.files.item(i).name);  
                  fileDatas.append('selectedUploads',input.files.item(i));  
 
                  //fileDatasObj["Index"] = nameArrr[2]+"_"+input.files.item(i).name;
@@ -343,13 +357,13 @@
            {
                var totalSubSub=$('input[name^="subsubbaB"]').length;
                  var req = ""; 
-
+               debugger;
                //console.log(totalSubSub);
                var tempInd= "";
                 for(const pair of fileDatas.entries()) 
                        {    
                             var nameindx =`${pair[1]}`;   
-                            var finalindxx = nameindx.split('_');
+                            var finalindxx = nameindx.split('-');
                             tempInd += finalindxx[0]; 
                        }
  
@@ -366,9 +380,9 @@
                            }else
                            {
 
-                                fileDatas.append('indx',i+"_"+"PDFkosong.pdf"); 
+                                fileDatas.append('indx',i+"-"+"PDFkosong.pdf"); 
                                 const blob = new Blob([req], {type : 'application/pdf'})
-                                var namel= i+"_"+"PDFkosong.pdf";
+                                var namel= i+"-"+"PDFkosong.pdf";
                                 fileDatas.append('selecteduploads', blob, namel)
                                 continue;
                            }

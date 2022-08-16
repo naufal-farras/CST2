@@ -584,8 +584,7 @@ namespace CST.Controllers.Transaksi
             //Add a new PDF page 
             PdfPage pageTOC = finalDoc.Pages.Add();
             //Set font for TOC and bookmark contents
-            _font = new PdfStandardFont(PdfFontFamily.Helvetica, 13f);
-            PdfFont fontBAB = new PdfStandardFont(PdfFontFamily.Helvetica, 20f, PdfFontStyle.Underline|PdfFontStyle.Bold);
+            PdfFont fontBAB = new PdfStandardFont(PdfFontFamily.TimesRoman, 12f, PdfFontStyle.Underline|PdfFontStyle.Bold);
             //Create a new instance of string format to set text layout information
             finalDoc.PageSettings.Margins.Bottom= 20;
             //PdfPageTemplateElement header = new PdfPageTemplateElement(30, 0, 75, 30);
@@ -596,7 +595,7 @@ namespace CST.Controllers.Transaksi
             PdfStringFormat format = new PdfStringFormat();
             //Set the text alignment.
             format.Alignment = PdfTextAlignment.Center;
-            pageTOC.Graphics.DrawString("DAFTAR ISI", fontBAB, PdfBrushes.Black, new RectangleF(new PointF(5, 10), new SizeF(pageTOC.Graphics.ClientSize.Width, 30)), format);
+            pageTOC.Graphics.DrawString("DAFTAR ISI", fontBAB, PdfBrushes.Black, new RectangleF(new PointF(5, 40), new SizeF(pageTOC.Graphics.ClientSize.Width, 60)), format);
             var countBab = 0;  
             var countSub = 0;
             var countSubSub = 0;
@@ -619,10 +618,9 @@ namespace CST.Controllers.Transaksi
             PdfPage pageTOC2 = null;
             PdfPage pageTOC3 = null;
             PdfPage pageTOC4 = null;
-
-
-
-            if (totalCount < 66)
+             
+           
+            if (totalCount > 32 && totalCount < 66)
             {
                  pageTOC2 = finalDoc.Pages.Add();
                  pageTOC3 = finalDoc.Pages.Add();
@@ -648,25 +646,25 @@ namespace CST.Controllers.Transaksi
             var indx = 0;
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument();
 
-            var x = 15; 
-            var y = 40; 
-            var x2 = 51; 
-            var x3 = 63;
+            var x = 30; 
+            var y = 80; 
+            var x2 = 40; 
+            var x3 = 65;
 
-            var xB = 15;
-            var yB = 40;
-            var x2B = 51;
-            var x3B = 63;
+            var xB = 30;
+            var yB = 80;
+            var x2B = 40;
+            var x3B = 65;
 
-            var xC = 15;
-            var yC = 40;
-            var x2C = 51;
-            var x3C = 63;
+            var xC = 30;
+            var yC = 80;
+            var x2C = 40;
+            var x3C = 65;
 
-            var xD = 15;
-            var yD = 40;
-            var x2D = 51;
-            var x3D = 63;
+            var xD = 30;
+            var yD = 80;
+            var x2D = 40;
+            var x3D = 65;
 
             var nobab = 1;
 
@@ -696,31 +694,36 @@ namespace CST.Controllers.Transaksi
 
                 if (pageTOC.Annotations.Count < 33)
                 {
-                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, "BAB " + nobab + " " + items.namaBab, new PointF(x, y));
-                    y += 23;
+                    y += 10;
+                     AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, "Bab " + nobab + " " + items.namaBab, new PointF(x, y));
+                    y += 19;
 
 
                 }
                 else if (pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
                 { 
-                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, "BAB " + nobab + " " + items.namaBab, new PointF(xB, yB));
+                    yB += 10;
 
-                    yB += 23;
+                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, "Bab " + nobab + " " + items.namaBab, new PointF(xB, yB));
+
+                    yB += 19;
 
                 }
                 else if (pageTOC2.Annotations.Count >= 32 && pageTOC3.Annotations.Count < 33)
                 {
-                     
-                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC3, "BAB " + nobab + " " + items.namaBab, new PointF(xC, yC));
+                    yC += 10;
 
-                    yC += 23;
+                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC3, "Bab " + nobab + " " + items.namaBab, new PointF(xC, yC));
+
+                    yC += 19;
 
                 }
                 else if (pageTOC3.Annotations.Count >= 32 && pageTOC4.Annotations.Count < 33)
                 {
+                    yD += 10;
 
-                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, "BAB " + nobab + " " + items.namaBab, new PointF(xD, yD));
-                    yD += 23;
+                    AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, "Bab " + nobab + " " + items.namaBab, new PointF(xD, yD));
+                    yD += 19;
 
                 }
 
@@ -751,23 +754,23 @@ namespace CST.Controllers.Transaksi
 
                     if (pageTOC.Annotations.Count < 33)
                     {
-                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + ". " + items2.namaSubBab, new PointF(x2, y));
-
-                        y += 23;
+                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + "   " + items2.namaSubBab, new PointF(x2, y));
+                        
+                        y += 19;
 
                     }
                     else if(pageTOC.Annotations.Count >= 32 && pageTOC2.Annotations.Count < 33)
                     {
                         
-                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, subnobab + ". " + items2.namaSubBab, new PointF(x2B, yB));
+                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, subnobab + "   " + items2.namaSubBab, new PointF(x2B, yB));
 
-                        yB += 23;
+                        yB += 19;
 
                     }
                     else if (pageTOC2.Annotations.Count >= 32 && pageTOC3.Annotations.Count < 33)
                     {
                         //y = 40; 
-                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC3, subnobab + ". " + items2.namaSubBab, new PointF(x2C, yC));
+                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC3, subnobab + "   " + items2.namaSubBab, new PointF(x2C, yC));
 
                         yC += 23;
                     }
@@ -775,9 +778,9 @@ namespace CST.Controllers.Transaksi
                     {
                         //y = 40;
 
-                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + ". " + items2.namaSubBab, new PointF(x2D, yD));
+                        AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + "   " + items2.namaSubBab, new PointF(x2D, yD));
 
-                        yD += 23;
+                        yD += 19;
                     }
 
 
@@ -815,7 +818,7 @@ namespace CST.Controllers.Transaksi
                         {
                             AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3, y));
 
-                            y += 23;
+                            y += 19;
 
                         }
 
@@ -825,7 +828,7 @@ namespace CST.Controllers.Transaksi
 
                             AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC2, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3B, yB));
 
-                            yB += 23;
+                            yB += 19;
 
                         }
                         else if (pageTOC2.Annotations.Count >= 32 && pageTOC3.Annotations.Count < 33)
@@ -834,14 +837,14 @@ namespace CST.Controllers.Transaksi
 
                             AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC3, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3C, yC));
 
-                            yC += 23;
+                            yC += 19;
                         }
                         else if (pageTOC3.Annotations.Count >= 32 && pageTOC4.Annotations.Count < 33)
                         {
 
                             AddBookmark(finalDoc.Pages[finalDoc.Pages.Count - 1], pageTOC4, subnobab + "." + subsubnobab + " " + items3.namaSubSubBab, new PointF(x3D, yD));
 
-                            yD += 23;
+                            yD += 19;
                         }
 
 
@@ -888,7 +891,7 @@ namespace CST.Controllers.Transaksi
 
 
                 //Set the font.
-                PdfFont fonts3 = new PdfStandardFont(PdfFontFamily.Helvetica, 12f);
+                PdfFont fonts3 = new PdfStandardFont(PdfFontFamily.TimesRoman, 10f);
 
                 //Create page number field.
                 PdfPageNumberField pageNumber = new PdfPageNumberField(fonts3, PdfBrushes.Black);
@@ -911,15 +914,13 @@ namespace CST.Controllers.Transaksi
                     //    //Draw the composite field. 
                     //    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 23));
                     //}
-                    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 33));
+                    compositeField.Draw(finalDoc.Pages[i].Graphics, new PointF((finalDoc.Pages[i].Size.Width / 2) - 37, finalDoc.Pages[i].Size.Height - 30));
 
 
                 }
 
-            }
-
-          
-
+            } 
+            
             //Save the document into stream 
             MemoryStream stream = new MemoryStream(); 
             finalDoc.Save(stream);
@@ -950,6 +951,17 @@ namespace CST.Controllers.Transaksi
         //Add table of content with page number and document link annotations
         private void AddTableOfContent(PdfPage page, PdfPage toc, string content, PointF point)
         {
+            var cekBab = content.Contains("Bab");
+            if (cekBab)
+            {
+              _font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12f,PdfFontStyle.Bold);
+
+            }
+            else
+            {
+                _font = new PdfStandardFont(PdfFontFamily.TimesRoman, 11f);
+
+            }
             //Draw title in TOC
             PdfTextElement element = new PdfTextElement(content, _font);
             //Set layout format for pagination of TOC
@@ -959,7 +971,7 @@ namespace CST.Controllers.Transaksi
             PdfLayoutResult result = element.Draw(toc, point, format);
             //Draw page number in TOC
             PdfTextElement pageNumber = new PdfTextElement(finalDoc.Pages.Count.ToString(), _font, PdfBrushes.Black);
-            pageNumber.Draw(toc, new PointF(toc.Graphics.ClientSize.Width - 40, point.Y));
+            pageNumber.Draw(toc, new PointF(toc.Graphics.ClientSize.Width - 60, point.Y));
             //Creates a new document link annotation
             RectangleF bounds = result.Bounds;
             bounds.Width = toc.Graphics.ClientSize.Width - point.X;
