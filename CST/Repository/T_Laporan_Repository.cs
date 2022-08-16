@@ -124,7 +124,8 @@ namespace CST.Repository
             //var Index = 0;
             foreach (var item in selectedUploads)
             {
-                var nameHasil = item.FileName.Split('_').ToList();
+                var delPdf = item.FileName.Replace(".pdf", "");
+                var nameHasil = delPdf.Split('-').ToList();
 
                 foreach (var item2 in indx)
                 {
@@ -134,12 +135,13 @@ namespace CST.Repository
                     string webRootPath = _webHostEnvironment.WebRootPath;
                     string path = Path.Combine(webRootPath, "Files/Data");
 
-                    var indxHasil = item2.Split('_').ToList();
-                    if (nameHasil[1] == "PDFkosong.pdf" && indxHasil.Count() < 3)
+                    var delPdf2 = item2.Replace(".pdf", "");
+                    var indxHasil = delPdf2.Split('-').ToList();
+                    if (nameHasil[1] == "PDFkosong" && indxHasil.Count() < 3)
                     {
                         if (indxHasil[0] == nameHasil[0])
                         {
-                            string generateNameFile = nameHasil[1];
+                            string generateNameFile = nameHasil[1]+".pdf";
                             FileStream savingFile = new FileStream(Path.Combine(path, generateNameFile), FileMode.Create);
 
                             item.CopyTo(savingFile);
@@ -154,9 +156,9 @@ namespace CST.Repository
                         }
                       
                     }
-                    if (indxHasil.Count > 3 && nameHasil.Count > 2)
+                    if (indxHasil.Count > 2 && nameHasil.Count > 1)
                     {
-                        if (indxHasil[2].Replace(" ","").ToLower() == nameHasil[1].Replace(" ", "").ToLower() && indxHasil[3].Replace(" ", "").ToLower() == nameHasil[2].Replace(" ", "").ToLower())
+                        if (indxHasil[1].Replace(" ","").ToLower() == nameHasil[0].Replace(" ", "").ToLower() && indxHasil[2].Replace(" ", "").ToLower() == nameHasil[1].Replace(" ", "").ToLower())
                         {
                             int indexFile = Convert.ToInt32(indxHasil[0]);
                             var cekDetail = _context.T_TransDetail.Include(x => x.Transaksi).Where(x => x.TransaksiId == transId && x.Index == indexFile).Count();
