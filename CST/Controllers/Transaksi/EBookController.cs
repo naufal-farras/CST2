@@ -805,12 +805,12 @@ namespace CST.Controllers.Transaksi
 
                         if (graphicsss.Size.Width != 595 && graphicsss.Size.Height != 842)
                         {
-                            graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new RectangleF(300, 500, 300, 200), format);
+                            graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new RectangleF(300, 500, 300, 400), format);
 
                         }
                         else
                         {
-                        graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new RectangleF(200, 400, 200, 100), format);
+                        graphicsss.DrawString(items3.namaSubSubBab, fontss, PdfBrushes.Black, new RectangleF(200, 400, 200, 400), format);
                         }
 
                         //y += 23;

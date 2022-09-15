@@ -192,6 +192,16 @@
 </section>
 <div class="md-overlay"></div>
 
+<div id="overlay" style="position:fixed; left:0; bottom:0; right:0; top:0; background:rgba(0, 0, 0, 0.5);display:none; z-index:100">
+    <div style="display:grid; place-items: center; width:100vw; height:100vh; overflow:hidden; ">
+         <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+    </div> 
+    </div>
+   
+</div>
+
+
 @section Styles{
     <link rel="stylesheet" href="~/vendor/jazztemplate/plugins/data-tables/css/datatables.min.css">
     <link href="~/vendor/bootstrap.min.css" rel="stylesheet">
@@ -252,25 +262,30 @@
             //var nameArr = names.split('_'); // old
              
             //console.log(input.files[0]);
+            debugger;
             $('input[name^="subsubbaB"]').each(function(){
             var subsubId = "fileList-"+$(this)[0].id;
             var namesss = $(this)[0].value;
             var nameArrr = namesss.split('-');
-            let text = nameArrr[0].replace(/ /g,'').toLowerCase();
+            let text = nameArrr[0].replace(/ /g,'').toLowerCase();  
             var a = nameArr[1].replace(/ /g,'').toLowerCase();
-            //var a = nameArr[1].replace(/ /g,'').toLowerCase(); //yg bener pake bpjsd
-            debugger;
-            
-            let result = text.match(a);
+
+                var cekProgram = text.match("program");
+                let result;
+                if (cekProgram == "program") {
+                     var text3 = nameArrr[0].replace(/program/ig,'').toLowerCase();  
+                     text = text3.replace(/ /g,'').toLowerCase();  
+                    result = text;
+
+                } else
+                {
+                     result = text.match(a);
+                }
+                debugger;
             //console.log(result);
             var output = document.getElementById(subsubId);
             var children = "";
-                //var namesind = $(this)[0].value;
-                //var indx = namesind.split('-');
-                //console.log(indx);
-                //debugger;
                 
-                //var namaTemp = nameArr[2].replace(/ /g,'').toLowerCase();//yg bener pake bpjsd
                 var potongLap = nameArr[0].replace(/Laporan/g,'').toLowerCase();
                 var potongLap2 = potongLap.replace(/laporan/g,'');
                 var namaTemp = potongLap2.replace(/ /g,'');
@@ -290,6 +305,8 @@
                 //console.log(aa);
                 if((namaTemp  ==  namaTemp2) && (namaFile == result ))
                 {
+            debugger;
+
                  //var fileDatasObj = {};   
 
                  //fileDatas.append('Index',nameArrr[2]+"_"+input.files.item(i).name);  
@@ -324,6 +341,14 @@
    
        function AddData() 
        {
+            $('#overlay').show();
+            setTimeout(function(){
+            $('#overlay').hide();
+
+            },
+                5000
+            
+            )
        //var arr3 = [];
 
        // for(const pair of fileDatas.entries()) {
@@ -374,7 +399,6 @@
                            var result = finalindxcx;  
                            if(result.find(x => x == i))
                            {
-                          debugger;
                                
                                continue;
                            }else
@@ -487,12 +511,16 @@
                                         }) 
                                     },
                                     error: function (response) {
+                                          $('.spinnerButtonProccess').hide();
                                         swal("Oops", "We couldn't connect to the server!", "error");
+
                                     }
                                 });
                        } 
 
        }  
+
+      
            
     </script>
 }
